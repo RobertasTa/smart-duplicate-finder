@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+duplicate_report_*.xlsx
+scan_speed.json
+paskutinis_skenas.json
+veiklos.log
+.idea/
