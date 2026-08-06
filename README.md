@@ -50,10 +50,14 @@ removal, and nothing happens without your confirmation.
 - **Scan memory** — results are cached; on next start the program offers to load the
   previous scan so you can export immediately without re-scanning.
 - **Double-click any row** → Explorer opens with the file selected.
-- **Portable** — one exe, no installation, no Python. Runs from a USB stick and
-  writes nothing next to itself (service files go to `%TEMP%` of the host machine).
+- **Portable** — one exe, no installation, no Python. Working files (scan cache,
+  activity log) live in `%LOCALAPPDATA%\SmartDuplicateFinder`; tick **Portable
+  mode** and they move next to the exe instead — perfect for a USB stick, no
+  traces left on the host machine (a `portable.txt` marker makes the mode travel
+  with your stick, the Notepad++ convention).
 - **No ads, no telemetry, no network access.** MIT licensed.
-- **UI in English and Lithuanian** (separate exe builds; readmes also in Russian).
+- **UI in English and Lithuanian** — switched inside the app; first run follows
+  your Windows language (readmes also in Russian).
 
 ## Download
 
@@ -61,8 +65,7 @@ Grab the latest exe from **[Releases](../../releases)**:
 
 | File | UI language |
 |---|---|
-| `SmartDuplicateFinder-en.exe` | English |
-| `SmartDuplicateFinder.exe` | Lithuanian |
+| `SmartDuplicateFinder.exe` | English / Lithuanian — switch inside the app |
 
 **Requirements:** Windows 10 or newer, 64-bit. (On Windows 7 the exe will not
 start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
