@@ -14,7 +14,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from kalba import fam as _famv
+from kalba import fam as _famv, t as _t
 from table_populator import family_of, FAMILY_ORDER, FAMILY_COLORS
 
 
@@ -86,7 +86,11 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
                      for f, c in FAMILY_COLORS.items()}
     sus_fills = (_fill("#FFFFCC"), _fill("#FFF3CD"))
 
-    headers = ["Group", "File Name", "Full Path", "Size (MB)"]
+    # Roberto klausimas 2026-08-06: lapu pavadinimai ir antrastes - pagal
+    # pasirinkta kalba (ataskaita yra dokumentas zmogui), tie patys raktai
+    # kaip GUI lenteleje. Failo pavadinimas lieka angliskas (techninis).
+    headers = [_t("Grupe"), _t("Failo vardas"),
+               _t("Pilnas kelias"), _t("Dydis (MB)")]
 
     # --- 1. Paruosiam eiluciu duomenis RAM'e (tik dubliai - nedidele apimtis) ---
     # (vals, fill, font) - fill/font None = paprastas tekstas
@@ -117,7 +121,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
                     active = warn_yellow
                 else:
                     active = group_fill
-                dup_rows.append(([f"Group {gid}", os.path.basename(fp),
+                dup_rows.append(([_t("Grupe {idx}").format(idx=gid),
+                                  os.path.basename(fp),
                                   str(Path(fp).resolve()),
                                   round(size_bytes / 1048576, 2)],
                                  active, None))
@@ -128,7 +133,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     for vidx, grp in enumerate(visual or [], 1):
         fill = vis_fills[(vidx - 1) % 2]
         for fp in grp:
-            vis_rows.append(([f"Image {vidx}", os.path.basename(fp),
+            vis_rows.append(([_t("Vaizdas {idx}").format(idx=vidx),
+                              os.path.basename(fp),
                               str(Path(fp).resolve()),
                               round(_size_of(fp) / 1048576, 2)],
                              fill, None))
@@ -145,7 +151,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             sz = pair.get(sz_key)
             if sz is None:
                 sz = _size_of(fp)
-            sus_rows.append(([f"Suspect {sid+1}", os.path.basename(fp),
+            sus_rows.append(([_t("Itartinas {n}").format(n=sid + 1),
+                              os.path.basename(fp),
                               str(Path(fp).resolve()),
                               round(sz / 1048576, 2)],
                              fill, None))
@@ -160,8 +167,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
         ws = wb.create_sheet(title)
         notice = None
         if len(rows) > SAFE_ROWS:
-            notice = (f"RODOMA {SAFE_ROWS} IS {len(rows)} EILUCIU - "
-                      f"virsyta Excel lapo riba (1 048 576)")
+            notice = _t("RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)").format(
+                a=SAFE_ROWS, b=len(rows))
             rows = rows[:SAFE_ROWS]
         _autofit(ws, [r[0] for r in rows] + [headers], headers)
         hdr = []
@@ -188,10 +195,10 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             c.font = bold_font
             ws.append([c])
 
-    _write_sheet("Duplicates", dup_rows)
+    _write_sheet(_t("Dublikatai"), dup_rows)
     if vis_rows:
-        _write_sheet("Similar Images", vis_rows)
-    _write_sheet("Suspects", sus_rows)
+        _write_sheet(_t("Panasios nuotraukos"), vis_rows)
+    _write_sheet(_t("Itartini"), sus_rows)
 
     if out_path is None:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")

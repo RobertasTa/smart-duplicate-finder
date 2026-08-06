@@ -119,15 +119,22 @@ GUDRYBĖS, KURIAS VERTA ŽINOTI
 KUR PROGRAMA KĄ SAUGO
 ---------------------
 * Excel ataskaitos — kur pasirinksite (siūlomi Dokumentai).
-* Tarnybiniai failai — kompiuterio %TEMP%\SmartDuplicateFinder\:
+* Tarnybiniai failai — %LOCALAPPDATA%\SmartDuplicateFinder\:
     paskutinis_skenas.json  – skeno atmintis
     scan_speed.json         – disko greitis laiko prognozėms
     veiklos.log             – veiklos žurnalas (jei kas stringa,
                               šis failas padeda išsiaiškinti kur)
-  Į fleškę ar programos katalogą nerašoma nieko — galima drąsiai
-  leisti iš fleškės svetimame kompiuteryje.
+* PORTABLE REŽIMAS (varnelė kairės juostos apačioje): įjungus,
+  tarnybiniai failai saugomi _darbal kataloge ŠALIA programos
+  (pvz., fleškėje), o kompiuteryje pėdsakų nelieka — programa net
+  ištrina savo anksčiau sukurtą %LOCALAPPDATA% katalogą. Pasirinkimą
+  atsimena failas portable.txt šalia exe (Notepad++ / VS Code
+  konvencija) — jis keliauja kartu su fleške.
 * Visus tarnybinius failus galima bet kada ištrinti — programa
   tiesiog pradės nuo švaraus lapo.
+* KALBA (Lietuvių / English) perjungiama išsiskleidžiančiame sąraše
+  kairės juostos apačioje; pasirinkimas įsimenamas ir pritaikomas
+  paleidus programą iš naujo.
 
 ---------------------------------------------------------------------
 Sukūrė: Robertas + Claude (Anthropic AI) + vietinė AI „mergytė"

@@ -12,7 +12,7 @@ from pathlib import Path
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QListWidget, QListWidgetItem, QLabel, QTableWidget,
-    QProgressBar, QMessageBox, QHeaderView, QFrame
+    QProgressBar, QMessageBox, QHeaderView, QFrame, QCheckBox
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont, QIcon
@@ -36,15 +36,20 @@ def _app_dir():
 
 
 def _cache_dir():
-    """Kompo %TEMP% kesas (fleskes scenarijus: i fleske NErasoma nieko).
-    Cia gyvena scan_speed.json ir paskutinis_skenas.json; temp valytuvai
-    (pvz. Roberto 'Temp SIUKSLIU valymas') gali drasiai trinti.
+    """Darbiniu failu vieta (kesas, veiklos.log, scan_speed.json).
+
+    Nuo 2026-08-06 sprendzia saugykla.py: numatyta
+    %LOCALAPPDATA%/SmartDuplicateFinder, o portable rezime (portable.txt
+    salia exe, GUI varnele) - _darbal salia exe. Anksciau buvo %TEMP%,
+    bet temp valytuvai kesa istrindavo ir elgsena nesutapo su Temp
+    Cleaner dovana (Roberto pastaba 2026-08-06).
     SDF_CACHE_DIR - testu izoliacijai (patikros neperraso tikro keso)."""
     override = os.environ.get("SDF_CACHE_DIR")
     if override:
         d = Path(override)
     else:
-        d = Path(os.environ.get("TEMP", ".")) / "SmartDuplicateFinder"
+        import saugykla
+        d = saugykla.data_dir()
     try:
         d.mkdir(parents=True, exist_ok=True)
     except OSError:
@@ -335,7 +340,96 @@ class MainWindow(QMainWindow):
         ])
         self.btn_junk.setEnabled(False)
         lay.addStretch(2)
+
+        # Portable varnele (2026-08-06, bendras abieju dovanu sprendimas:
+        # Roberto ideja + portable.txt zymeklis salia exe, zr. saugykla.py)
+        import saugykla
+        self.chk_portable = QCheckBox(t("Portable rezimas"))
+        self.chk_portable.setObjectName("chk_portable")
+        self.chk_portable.setChecked(saugykla.is_portable())
+        self.chk_portable.setToolTip(t(
+            "Ijungta: kesas ir zurnalas saugomi salia programos (pvz., "
+            "flesiuke) - kompiuteryje pedsaku nelieka.\n"
+            "Isjungta (numatyta): saugoma vartotojo kataloge "
+            "%LOCALAPPDATA%\\SmartDuplicateFinder."))
+        self.chk_portable.toggled.connect(self._on_portable_toggled)
+        lay.addWidget(self.chk_portable)
+
+        # Kalbos pasirinkimas (2026-08-06, Roberto pastaba "du exe del
+        # kalbos - negrazu"): vienas exe, pasirinkimas kalba.txt faile,
+        # isigalioja perleidus programa.
+        from PyQt6.QtWidgets import QComboBox
+        from kalba import LANG as _dabartine_kalba
+        self.cmb_kalba = QComboBox()
+        self.cmb_kalba.setObjectName("cmb_kalba")
+        self.cmb_kalba.addItem("Lietuvi\u0173", "lt")   # rodo "Lietuviu" su u-nosine
+        self.cmb_kalba.addItem("English", "en")
+        self.cmb_kalba.setCurrentIndex(1 if _dabartine_kalba == "en" else 0)
+        self.cmb_kalba.setToolTip(t(
+            "Kalba pritaikoma paleidus programa is naujo."))
+        self.cmb_kalba.currentIndexChanged.connect(self._on_kalba_changed)
+        lay.addWidget(self.cmb_kalba)
         return bar
+
+    def _perleisti_programa(self):
+        """Paleidzia nauja programos kopija ir uzdaro sia (kalbos keitimui).
+
+        PyInstaller onefile SPASTAS (Roberto gyvas testas 2026-08-06):
+        vaikas paveldi _PYI*/_MEIPASS2 env ir naudoja TEVO _MEI kataloga;
+        tevas ji istrina -> kitas restartas luzta 'Failed to start
+        embedded python interpreter'. Env isvalomas - vaikas issipakuoja
+        SAVO kopija.
+        """
+        import subprocess
+        env = {k: v for k, v in os.environ.items()
+               if k != "_MEIPASS2" and not k.startswith("_PYI")}
+        if getattr(sys, "frozen", False):
+            subprocess.Popen(
+                [sys.executable], env=env,
+                cwd=str(Path(sys.executable).resolve().parent))
+        else:
+            subprocess.Popen([sys.executable] + sys.argv, env=env)
+        QApplication.instance().quit()
+
+    def _on_kalba_changed(self, _idx):
+        """Kalbos pasirinkimas: irasomas i kalba.txt + pasiulomas perleidimas.
+
+        Roberto pastaba 2026-08-06: "gal geriau pati restartuotu, painiavos
+        maziau" - Taip perleidzia is karto, Ne pritaiko kita karta.
+        """
+        from kalba import issaugoti_kalba
+        try:
+            issaugoti_kalba(self.cmb_kalba.currentData())
+        except OSError as e:
+            QMessageBox.warning(
+                self, t("Kalba"), t("Nepavyko issaugoti: {}").format(e))
+            return
+        reply = QMessageBox.question(
+            self, t("Kalba"),
+            t("Kalba issaugota. Perleisti programa dabar?"),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
+            self._perleisti_programa()
+
+    def _on_portable_toggled(self, on):
+        """Portable varnele: saugyklos perjungimas (zr. saugykla.py).
+
+        Nepavykus (pvz., read-only flesiukas) - varnele grazinama atgal
+        (blockSignals, kad atstatymas nesuktu antro perjungimo).
+        """
+        import saugykla
+        ok, err = saugykla.set_portable(on)
+        if not ok:
+            QMessageBox.warning(
+                self, t("Portable rezimas"),
+                t("Nepavyko perjungti rezimo: {}").format(err))
+            self.chk_portable.blockSignals(True)
+            self.chk_portable.setChecked(not on)
+            self.chk_portable.blockSignals(False)
+            return
+        self.status_label.setText(
+            t("Portable rezimas IJUNGTAS - duomenys salia programos") if on
+            else t("Portable rezimas isjungtas - duomenys vartotojo kataloge"))
 
     # ---- Desineje: katalogu sarasas + lentele ----
     def _build_right_area(self):
@@ -360,6 +454,12 @@ class MainWindow(QMainWindow):
         self.results_table.setColumnWidth(4, 90)
         self.results_table.horizontalHeader().setSectionResizeMode(
             1, QHeaderView.ResizeMode.Stretch)
+        # 2026-08-06: ilgi keliai buvo rodomi "C:..." (Roberto laptopo
+        # skrinas) - numatytas wordWrap=True lauzo kelia ties '\' ir
+        # isjungia elidinima; be wrap ElideMiddle rodo pradzia...galas
+        # (patikrinta izoliuotu testu Temp Cleaner dovanoje).
+        self.results_table.setTextElideMode(Qt.TextElideMode.ElideMiddle)
+        self.results_table.setWordWrap(False)
         self.results_table.cellDoubleClicked.connect(self._on_open_folder)
         lay.addWidget(self.results_table, 1); return w
 

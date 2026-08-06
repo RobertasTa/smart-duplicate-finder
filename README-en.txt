@@ -112,15 +112,22 @@ GOOD TO KNOW
 WHERE THINGS ARE STORED
 -----------------------
 * Excel reports — wherever you choose (Documents suggested).
-* Service files — in the computer's %TEMP%\SmartDuplicateFinder\:
+* Service files — in %LOCALAPPDATA%\SmartDuplicateFinder\:
     paskutinis_skenas.json  - scan memory
     scan_speed.json         - disk speed for time estimates
     veiklos.log             - activity log (useful if something
                               ever gets stuck)
-  Nothing is ever written to the USB stick or next to the exe —
-  safe to run from a stick on any computer.
+* PORTABLE MODE (checkbox at the bottom of the left bar): when ON,
+  service files are stored in a _darbal folder NEXT TO the app
+  (e.g. on a USB stick) and no traces are left on the computer —
+  the app even removes its previously created %LOCALAPPDATA% folder.
+  The choice is remembered by a portable.txt file next to the exe
+  (the Notepad++ / VS Code convention) - it travels with your stick.
 * All service files can be deleted at any time — the program simply
   starts fresh.
+* LANGUAGE (Lietuviu / English) can be switched in the dropdown at
+  the bottom of the left bar; the choice is remembered and applied
+  after a restart.
 
 ---------------------------------------------------------------------
 Created by: Robertas + Claude (Anthropic AI) + local AI assistant

@@ -1,8 +1,17 @@
 """
 kalba.py - GUI kalbos sluoksnis (2026-08-05, versija draugui Odesoje).
 Lietuviskas tekstas = zodyno raktas; t() grazina vertima arba pati rakta.
-Kalba parenkama: exe su isiutu lang_en.flag failu -> EN; kitaip pagal
-SDF_LANG aplinkos kintamaji; kitaip LT. Zero Qt priklausomybiu.
+
+Kalbos parinkimo prioritetai (2026-08-06, Roberto pastaba "du exe del
+kalbos - negrazu"; dabar VIENAS exe su pasirinkimu GUI):
+  1. SDF_LANG aplinkos kintamasis (testu izoliacija / prievarta)
+  2. kalba.txt darbiniu failu kataloge (GUI combobox pasirinkimas;
+     portable rezime keliauja su flesiuku kartu su portable.txt)
+  3. lang_en.flag salia exe (senoji -en buildu veliavele, suderinamumas)
+  4. OS kalba (Roberto 2026-08-06 "vienas exe visom kalbom"): lietuviska
+     sistema -> LT, kitaip -> EN. Nauja kalba ateityje = zodynas + eilute
+     combobox'e.
+Zero Qt priklausomybiu.
 """
 import os
 import sys
@@ -13,10 +22,50 @@ def _base():
     return Path(getattr(sys, "_MEIPASS", str(Path(__file__).resolve().parent)))
 
 
-if (_base() / "lang_en.flag").exists() or os.environ.get("SDF_LANG") == "en":
-    LANG = "en"
+def _issaugota_kalba():
+    """Skaito GUI pasirinkima is kalba.txt (saugyklos data_dir)."""
+    try:
+        import saugykla
+        v = (saugykla.data_dir() / "kalba.txt").read_text(
+            encoding="utf-8").strip().lower()
+        return v if v in ("lt", "en") else None
+    except OSError:
+        return None
+
+
+def issaugoti_kalba(lang):
+    """Iraso pasirinkima i kalba.txt; isigalioja perleidus programa.
+    Meta OSError, jei irasyti nepavyko (pvz., read-only vieta)."""
+    import saugykla
+    d = saugykla.data_dir()
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "kalba.txt").write_text(lang + "\n", encoding="utf-8")
+
+
+def _os_kalba():
+    """OS kalbos aptikimas pirmam paleidimui: lietuviska sistema -> lt."""
+    try:
+        import ctypes
+        langid = ctypes.windll.kernel32.GetUserDefaultUILanguage()
+        if (langid & 0x3FF) == 0x27:   # LANG_LITHUANIAN
+            return "lt"
+        return "en"
+    except Exception:
+        pass
+    try:
+        import locale
+        loc = locale.getlocale()[0] or ""
+        return "lt" if loc.lower().startswith("lt") else "en"
+    except Exception:
+        return "en"
+
+
+_env = os.environ.get("SDF_LANG")
+if _env in ("lt", "en"):
+    LANG = _env
 else:
-    LANG = "lt"
+    LANG = _issaugota_kalba() or (
+        "en" if (_base() / "lang_en.flag").exists() else _os_kalba())
 
 _EN = {
     # main_window: mygtukai, antrastes, statusai
@@ -55,6 +104,23 @@ _EN = {
     "Klaida:": "Error:",
     "Exporto klaida:": "Export error:",
     "veikia": "running",
+    # portable rezimas ir kalba (2026-08-06)
+    "Portable rezimas": "Portable mode",
+    "Kalba": "Language",
+    "Kalba pritaikoma paleidus programa is naujo.":
+        "The language is applied after restarting the app.",
+    "Kalba pasikeis paleidus programa is naujo.":
+        "The language will change after you restart the app.",
+    "Kalba issaugota. Perleisti programa dabar?":
+        "Language saved. Restart the app now?",
+    "Nepavyko issaugoti: {}": "Could not save: {}",
+    "Ijungta: kesas ir zurnalas saugomi salia programos (pvz., flesiuke) - kompiuteryje pedsaku nelieka.\nIsjungta (numatyta): saugoma vartotojo kataloge %LOCALAPPDATA%\\SmartDuplicateFinder.":
+        "On: the cache and log are stored next to the app (e.g. on a USB stick) - no traces left on the computer.\nOff (default): stored in the user profile at %LOCALAPPDATA%\\SmartDuplicateFinder.",
+    "Nepavyko perjungti rezimo: {}": "Could not switch mode: {}",
+    "Portable rezimas IJUNGTAS - duomenys salia programos":
+        "Portable mode ON - data lives next to the app",
+    "Portable rezimas isjungtas - duomenys vartotojo kataloge":
+        "Portable mode off - data lives in the user profile",
     # skeno santrauka
     "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB":
         "Scanned {n} files in {k} folder(s) - {g} duplicate groups, {mb:.2f} MB",
@@ -106,6 +172,13 @@ _EN = {
     "Atstatyti": "Cancel",
     # table_populator / worker
     "Grupe {idx}": "Group {idx}",
+    # Excel ataskaita (2026-08-06, lapu pavadinimai ir antrastes pagal kalba)
+    "Dublikatai": "Duplicates",
+    "Panasios nuotraukos": "Similar Images",
+    "Itartini": "Suspects",
+    "Itartinas {n}": "Suspect {n}",
+    "RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)":
+        "SHOWING {a} OF {b} ROWS - Excel sheet limit exceeded (1,048,576)",
     "ITARINI": "SUSPECT",
     "ITARTINI (panasus, bet ne identiski)": "SUSPICIOUS (similar, but not identical)",
     "Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
