@@ -64,9 +64,20 @@ Grab the latest exe from **[Releases](../../releases)**:
 | `SmartDuplicateFinder-en.exe` | English |
 | `SmartDuplicateFinder.exe` | Lithuanian |
 
+**Requirements:** Windows 10 or newer, 64-bit. (On Windows 7 the exe will not
+start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
+platform limit of the Qt6/Python toolchain, not a bug.)
+
 > **Note:** the exe is unsigned (homemade), so Windows SmartScreen may show
 > "Windows protected your PC" on first run — click **More info → Run anyway**.
 > First start takes a few extra seconds (self-extracting), that is normal.
+
+> **Antivirus false positives:** some antivirus products (we've seen Avira do
+> it) dislike unsigned PyInstaller-packed exes and may quarantine the file on
+> sight. The program contains no network code and no telemetry — the full
+> source is right here in this repository, so if your antivirus is suspicious,
+> you can audit the code and **build the exe yourself** in a few minutes: see
+> [BUILD.md](BUILD.md). That is the honest advantage of an open-source gift.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
