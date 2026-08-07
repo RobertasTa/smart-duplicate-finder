@@ -137,6 +137,6 @@ KUR PROGRAMA KĄ SAUGO
   paleidus programą iš naujo.
 
 ---------------------------------------------------------------------
-Sukūrė: Robertas + Claude (Anthropic AI) + vietinė AI „mergytė"
+Sukūrė: Robertas + Claude (Anthropic AI) + vietinis AI pagalbininkas
 2026-08-05        Versija: v2
 =====================================================================
