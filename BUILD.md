@@ -21,7 +21,8 @@ Lietuviska versija / Lithuanian build:
 
 ```bash
 pyinstaller --noconfirm --onefile --windowed --name "SmartDuplicateFinder" ^
-  --icon app.ico --add-data "pletiniai.json;." --add-data "app.ico;." main_window.py
+  --icon app.ico --add-data "pletiniai.json;." --add-data "app.ico;." ^
+  --add-data "README.txt;." --add-data "README-en.txt;." main_window.py
 ```
 
 Angliska versija / English build (sukurkite tuscia `lang_en.flag` faila /
@@ -31,6 +32,7 @@ create an empty `lang_en.flag` file first):
 echo en > lang_en.flag
 pyinstaller --noconfirm --onefile --windowed --name "SmartDuplicateFinder-en" ^
   --icon app.ico --add-data "pletiniai.json;." --add-data "app.ico;." ^
+  --add-data "README.txt;." --add-data "README-en.txt;." ^
   --add-data "lang_en.flag;." main_window.py
 ```
 

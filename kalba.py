@@ -194,6 +194,17 @@ _EN = {
     "Salinamos siuksles: {a}/{b}": "Cleaning junk: {a}/{b}",
     "{f}/{ft} failu": "{f}/{ft} files",
     "liko": "left",
+    # pagalbos "?" kampelis (2026-08-07, Roberto ideja: winget/Store
+    # vartotojas readme negauna - instrukcija gyvena pacioje programoje)
+    "Pagalba": "Help",
+    "Apie...": "About...",
+    "Instrukcija": "User guide",
+    "Nepavyko atidaryti: {}": "Could not open: {}",
+    "Apie programa": "About",
+    "Dubliuotu failu paieska pagal turini - nieko netrina.":
+        "Finds duplicate files by content - never deletes anything.",
+    "Versija {v}": "Version {v}",
+    "Kurejo puslapis:": "Project page:",
 }
 
 _FAM_EN = {

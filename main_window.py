@@ -19,6 +19,9 @@ from PyQt6.QtGui import QFont, QIcon
 
 from kalba import t
 
+# Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
+VERSIJA = "1.2"
+
 
 def _res_path(name):
     """Resurso kelias: veikia ir is source, ir is PyInstaller exe (_MEIPASS)."""
@@ -117,6 +120,12 @@ QPushButton#btn_export:pressed {
     background: #3568b8; border: 1px solid #1a4485;
     padding-top: 11px; padding-bottom: 7px;
 }
+QPushButton#btn_help {
+    border-radius: 13px;
+    padding: 0px;
+    font-weight: 700;
+}
+QPushButton#btn_help::menu-indicator { image: none; width: 0px; }
 QProgressBar {
     border: 1px solid #b6bac8; border-radius: 8px;
     background: #eef0f5; text-align: center; height: 16px;
@@ -431,10 +440,96 @@ class MainWindow(QMainWindow):
             t("Portable rezimas IJUNGTAS - duomenys salia programos") if on
             else t("Portable rezimas isjungtas - duomenys vartotojo kataloge"))
 
+    # ---- "?" pagalbos kampelis (2026-08-07, Roberto ideja: winget/Store
+    # vartotojas readme negauna, tad instrukcija gyvena pacioje programoje) ----
+    def _build_help_button(self):
+        from PyQt6.QtWidgets import QMenu
+        b = QPushButton("?")
+        b.setObjectName("btn_help")
+        b.setFixedSize(26, 26)
+        b.setToolTip(t("Pagalba"))
+        meniu = QMenu(b)
+        meniu.addAction(t("Apie..."), self._on_apie)
+        meniu.addAction(t("Instrukcija"), self._on_instrukcija)
+        b.setMenu(meniu)
+        return b
+
+    def _on_apie(self):
+        """Apie... langelis (Roberto dizainas 2026-08-07): logo,
+        pavadinimas, aprasas, versija, GitHub nuoroda apacioje.
+        Tinklas TIK vartotojui paspaudus nuoroda (offline DNR)."""
+        from PyQt6.QtWidgets import QDialog, QDialogButtonBox
+        dlg = QDialog(self)
+        dlg.setWindowTitle(t("Apie programa"))
+        lay = QVBoxLayout(dlg)
+        virsus = QHBoxLayout()
+        logo = QLabel()
+        ico = _res_path("app.ico")
+        if ico.exists():
+            logo.setPixmap(QIcon(str(ico)).pixmap(64, 64))
+        virsus.addWidget(logo, alignment=Qt.AlignmentFlag.AlignTop)
+        info = QVBoxLayout()
+        pavadinimas = QLabel("Smart Duplicate Finder")
+        pavadinimas.setStyleSheet("font-size: 14pt; font-weight: bold;")
+        info.addWidget(pavadinimas)
+        info.addWidget(QLabel(
+            t("Dubliuotu failu paieska pagal turini - nieko netrina.")))
+        info.addWidget(QLabel(t("Versija {v}").format(v=VERSIJA)))
+        autoriai = QLabel("Robertas & Claude")
+        autoriai.setStyleSheet("color: #5a5e6b;")
+        info.addWidget(autoriai)
+        virsus.addLayout(info)
+        lay.addLayout(virsus)
+        # Ryski melyna + bold, kad matytusi jog spaudziama (Roberto
+        # pastaba 2026-08-07: numatytoji nuorodos spalva per tamsi)
+        nuoroda = QLabel(
+            t("Kurejo puslapis:") + ' <a href="https://github.com/'
+            'RobertasTa/smart-duplicate-finder" style="color:#2f7ce0;'
+            'font-weight:bold;">GitHub</a>')
+        nuoroda.setOpenExternalLinks(True)
+        lay.addWidget(nuoroda)
+        mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        mygtukai.rejected.connect(dlg.reject)
+        lay.addWidget(mygtukai)
+        dlg.exec()
+
+    def _on_instrukcija(self):
+        """Instrukcija: exe viduje ikeptas README (LT/EN pagal GUI kalba)
+        rodomas pacios programos lange su slinktimi (Roberto pastaba
+        2026-08-07: Notepad atsidarydavo tuscias - jokiu isoriniu
+        programu ir jokiu failu kopiju diske)."""
+        from PyQt6.QtWidgets import QDialog, QPlainTextEdit, QDialogButtonBox
+        from kalba import LANG
+        vardas = "README.txt" if LANG == "lt" else "README-en.txt"
+        try:
+            tekstas = _res_path(vardas).read_text(
+                encoding="utf-8", errors="replace")
+        except OSError as e:
+            QMessageBox.warning(
+                self, t("Pagalba"), t("Nepavyko atidaryti: {}").format(e))
+            return
+        dlg = QDialog(self)
+        dlg.setWindowTitle(t("Instrukcija"))
+        lay = QVBoxLayout(dlg)
+        rodinys = QPlainTextEdit(tekstas)
+        rodinys.setReadOnly(True)
+        # Monospace - kad README ASCII antrastes lygiuotusi
+        rodinys.setFont(QFont("Consolas", 10))
+        lay.addWidget(rodinys)
+        mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        mygtukai.rejected.connect(dlg.reject)
+        lay.addWidget(mygtukai)
+        dlg.resize(780, 560)
+        dlg.exec()
+
     # ---- Desineje: katalogu sarasas + lentele ----
     def _build_right_area(self):
         w = QWidget(); lay = QVBoxLayout(w)
-        lay.addWidget(_hdr(t("Ivriniti katalogai:")))
+        virsus = QHBoxLayout()
+        virsus.addWidget(_hdr(t("Ivriniti katalogai:")))
+        virsus.addStretch(1)
+        virsus.addWidget(self._build_help_button())
+        lay.addLayout(virsus)
         self.folder_list = QListWidget()
         self.folder_list.setMinimumHeight(80); lay.addWidget(self.folder_list)
         self.progress_bar = QProgressBar()
