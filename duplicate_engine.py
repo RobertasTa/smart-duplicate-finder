@@ -177,8 +177,13 @@ def hash_groups(candidates, total_files=0, progress_cb=None):
 
 
 def _md5(filepath):
-    """MD5 hash of file contents. Returns hex string or None on error."""
-    h = hashlib.md5()
+    """MD5 hash of file contents. Returns hex string or None on error.
+
+    usedforsecurity=False: MD5 cia tik turinio sutapimo raktas, ne
+    kriptografija - be sito FIPS rezimo Windows (imoniu/valstybines
+    masinos) hashlib.md5() meta ValueError ir programa luzta
+    (claude.ai apzvalgos radinys #2, 2026-08-08)."""
+    h = hashlib.md5(usedforsecurity=False)
     try:
         with open(filepath, "rb") as fh:
             for chunk in iter(lambda: fh.read(65536), b""):

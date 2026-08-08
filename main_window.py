@@ -451,8 +451,59 @@ class MainWindow(QMainWindow):
         meniu = QMenu(b)
         meniu.addAction(t("Apie..."), self._on_apie)
         meniu.addAction(t("Instrukcija"), self._on_instrukcija)
+        meniu.addAction(t("Neradote atsakymo? Klauskite DI"),
+                        self._on_klausk_di)
         b.setMenu(meniu)
         return b
+
+    def _on_klausk_di(self):
+        """Atidaro claude.ai su paruostu promptu (Roberto ideja
+        2026-08-08, receptas is FOTO namu spr. 40): programa rase
+        Claude, tad claude.ai atsakys tiksliausiai. claude.ai/new?q=
+        tik UZPILDO lauka - siuncia pats vartotojas; pries narsykle -
+        paaiskinamasis langas su logotipu ('mociuciu instrukcija':
+        raudona juosta, kur rasyti klausima, kaip pakeisti kalba).
+        Promptas VISADA anglu k. su TIKSLIA repo nuoroda (gyvo testo
+        pamoka: is profilio nuorodos DI programos nerado). Tinklas
+        TIK vartotojui paspaudus OK."""
+        import urllib.parse
+        import webbrowser
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle(t("Neradote atsakymo? Klauskite DI"))
+        ico = _res_path("app.ico")
+        if ico.exists():
+            dlg.setIconPixmap(QIcon(str(ico)).pixmap(64, 64))
+        dlg.setText(t(
+            "Kas ivyks paspaudus OK:\n\n"
+            "1. Atsidarys interneto narsykle su DI padejejo\n"
+            "   claude.ai puslapiu. Zinutes laukelyje jau bus\n"
+            "   irasyta angliska pradzia - prisistatymas, kas per\n"
+            "   programa ir kur jos kodas.\n"
+            "2. NEISSIGASKITE raudono pranesimo virs zinutes -\n"
+            "   claude.ai ji rodo visada, kai tekstas ateina per\n"
+            "   nuoroda. Tai tik priminimas perskaityti, kas\n"
+            "   siunciama.\n"
+            "3. Zinutes gale, po zodziu \"My question:\", irasykite\n"
+            "   SAVO klausima - galima lietuviskai! - ir spauskite\n"
+            "   siuntimo mygtuka (rodykle).\n"
+            "4. Jei DI atsakys angliskai - tiesiog paprasykite kita\n"
+            "   zinute: \"atsakyk lietuviskai\", ir toliau bendraus\n"
+            "   lietuviskai.\n\n"
+            "Pastaba: claude.ai gali paprasyti prisijungti (nemokama\n"
+            "paskyra). Niekas neissiunciama be jusu rankos."))
+        dlg.setStandardButtons(QMessageBox.StandardButton.Ok
+                               | QMessageBox.StandardButton.Cancel)
+        if dlg.exec() != QMessageBox.StandardButton.Ok:
+            return
+        promptas = (
+            'Hi! I am using the app "Smart Duplicate Finder" - a'
+            " duplicate file finder. Its source code is public:"
+            " https://github.com/RobertasTa/smart-duplicate-finder."
+            " Please read the program's code and README, then answer my"
+            " question in plain, human language - no programmer jargon."
+            " My question: ")
+        webbrowser.open("https://claude.ai/new?q="
+                        + urllib.parse.quote(promptas))
 
     def _on_apie(self):
         """Apie... langelis (Roberto dizainas 2026-08-07): logo,
