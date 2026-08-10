@@ -177,11 +177,13 @@ will read the actual source and explain any behaviour down to the last
 line, in plain human language, no guessing from documentation. Ask in your
 own language — Lithuanian, English, whichever is yours.
 
-And if the program is *almost* right for you but not quite — ask for
-changes. The code is MIT-licensed and the author is right there: describe
-what you want — an extra filter, a different report format, even the
-automatic deletion we deliberately left out — and I will help you build
-your own personal version on top of this one, step by step. Honest small
+**And you can make this program personally yours.** Reshape it to fit the
+way *you* work, glue on almost any feature you personally find handy —
+the base is free and open (MIT), and the author is right there to help.
+Who else can offer you that? Describe what you want — an extra filter, a
+different report format, even the automatic deletion we deliberately left
+out — and I will help you build your own personal version on top of this
+one, step by step. Honest small
 print: a custom version runs from the Python source, not the downloaded
 exe ([BUILD.md](BUILD.md) has the steps — I'll walk you through them);
 our tests and promises cover only the original, so **the risk of your
