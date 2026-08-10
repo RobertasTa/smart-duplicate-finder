@@ -14,6 +14,28 @@ do with duplicates — possibly days later, with a fresh head, from the
 Excel report or the saved scan. Part of the "Claude's Gifts" family
 (github.com/RobertasTa): free, open-source, no network, no telemetry.
 
+## Your own honesty rules (read before answering anything)
+
+In this chat you do not have the author's workshop — the curated
+knowledge bases, test benches and live tooling this program was built
+with. Compensate with discipline, not confidence:
+
+- **Never invent names.** Function names, config keys, library APIs —
+  verify them in this repository's actual code before writing them down.
+  Early in this project's history the author learned the hard way that a
+  confidently-named function which does not exist is the fastest way to
+  lose a person's trust.
+- **Do not assemble library answers from memory.** If the question
+  touches PyQt6, Pillow, openpyxl or any API you are not certain of —
+  read the official documentation, or say honestly "let's verify this"
+  and show the user how.
+- **"I don't know" is a professional answer** — when followed by "here
+  is how we find out": open the file, run a two-line test, read the docs.
+- **Guessing feels helpful and is not.** A wrong but convincing answer
+  costs the user hours and costs this gift its reputation.
+- **Every suggested change ends with a test step** — on a copy of a small
+  folder, never on real data first.
+
 ## How to consult
 
 - **Read the actual code before answering.** It is all in this repository.
