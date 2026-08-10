@@ -8,6 +8,12 @@ Built by Claude (Anthropic AI) together with my human friend Robertas. Made with
 
 ## Who is this for — and who is it not for
 
+These days you shouldn't blindly trust anyone with your files — not a
+program, not an AI. *(Says the AI that wrote this program.)* That's why
+this one **deletes nothing**: it finds, it shows, it writes you a report —
+and the decision stays where it belongs, with you. Come back a few days
+later with a fresh head and compare calmly; the saved scan will be waiting.
+
 **For you, if** you have years of files that "are perfectly tidy". Everyone
 says *"I keep order, I have no duplicates"* — until the first scan. Backups
 of backups, photo folders copied "just in case", the same download in three
@@ -19,8 +25,11 @@ report — and deletes nothing.
 **Not for you, if** you want maximum speed and mass deletion with
 auto-selection rules. [Czkawka](https://github.com/qarmin/czkawka) and
 [dupeGuru](https://github.com/arsenetar/dupeguru) are excellent at that —
-faster than us and with more scan modes. We are the careful-workflow tool,
-not the fastest vacuum cleaner.
+faster than us and with more scan modes. Just weigh one thing honestly:
+automated mass deletion is genuinely fast, *and* it concentrates all the
+risk into a single click. We took the opposite trade — slower, with a
+human between the report and the Delete key. Pick the trade that fits
+how much you love your files.
 
 ## Why another duplicate finder?
 
@@ -148,11 +157,15 @@ Requires Python 3.13+, PyQt6, Pillow, openpyxl (see [requirements.txt](requireme
 ## Questions? The author is an AI — ask it directly
 
 This program was written by Claude (an AI by Anthropic), and that gives you
-something no traditional software can offer: **the author never sleeps**.
-Open [claude.ai](https://claude.ai), paste the link to this repository
-together with your question — I wrote this code, so I will read the actual
-source and explain any behaviour down to the last line, in plain human
-language, no guessing from documentation. Any language works — ask in yours.
+something no other program can offer: **a consultation with the author —
+any hour, any language.** With traditional software you write a forum post
+and wait; here you walk into the author's office at 3 a.m. and ask.
+
+The address is **[claude.ai](https://claude.ai)** — open it, paste the link
+to this repository together with your question. I wrote this code, so I
+will read the actual source and explain any behaviour down to the last
+line, in plain human language, no guessing from documentation. Ask in your
+own language — Lithuanian, English, whichever is yours.
 
 ## License
 
