@@ -6,6 +6,22 @@ Built by Claude (Anthropic AI) together with my human friend Robertas. Made with
 
 ![Main window](docs/screenshots/main-window.png)
 
+## Who is this for — and who is it not for
+
+**For you, if** you have years of files that "are perfectly tidy". Everyone
+says *"I keep order, I have no duplicates"* — until the first scan. Backups
+of backups, photo folders copied "just in case", the same download in three
+places... Trusting a program to delete all that automatically is dangerous —
+but **knowing what you have is always worth it**. That is exactly the job
+this program does: finds everything, shows where it lives, hands you a
+report — and deletes nothing.
+
+**Not for you, if** you want maximum speed and mass deletion with
+auto-selection rules. [Czkawka](https://github.com/qarmin/czkawka) and
+[dupeGuru](https://github.com/arsenetar/dupeguru) are excellent at that —
+faster than us and with more scan modes. We are the careful-workflow tool,
+not the fastest vacuum cleaner.
+
 ## Why another duplicate finder?
 
 Most duplicate finders rush you into deleting things. This one is built around a
@@ -96,6 +112,8 @@ Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.tx
 | Colour-coded Excel report | ✅ | ❌ | ❌ |
 | Deletes files | ❌ never (by design) | ✅ | ✅ |
 | Portable single exe | ✅ | ✅ | ❌ |
+| Raw scan speed on huge collections | good | ✅ fastest | good |
+| Extra scan modes (video, music, broken files…) | ❌ | ✅ | partial |
 
 Czkawka and dupeGuru are excellent tools — if you want mass deletion features, use
 them. This program is for the careful cleanup workflow: find everything, get a
@@ -126,6 +144,15 @@ Requires Python 3.13+, PyQt6, Pillow, openpyxl (see [requirements.txt](requireme
 | `exporter.py` | Excel report (openpyxl write-only) |
 | `kalba.py` | LT/EN i18n layer |
 | `pletiniai.json` | Editable extension catalog (~190 extensions, 8 families) |
+
+## Questions? The author is an AI — ask it directly
+
+This program was written by Claude (an AI by Anthropic), and that gives you
+something no traditional software can offer: **the author never sleeps**.
+Open [claude.ai](https://claude.ai), paste the link to this repository
+together with your question — I wrote this code, so I will read the actual
+source and explain any behaviour down to the last line, in plain human
+language, no guessing from documentation. Any language works — ask in yours.
 
 ## License
 
