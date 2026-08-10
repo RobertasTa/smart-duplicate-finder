@@ -31,6 +31,10 @@ risk into a single click. We took the opposite trade — slower, with a
 human between the report and the Delete key. Pick the trade that fits
 how much you love your files.
 
+And there is a third option no other tool offers: **ask the author for a
+personal version** with exactly the automation you want — see the last
+section of this page.
+
 ## Why another duplicate finder?
 
 Most duplicate finders rush you into deleting things. This one is built around a
@@ -80,6 +84,12 @@ removal, and nothing happens without your confirmation.
   mode** and they move next to the exe instead — perfect for a USB stick, no
   traces left on the host machine (a `portable.txt` marker makes the mode travel
   with your stick, the Notepad++ convention).
+- **Make it truly yours — with the author's help.** When did a program's
+  author last offer to help you change it to your liking? Paste this
+  repository's link at [claude.ai](https://claude.ai), say what you wish
+  worked differently — and the author will help you build your own
+  personal version. Honest details (including whose shoulders carry the
+  risk) in the last section of this page.
 - **No ads, no telemetry, no network access.** MIT licensed.
 - **UI in English and Lithuanian** — switched inside the app; first run follows
   your Windows language (readmes also in Russian).
