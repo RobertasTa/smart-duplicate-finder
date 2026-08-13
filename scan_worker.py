@@ -132,7 +132,8 @@ class DeepScanWorker(QObject):
                         .format(a=f"{done:,}", b=f"{total:,}")
                         .replace(",", " "))
 
-            suspects = find_suspects(self.suspect_files, progress_cb=_sus_cb)
+            suspects, suspects_truncated = find_suspects(
+                self.suspect_files, progress_cb=_sus_cb)
             self.updateProgress.emit(95)
 
             # Vizualiai panasios nuotraukos (95..99%), jei pazymeta dialoge
@@ -168,6 +169,7 @@ class DeepScanWorker(QObject):
                 "stats": results["stats"],
                 "groups": results["groups"],
                 "suspects": suspects,
+                "suspects_truncated": suspects_truncated,
                 "visual": visual,
                 "total_files": self.total_files,
                 "speed_mbs": round(speed_mbs, 1),

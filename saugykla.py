@@ -2,13 +2,15 @@
 
 2026-08-06 bendras abieju dovanu sprendimas (Roberto varnele + Notepad++
 doLocalConf.xml konvencija, kaip Temp Cleaner dovanoje): rezima nustato
-ZYMEKLIO FAILAS portable.txt salia exe - jis keliauja su flesiuku, tad
+ZYMEKLIO FAILAS SDF_portable.txt salia exe - jis keliauja su flesiuku, tad
 ijungtas rezimas galioja visuose kompiuteriuose. GUI ji valdo varnele.
 
-- portable.txt NERA (numatyta): kesas/zurnalas -> %LOCALAPPDATA%/SmartDuplicateFinder.
+- zymeklio NERA (numatyta): kesas/zurnalas -> %LOCALAPPDATA%/SmartDuplicateFinder.
   (Anksciau buvo %TEMP% - bet temp valytuvai kesa istrindavo, o elgsena
   nesutapo su Temp Cleaner dovana.)
-- portable.txt YRA: -> _darbal salia exe (kompiuteryje pedsaku nelieka).
+- zymeklis YRA: -> _darbal salia exe (kompiuteryje pedsaku nelieka).
+- senas bendras portable.txt (iki v1.2) skaitomas kaip fallback ir
+  migruojamas perjungiant rezima (zr. PORTABLE_MARKER_SENAS).
 """
 
 import os
@@ -16,7 +18,11 @@ import shutil
 import sys
 from pathlib import Path
 
-PORTABLE_MARKER = "portable.txt"
+PORTABLE_MARKER = "SDF_portable.txt"
+PORTABLE_MARKER_SENAS = "portable.txt"   # iki-v1.2 zymeklis: skaitomas, neberasomas.
+# Pervadinta del SEIMOS KOLIZIJOS (Roberto radinys 2026-08-07): dvi dovanos
+# viename flesiuko kataloge dalinosi ta pati portable.txt - vienos isjungimas
+# isjungdavo abi. Elgesys 1:1 kaip TempCleaner (TempCleaner_portable.txt).
 APP_DIRNAME = "SmartDuplicateFinder"
 
 
@@ -28,7 +34,8 @@ def exe_dir():
 
 
 def is_portable():
-    return (exe_dir() / PORTABLE_MARKER).exists()
+    d = exe_dir()
+    return (d / PORTABLE_MARKER).exists() or (d / PORTABLE_MARKER_SENAS).exists()
 
 
 def data_dir():
@@ -47,12 +54,18 @@ def set_portable(on):
     Grazina (ok, klaidos_tekstas) - pvz., read-only flesiukas -> (False, ...).
     """
     marker = exe_dir() / PORTABLE_MARKER
+    marker_senas = exe_dir() / PORTABLE_MARKER_SENAS
     try:
         src_dir = data_dir()                  # dabartine vieta (senas rezimas)
         if on:
             marker.write_text("portable\n", encoding="utf-8")
-        elif marker.exists():
-            marker.unlink()
+            # migracija: senas bendras zymeklis nuimamas - nuo dabar tik savas
+            if marker_senas.exists():
+                marker_senas.unlink()
+        else:
+            for m in (marker, marker_senas):
+                if m.exists():
+                    m.unlink()
         dst_dir = data_dir()                  # nauja vieta (rezimas jau naujas)
         if src_dir != dst_dir and src_dir.is_dir():
             dst_dir.mkdir(parents=True, exist_ok=True)

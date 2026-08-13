@@ -14,6 +14,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import QTableWidgetItem
 
+from duplicate_engine import pletiniai_kelias
 from kalba import t as _t, fam as _famv
 
 FAMILY_ORDER = ["Paveiksliukai", "Video", "Audio", "Dokumentai",
@@ -45,7 +46,9 @@ def _ext_info():
     if _EXT_INFO is None:
         _EXT_INFO = {}
         try:
-            p = Path(__file__).resolve().parent / "pletiniai.json"
+            # frozen exe rezime __file__ rodo i _MEIPASS - kelias imamas is
+            # bendro pagalbininko (salia exe -> bundle fallback)
+            p = pletiniai_kelias()
             with open(p, encoding="utf-8") as fh:
                 data = json.load(fh)
             _EXT_INFO = {k: v for k, v in data.items()

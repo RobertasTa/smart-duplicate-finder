@@ -6,7 +6,7 @@ Kalbos parinkimo prioritetai (2026-08-06, Roberto pastaba "du exe del
 kalbos - negrazu"; dabar VIENAS exe su pasirinkimu GUI):
   1. SDF_LANG aplinkos kintamasis (testu izoliacija / prievarta)
   2. kalba.txt darbiniu failu kataloge (GUI combobox pasirinkimas;
-     portable rezime keliauja su flesiuku kartu su portable.txt)
+     portable rezime keliauja su flesiuku kartu su SDF_portable.txt)
   3. lang_en.flag salia exe (senoji -en buildu veliavele, suderinamumas)
   4. OS kalba (Roberto 2026-08-06 "vienas exe visom kalbom"): lietuviska
      sistema -> LT, kitaip -> EN. Nauja kalba ateityje = zodynas + eilute
@@ -124,6 +124,10 @@ _EN = {
     # skeno santrauka
     "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB":
         "Scanned {n} files in {k} folder(s) - {g} duplicate groups, {mb:.2f} MB",
+    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
+        "Scanned {n} files in {k} folder(s) - {g} duplicate groups: duplicates take {mb:.2f} MB, {fmb:.2f} MB can be freed",
+    "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
+        "; SUSPICIOUS list truncated at the {n}-pair limit (narrow the folders to see all)",
     "; praleista {n} nepasiekiamu failu": "; {n} unreadable files skipped",
     "Dubliu kandidatu nerasta ({n} failu perziureta{skip}).":
         "No duplicate candidates found ({n} files checked{skip}).",

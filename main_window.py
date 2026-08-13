@@ -42,7 +42,7 @@ def _cache_dir():
     """Darbiniu failu vieta (kesas, veiklos.log, scan_speed.json).
 
     Nuo 2026-08-06 sprendzia saugykla.py: numatyta
-    %LOCALAPPDATA%/SmartDuplicateFinder, o portable rezime (portable.txt
+    %LOCALAPPDATA%/SmartDuplicateFinder, o portable rezime (SDF_portable.txt
     salia exe, GUI varnele) - _darbal salia exe. Anksciau buvo %TEMP%,
     bet temp valytuvai kesa istrindavo ir elgsena nesutapo su Temp
     Cleaner dovana (Roberto pastaba 2026-08-06).
@@ -351,7 +351,7 @@ class MainWindow(QMainWindow):
         lay.addStretch(2)
 
         # Portable varnele (2026-08-06, bendras abieju dovanu sprendimas:
-        # Roberto ideja + portable.txt zymeklis salia exe, zr. saugykla.py)
+        # Roberto ideja + SDF_portable.txt zymeklis salia exe, zr. saugykla.py)
         import saugykla
         self.chk_portable = QCheckBox(t("Portable rezimas"))
         self.chk_portable.setObjectName("chk_portable")
@@ -775,8 +775,10 @@ class MainWindow(QMainWindow):
         self._sizes = data.get("sizes") or {}
         st0 = data["stats"]
         self._log(f"GILUS done: {st0['duplicate_groups']} grupiu, "
-                  f"{st0['duplicated_mb']:.0f} MB dubliu, "
-                  f"{len(self.suspect_results)} ITARTINI poru, "
+                  f"{st0['duplicated_mb']:.0f} MB dubliu "
+                  f"(atlaisvinama {st0.get('freeable_mb', 0):.0f} MB), "
+                  f"{len(self.suspect_results)} ITARTINI poru"
+                  f"{' (NUKIRPTA)' if data.get('suspects_truncated') else ''}, "
                   f"{len(self.visual_results)} vizualiu grupiu, "
                   f"greitis {data.get('speed_mbs', 0)} MB/s")
         # Kesas PRIES lentele: jei vartotojas nudobtu programa lentelei pildantis,
@@ -792,15 +794,22 @@ class MainWindow(QMainWindow):
         self._log(f"LENTELE: {self.results_table.rowCount()} eiluciu "
                   f"per {time.time() - t_populate:.1f} s")
         st = data["stats"]
-        msg = t("Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, "
-                "{mb:.2f} MB").format(n=st['total_files'], k=len(self.folders),
-                                      g=st['duplicate_groups'],
-                                      mb=st['duplicated_mb'])
+        msg = t("Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: "
+                "dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB"
+                ).format(n=st['total_files'], k=len(self.folders),
+                         g=st['duplicate_groups'],
+                         mb=st['duplicated_mb'],
+                         fmb=st.get('freeable_mb', 0.0))
         if self._skipped:
             msg += t("; praleista {n} nepasiekiamu failu").format(n=self._skipped)
         if self.visual_results:
             msg += t("; vizualiai panasiu grupiu: {n}").format(
                 n=len(self.visual_results))
+        if data.get("suspects_truncated"):
+            from duplicate_engine import MAX_SUSPECT_PAIRS
+            msg += t("; ITARTINI sarasas nukirptas ties {n} poru riba "
+                     "(susiaurink katalogus, jei nori visu)").format(
+                n=MAX_SUSPECT_PAIRS)
         self._scan_idle(msg)
 
     # ---- Disko greicio prisiminimas laiko prognozei (scan_speed.json) ----

@@ -4,8 +4,26 @@ import json
 import os
 import re
 import stat as stat_mod
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+
+def pletiniai_kelias():
+    """pletiniai.json vieta. PyInstaller onefile rezime __file__ rodo i
+    laikina _MEIPASS aplanka, todel vartotojo redaguojamas failas SALIA EXE
+    likdavo nematomas (claude.ai apzvalgos radinys #1, 2026-08-08).
+    Paieskos tvarka: (1) salia exe (vartotojo kopija, redaguojama);
+    (2) _MEIPASS bundle (gamyklinis fallback); (3) salia .py (dev rezimas)."""
+    if getattr(sys, "frozen", False):
+        salia_exe = Path(sys.executable).resolve().parent / "pletiniai.json"
+        if salia_exe.is_file():
+            return salia_exe
+        bundle = getattr(sys, "_MEIPASS", None)
+        if bundle:
+            return Path(bundle) / "pletiniai.json"
+        return salia_exe
+    return Path(__file__).resolve().parent / "pletiniai.json"
 
 # --- Windows/Mac siuksliu atpazinimas (2026-08-05, Roberto uzsakymas) ---
 # Dviguba patikra: vardas + turinio parasas (magic bytes). Failai - gryni
@@ -23,7 +41,7 @@ def _extra_junk_names():
     if _EXTRA_JUNK is None:
         _EXTRA_JUNK = set()
         try:
-            p = Path(__file__).resolve().parent / "pletiniai.json"
+            p = pletiniai_kelias()
             with open(p, encoding="utf-8") as fh:
                 data = json.load(fh)
             _EXTRA_JUNK = {str(n).lower() for n in data.get("_siuksles", [])}
@@ -71,12 +89,23 @@ def delete_junk(junk_list, progress_cb=None):
             except PermissionError:
                 # hidden/system/readonly atributai - nuimam ir bandom dar karta
                 try:
+                    senas_mode = os.stat(p).st_mode
+                except OSError:
+                    senas_mode = None
+                try:
                     os.chmod(p, stat_mod.S_IWRITE)
                     os.remove(p)
                     deleted += 1
                     freed += s
                 except OSError:
                     skipped += 1
+                    # trinti nepavyko - grazinam atributus, kokie buvo
+                    # (claude.ai apzvalgos radinys #5, 2026-08-08)
+                    if senas_mode is not None:
+                        try:
+                            os.chmod(p, stat_mod.S_IMODE(senas_mode))
+                        except OSError:
+                            pass
             except OSError:
                 skipped += 1
         else:
@@ -140,31 +169,78 @@ def size_candidates(file_list):
     return [(s, ps) for s, ps in by_size.items() if len(ps) >= 2]
 
 
+def _fiziniu_failu_kiekis(paths):
+    """Kiek FIZISKAI skirtingu failu tarp keliu (hardlink'ai = tas pats
+    failas, st_dev+st_ino sutampa). Hardlink'o istrynimas vietos neatlaisvina,
+    tad 'atlaisvinama' skaiciuojama nuo fiziniu kopiju (claude.ai apzvalgos
+    radinys #3, 2026-08-08). Neperskaitomi keliai laikomi atskirais failais."""
+    inodes = set()
+    extra = 0
+    for p in paths:
+        try:
+            st = os.stat(p)
+            inodes.add((st.st_dev, st.st_ino))
+        except OSError:
+            extra += 1
+    return len(inodes) + extra
+
+
 def hash_groups(candidates, total_files=0, progress_cb=None):
     """2 FAZE (leta): MD5 tik dydzio kandidatu grupese.
     progress_cb(bytes_done, bytes_total) - kvieciamas po kiekvieno failo.
 
     Returns dict with:
       groups - list of lists, each inner list = identical file paths
-      stats  - { total_files, duplicate_groups, duplicated_mb }
+      stats  - { total_files, duplicate_groups, duplicated_mb, freeable_mb }
+        duplicated_mb - bendras dubliu uzimamas turis (VISOS kopijos kartu);
+        freeable_mb   - kiek atsilaisvintu palikus po viena FIZINE kopija
+                        (size*(n-1), hardlink'ai neskaiciuojami; GPT radinys
+                        (a) + claude.ai #3, 2026-08-08).
     """
     bytes_total = sum(s * len(ps) for s, ps in candidates)
     bytes_done = 0
     groups = []
     dup_bytes = 0
+    freeable_bytes = 0
     for size, paths in candidates:
+        # Dideliems failams - 64 KB prefikso filtras: pilnas MD5 tik toms
+        # pogrupemis, kuriu prefiksai sutampa (skirtingi failai atkrenta
+        # perskaicius pirmus baitus, ne visa turini)
+        pogrupes = [paths]
+        if size > _PREFIX_RIBA:
+            by_pref = defaultdict(list)
+            for p in paths:
+                pm = _md5_prefiksas(p)
+                if pm is None:
+                    # pilnas MD5 irgi luztu - failas praleidziamas, progresas juda
+                    bytes_done += size
+                    if progress_cb:
+                        progress_cb(bytes_done, bytes_total)
+                else:
+                    by_pref[pm].append(p)
+            pogrupes = []
+            for ps in by_pref.values():
+                if len(ps) >= 2:
+                    pogrupes.append(ps)
+                else:
+                    # prefiksas unikalus - dublio nebus, pilno skaitymo nereikia
+                    bytes_done += size
+                    if progress_cb:
+                        progress_cb(bytes_done, bytes_total)
         by_md5 = defaultdict(list)
-        for p in paths:
-            m = _md5(p)
-            bytes_done += size
-            if m is not None:
-                by_md5[m].append(p)
-            if progress_cb:
-                progress_cb(bytes_done, bytes_total)
+        for ps in pogrupes:
+            for p in ps:
+                m = _md5(p)
+                bytes_done += size
+                if m is not None:
+                    by_md5[m].append(p)
+                if progress_cb:
+                    progress_cb(bytes_done, bytes_total)
         for md, members in by_md5.items():
             if len(members) >= 2:
                 groups.append(sorted(members))
                 dup_bytes += size * len(members)
+                freeable_bytes += size * max(0, _fiziniu_failu_kiekis(members) - 1)
 
     return {
         "groups": groups,
@@ -172,8 +248,27 @@ def hash_groups(candidates, total_files=0, progress_cb=None):
             "total_files": total_files,
             "duplicate_groups": len(groups),
             "duplicated_mb": round(dup_bytes / (1024.0 * 1024.0), 2),
+            "freeable_mb": round(freeable_bytes / (1024.0 * 1024.0), 2),
         },
     }
+
+
+# Nuo kokio failo dydzio apsimoka pirmas 64 KB "prefikso" perskaitymas:
+# dideliems failams skirtingas turinys demaskuojamas is pirmu baitu ir
+# pilno skaitymo nebereikia (claude.ai apzvalgos radinys #6, 2026-08-08)
+_PREFIX_RIBA = 4 * 1024 * 1024
+_PREFIX_KIEK = 65536
+
+
+def _md5_prefiksas(filepath):
+    """MD5 tik pirmu 64 KB - pigus filtras pries pilna skaityma."""
+    h = hashlib.md5(usedforsecurity=False)
+    try:
+        with open(filepath, "rb") as fh:
+            h.update(fh.read(_PREFIX_KIEK))
+    except (OSError, PermissionError):
+        return None
+    return h.hexdigest()
 
 
 def _md5(filepath):
@@ -221,7 +316,11 @@ def find_suspects(file_list, progress_cb=None):
     Be prefiltro visam diskui buvo hash'uojami visi vienavardziai failai.
     progress_cb(done, total) - kvieciamas po kiekvieno suhash'uoto failo.
 
-    Returns list of dicts {file_a, file_b, reason}.
+    Returns (suspects, truncated):
+      suspects  - list of dicts {file_a, file_b, size_a, size_b, reason}
+      truncated - True, jei pasiekta MAX_SUSPECT_PAIRS lubos ir dalis poru
+                  NEPARODYTA (anksciau kirpdavo TYLIAI - claude.ai apzvalgos
+                  radinys #4, 2026-08-08; vartotojui rodyti ispejima).
     """
     by_name = defaultdict(list)
     for path_str, size in file_list:
@@ -249,8 +348,10 @@ def find_suspects(file_list, progress_cb=None):
     done = 0
     seen = set()
     suspects = []
+    truncated = False
     for cand in hash_jobs:
         if len(suspects) >= MAX_SUSPECT_PAIRS:
+            truncated = True
             break
         enriched = []
         for p, s in cand:
@@ -262,6 +363,7 @@ def find_suspects(file_list, progress_cb=None):
                 enriched.append((p, s, m))
         for i in range(len(enriched)):
             if len(suspects) >= MAX_SUSPECT_PAIRS:
+                truncated = True
                 break
             pa, sa, ma = enriched[i]
             for j in range(i + 1, len(enriched)):
@@ -283,8 +385,9 @@ def find_suspects(file_list, progress_cb=None):
                             "reason": "norm name match + similar size +-10%, diff content",
                         })
                         if len(suspects) >= MAX_SUSPECT_PAIRS:
+                            truncated = True
                             break
-    return suspects
+    return suspects, truncated
 
 
 def find_similar_images(image_files, progress_cb=None, exact_groups=None):
@@ -304,19 +407,28 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
     Returns list of groups (list of paths). Neatidaromi failai praleidziami.
     """
     try:
-        from PIL import Image
+        from PIL import Image, ImageOps
     except ImportError:
         return []
 
-    VIS_DIST = 4  # maks. Hamming atstumas (is 64 bitu), kad laikytume "ta pacia"
-                  # (resize/kokybes perspaudimas realiai pajudina 0-2 bitus)
+    VIS_DIST = 3  # maks. Hamming atstumas (is 64 bitu), kad laikytume "ta pacia"
+                  # (resize/kokybes perspaudimas realiai pajudina 0-2 bitus).
+                  # BUVO 4, bet 4x16 bitu skirstymas zemiau GARANTUOJA tik <=3
+                  # (balandides principas: 4 skirtingi bitai gali pataikyti i
+                  # visus 4 gabalus) - riba suvienodinta su garantija, kad
+                  # nebutu tyliu praleidimu (GPT (b) + claude.ai #7, 2026-08-08)
 
     def _dhash64(img):
         """dHash grynu Pillow (be imagehash/numpy/scipy - exe lieknumui):
         9x8 pilku tasku tinklelis, bitas = ar kairysis taskas sviesesnis
         uz desiniji. Rezultatas - 64 bitu int, atsparus resize/kokybei."""
         g = img.convert("L").resize((9, 8), Image.LANCZOS)
-        px = list(g.getdata())
+        # getdata() nyksta Pillow 14 (2027) - naujas API naudojamas kai yra,
+        # senas paliktas suderinamumui su Pillow <12.3
+        if hasattr(g, "get_flattened_data"):
+            px = list(g.get_flattened_data())
+        else:
+            px = list(g.getdata())
         hv = 0
         for r in range(8):
             for c in range(8):
@@ -329,6 +441,13 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
     for i, (p, s) in enumerate(image_files, 1):
         try:
             with Image.open(p) as img:
+                # JPEG: draft dekoduoja is karto sumazinta - keliskart greiciau
+                # (miniatiurai 9x8 pilnos rezoliucijos nereikia)
+                img.draft("L", (9, 8))
+                # EXIF Orientation: telefonu "pasukta" kopija be sito gautu
+                # KITA atspauda ir dublio nerastume (claude.ai radinys, 2026-08-08;
+                # pillow_foto_guard taisykle #1)
+                img = ImageOps.exif_transpose(img)
                 hv = _dhash64(img)
             by_hash[hv].append(p)
         except Exception:
@@ -338,8 +457,8 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
 
     # 2) Artimu atspaudu suliejimas be O(n^2): 64 bitai dalinami i 4 gabalus
     # po 16 bitu; jei atstumas <= 3, bent vienas gabalas sutampa (balandides
-    # principas) - lyginam tik bendro gabalo kibiruose. VIS_DIST 4-6 pagauna
-    # per du gabalus, praktikoje resize/kokybe pajudina vos kelis bitus.
+    # principas) - lyginam tik bendro gabalo kibiruose. Garantija galioja
+    # butent <=3, todel VIS_DIST=3 (zr. aukciau).
     uniq = list(by_hash.keys())
     parent = list(range(len(uniq)))
 
