@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
         root.setContentsMargins(0, 0, 0, 0)
         root.addWidget(self._build_left_bar())
         root.addWidget(self._build_right_area(), stretch=1)
-        self.statusBar().showMessage(t("Pasiirenges"))
+        self.statusBar().showMessage(t("Pasirenges"))
         # Gyvas skaitliukas apatiniame desiniame kampe (programistu kampelis):
         # [veikia MM:SS] [darbininko statistika]
         self.elapsed_label = QLabel("")
@@ -579,7 +579,7 @@ class MainWindow(QMainWindow):
     def _build_right_area(self):
         w = QWidget(); lay = QVBoxLayout(w)
         virsus = QHBoxLayout()
-        virsus.addWidget(_hdr(t("Ivriniti katalogai:")))
+        virsus.addWidget(_hdr(t("Itraukti katalogai:")))
         virsus.addStretch(1)
         virsus.addWidget(self._build_help_button())
         lay.addLayout(virsus)
@@ -587,7 +587,7 @@ class MainWindow(QMainWindow):
         self.folder_list.setMinimumHeight(80); lay.addWidget(self.folder_list)
         self.progress_bar = QProgressBar()
         self.progress_bar.setVisible(False); lay.addWidget(self.progress_bar)
-        self.status_label = QLabel(t("Prideti katalogus ir spauskite 'Skelnuoti'."))
+        self.status_label = QLabel(t("Prideti katalogus ir spauskite 'Skenuoti'."))
         self.status_label.setWordWrap(True); lay.addWidget(self.status_label)
         lay.addWidget(_hdr(t("Rezultatai:")))
         self.results_table = QTableWidget()
