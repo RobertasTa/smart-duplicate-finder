@@ -1,4 +1,4 @@
-# Smart Duplicate Finder v2 — kompiliavimas / Building
+# Smart Duplicate Finder — kompiliavimas / Building
 
 ## Paleidimas is kodo / Run from source
 
@@ -8,35 +8,32 @@ python -m venv .venv
 .venv\Scripts\python main_window.py
 ```
 
-GUI kalba / UI language: lietuviu (numatytoji). English:
-`set SDF_LANG=en` pries paleidziant / before launching.
+GUI kalba / UI language: perjungiama programos viduje; pirmas paleidimas seka
+Windows kalba / switched inside the app; first run follows your Windows language.
 
 ## EXE kompiliavimas / Building the EXE
 
+Nuo v1.1 vienas exe aptarnauja abi kalbas — atskiro `-en` build'o nebera. /
+Since v1.1 a single exe serves both languages — there is no separate `-en` build.
+
 ```bash
 .venv\Scripts\pip install pyinstaller
-```
-
-Lietuviska versija / Lithuanian build:
-
-```bash
-pyinstaller --noconfirm --onefile --windowed --name "SmartDuplicateFinder" ^
-  --icon app.ico --add-data "pletiniai.json;." --add-data "app.ico;." ^
+.venv\Scripts\python -m PyInstaller --noconfirm --onefile --windowed ^
+  --name "SmartDuplicateFinder" --icon app.ico ^
+  --add-data "pletiniai.json;." --add-data "app.ico;." ^
   --add-data "README.txt;." --add-data "README-en.txt;." main_window.py
 ```
 
-Angliska versija / English build (sukurkite tuscia `lang_en.flag` faila /
-create an empty `lang_en.flag` file first):
+Pastabos / Notes:
 
-```bash
-echo en > lang_en.flag
-pyinstaller --noconfirm --onefile --windowed --name "SmartDuplicateFinder-en" ^
-  --icon app.ico --add-data "pletiniai.json;." --add-data "app.ico;." ^
-  --add-data "README.txt;." --add-data "README-en.txt;." ^
-  --add-data "lang_en.flag;." main_window.py
-```
+- Kvieskite `python -m PyInstaller` (ne `pyinstaller.exe`) — veikia ir tada,
+  kai venv shim'ai luze. / Call `python -m PyInstaller` (not `pyinstaller.exe`) —
+  robust even when venv shims break.
+- `pletiniai.json` PRIVALO buti supakuotas (`--add-data`): be jo frozen exe
+  pletiniu zinynas tyliai degraduotu. / `pletiniai.json` MUST be bundled:
+  without it the frozen exe silently degrades the extension catalog.
 
-Rezultatas / result: `dist\SmartDuplicateFinder[-en].exe` (~54 MB, portable,
+Rezultatas / result: `dist\SmartDuplicateFinder.exe` (~43 MB, portable,
 jokio diegimo / no installation required).
 
 ## Architektura / Architecture

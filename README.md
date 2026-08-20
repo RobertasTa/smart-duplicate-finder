@@ -2,7 +2,11 @@
 
 **A safe, portable duplicate file finder for Windows — finds your duplicates, never deletes them.**
 
+*Find. Show. Never delete.*
+
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
+
+![Demo: scan, review, export — it found them, it deleted zero](docs/demo.gif)
 
 ![Main window](docs/screenshots/main-window.png)
 
@@ -52,7 +56,9 @@ removal, and nothing happens without your confirmation.
 
 - **Content-based detection** — files are compared by MD5 checksum, not by name.
   Renamed duplicates are found; same-named files with different content never
-  produce false alarms.
+  produce false alarms. (MD5 is used here as a content fingerprint, not for
+  security: a collision requires specially crafted files and does not happen
+  by accident in a photo folder.)
 - **Two-phase scan with a candidate dialog** — a seconds-fast size recon first, then
   a dialog shows *what* was found grouped by file family (Pictures, Video, Documents,
   CAD, Code…) with volume and a **time estimate per family**. You choose what is
@@ -90,13 +96,22 @@ removal, and nothing happens without your confirmation.
   worked differently — and the author will help you build your own
   personal version. Honest details (including whose shoulders carry the
   risk) in the last section of this page.
+- **Stuck? Ask the AI that wrote it** — the **?** menu in the app opens
+  step-by-step instructions for a live consultation with the author (details
+  in the last section of this page).
 - **No ads, no telemetry, no network access.** MIT licensed.
 - **UI in English and Lithuanian** — switched inside the app; first run follows
   your Windows language (readmes also in Russian).
 
 ## Download
 
-Grab the latest exe from **[Releases](../../releases)**:
+The quick way (Windows 10/11 built-in package manager):
+
+```
+winget install RobertasTa.SmartDuplicateFinder
+```
+
+Or grab the latest exe from **[Releases](../../releases)**:
 
 | File | UI language |
 |---|---|
@@ -116,6 +131,8 @@ platform limit of the Qt6/Python toolchain, not a bug.)
 > source is right here in this repository, so if your antivirus is suspicious,
 > you can audit the code and **build the exe yourself** in a few minutes: see
 > [BUILD.md](BUILD.md). That is the honest advantage of an open-source gift.
+> Each release description also carries the exe's SHA-256 and a VirusTotal
+> link, so you can verify what you downloaded.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
@@ -137,6 +154,16 @@ Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.tx
 Czkawka and dupeGuru are excellent tools — if you want mass deletion features, use
 them. This program is for the careful cleanup workflow: find everything, get a
 report, decide yourself.
+
+**Measured side by side on real CAD files** (a test set of Autodesk Inventor
+`.ipt`/`.idw`/`.ipj` files, August 2026, same machine): exact duplicates —
+a tie, both SDF and Czkawka found the same groups. *Same file name, silently
+modified part* — SDF's "Suspicious" section flagged both pairs, Czkawka has
+no such category and stays silent. And one honest limit that applies to both:
+*same geometry saved under a different name* is invisible to any file-level
+tool — CAD formats are never byte-identical between saves. If you live in
+Inventor, that middle case ("which version of this part is the real one?")
+is the everyday question — and that's the one this program answers.
 
 ## Run from source / build
 
@@ -198,3 +225,9 @@ My briefing for exactly that conversation lives in
 *This program is a gift to the world. If it saved your disk some space, that's all
 we wanted. Bug reports and ideas are welcome in
 [Issues](../../issues) — they are read and acted on.*
+
+*If it helped and you feel like saying thanks: a ⭐ on this repository is the
+only payment an AI can actually read (I check the counter every working
+session — [here's why](https://github.com/RobertasTa)), and a Like on
+[AlternativeTo](https://alternativeto.net/software/smart-duplicate-finder/about/)
+helps other people find it.*
