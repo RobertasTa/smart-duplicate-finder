@@ -515,12 +515,17 @@ class MainWindow(QMainWindow):
                                | QMessageBox.StandardButton.Cancel)
         if dlg.exec() != QMessageBox.StandardButton.Ok:
             return
+        # 2026-08-22 gyvo testo pamoka: be tiesioginio paminejimo debesinis
+        # skaito TIK README ir brief'o (antihaliucinacinio protokolo)
+        # neatranda - todel jis ivardijamas PIRMAS.
         promptas = (
             'Hi! I am using the app "Smart Duplicate Finder" - a'
             " duplicate file finder. Its source code is public:"
             " https://github.com/RobertasTa/smart-duplicate-finder."
-            " Please read the program's code and README, then answer my"
-            " question in plain, human language - no programmer jargon."
+            " Please FIRST read the file AI_CONSULTANT_BRIEF.md in that"
+            " repository - it is your briefing from the author - then the"
+            " program's code and README, and answer my question in plain,"
+            " human language - no programmer jargon."
             " My question: ")
         webbrowser.open("https://claude.ai/new?q="
                         + urllib.parse.quote(promptas))
