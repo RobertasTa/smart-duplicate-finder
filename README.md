@@ -41,12 +41,18 @@ section of this page.
 
 ## Why another duplicate finder?
 
-Most duplicate finders rush you into deleting things. This one is built around a
-deliberate **safety principle**: the program **never deletes your files**. It finds
-duplicates, shows where they live and how much space they waste — and hands you a
-colour-coded Excel report so you can clean up *at your own pace*, a few files a day
-if you like. A duplicate may sit in a folder on purpose (a backup, a project bundle) —
-no automation should decide which copy to keep.
+Ask anyone who has used duplicate finders for years and you will hear the same
+story: one day the program deleted the wrong files. That is not a bug in one
+particular tool — it is the limit of every algorithm. **No algorithm can decide
+what matters to you**: what is junk to one person is the only surviving backup
+to another. So this program is built around a deliberate **safety principle**:
+it **never deletes your files**. It finds duplicates, shows where they live and
+how much space they waste — and hands you a colour-coded Excel report so you can
+review it calmly, with a cool head, *at your own pace*, a few files a day if you
+like. A duplicate may sit in a folder on purpose (a backup, a project bundle).
+And if after the review you decide you want to keep every single copy — that is
+a perfectly good outcome too. The goal here is not gigabytes deleted; it is you
+knowing exactly what you have and making the call yourself.
 
 The only deletion it can do is optional **system junk cleanup** (`Thumbs.db`,
 `.DS_Store`) — and even there, every file's content signature is verified before
