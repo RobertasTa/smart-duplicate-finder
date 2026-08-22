@@ -74,7 +74,9 @@ removal, and nothing happens without your confirmation.
 
 - **Visually similar photos** — a built-in perceptual hash (dHash) finds the same
   picture even after resizing, re-saving at different quality or format conversion.
-  Shown in a separate violet section and a dedicated Excel sheet.
+  Works across everyday image formats (JPG, PNG, GIF, BMP, TIFF, WebP), and phone
+  photos stored "rotated" (EXIF orientation) are matched correctly too. Shown in a
+  separate violet section and a dedicated Excel sheet.
 - **"Suspicious" section** — files with identical names and similar size but
   *different* content: not duplicates, but often two versions of the same document
   worth a look.
@@ -88,8 +90,11 @@ removal, and nothing happens without your confirmation.
 
 - **Fast on real disks** — different sizes are never even read; a whole-drive scan
   (1.18 million files) goes from button to results table in ~50 seconds.
-- **Scan memory** — results are cached; on next start the program offers to load the
-  previous scan so you can export immediately without re-scanning.
+- **Scan memory that survives anything** — results are saved to disk the moment
+  scanning finishes, *before* the table is even drawn. If the program gets killed
+  or crashes right after a long scan, the results are still there: on next start
+  it offers to load the previous scan so you can review and export immediately,
+  without re-scanning. A scan that took hours is never lost.
 - **Double-click any row** → Explorer opens with the file selected.
 - **Portable** — one exe, no installation, no Python. Working files (scan cache,
   activity log) live in `%LOCALAPPDATA%\SmartDuplicateFinder`; tick **Portable
