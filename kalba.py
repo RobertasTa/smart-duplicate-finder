@@ -28,7 +28,7 @@ def _issaugota_kalba():
         import saugykla
         v = (saugykla.data_dir() / "kalba.txt").read_text(
             encoding="utf-8").strip().lower()
-        return v if v in ("lt", "en") else None
+        return v if v in ("lt", "en", "ru", "de") else None
     except OSError:
         return None
 
@@ -61,7 +61,7 @@ def _os_kalba():
 
 
 _env = os.environ.get("SDF_LANG")
-if _env in ("lt", "en"):
+if _env in ("lt", "en", "ru", "de"):
     LANG = _env
 else:
     LANG = _issaugota_kalba() or (
@@ -198,6 +198,11 @@ _EN = {
     "Salinamos siuksles: {a}/{b}": "Cleaning junk: {a}/{b}",
     "{f}/{ft} failu": "{f}/{ft} files",
     "liko": "left",
+    # v1.3 desinio klaviso meniu rezultatu lenteleje (2026-08-22)
+    "Atidaryti faila": "Open file",
+    "Atidaryti kataloga": "Open folder",
+    "Kopijuoti kelia": "Copy path",
+    "Kelias nukopijuotas": "Path copied",
     # pagalbos "?" kampelis (2026-08-07, Roberto ideja: winget/Store
     # vartotojas readme negauna - instrukcija gyvena pacioje programoje)
     "Pagalba": "Help",
@@ -257,15 +262,37 @@ _FAM_EN = {
 }
 
 
+# v1.3 (2026-08-22): RU/DE/LT zodynai gyvena atskiruose moduliuose,
+# kad kalba.py liktu skaitomas. Trukstamo rakto atsarga RU/DE rezime -
+# EN vertimas (suprantamesnis uz lietuviska rakta), tada pats raktas.
+# LT zodynas (Roberto pastaba is gyvo v1.3 testo) - taisyklingos
+# lietuviskos raides rodymui; raktai kode lieka ASCII.
+from kalba_ru import _RU, _FAM_RU
+from kalba_de import _DE, _FAM_DE
+from kalba_lt import _LT
+
+_ZODYNAI = {"lt": _LT, "en": _EN, "ru": _RU, "de": _DE}
+_FAM_ZODYNAI = {"en": _FAM_EN, "ru": _FAM_RU, "de": _FAM_DE}
+
+
 def t(raktas):
-    """Vertimas: LT rezime grazina rakta, EN - vertima (arba rakta, jei nera)."""
-    if LANG == "en":
-        return _EN.get(raktas, raktas)
-    return raktas
+    """Vertimas: kiekviena kalba turi zodyna (LT - diakritiku sluoksni).
+    Trukstamam raktui: RU/DE krenta i EN, LT ir EN - i pati rakta."""
+    z = _ZODYNAI.get(LANG)
+    if z is None:
+        return raktas
+    v = z.get(raktas)
+    if v is None and LANG in ("ru", "de"):
+        v = _EN.get(raktas)
+    return v if v is not None else raktas
 
 
 def fam(seima):
     """Seimos pavadinimas rodymui (vidiniai raktai visada lietuviski)."""
-    if LANG == "en":
-        return _FAM_EN.get(seima, seima)
-    return seima
+    z = _FAM_ZODYNAI.get(LANG)
+    if z is None:
+        return seima
+    v = z.get(seima)
+    if v is None and LANG != "en":
+        v = _FAM_EN.get(seima)
+    return v if v is not None else seima

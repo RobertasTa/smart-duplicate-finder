@@ -17,7 +17,14 @@ SVARBU: dublių programa NETRINA — tik suranda ir parodo; ką daryti,
 sprendžiate patys. Vienintelis trynimas — sistemos šiukšlių valymas,
 ir tas vyksta tik jums patvirtinus.
 
-Tai SĄMONINGAS SAUGUMO PRINCIPAS, ne trūkumas: jokia automatika
+Paklauskite bet ko, kas dublių ieškiklius naudoja ne pirmus metus,
+ir išgirsite tą pačią istoriją: vieną dieną programa ištrynė ne
+tuos failus. Tai ne vieno konkretaus įrankio klaida — tai kiekvieno
+algoritmo riba. JOKS ALGORITMAS NEGALI NUSPRĘSTI, KAS SVARBU BŪTENT
+JUMS: kas vienam šiukšlė, kitam — vienintelė išlikusi atsarginė
+kopija.
+
+Todėl tai SĄMONINGAS SAUGUMO PRINCIPAS, ne trūkumas: jokia automatika
 nenuspręs už jus, kurią kopiją palikti — gal dublis kataloge guli
 tyčia (atsarginė kopija, projekto komplektas). Programa niekada
 neištrins to, ko nenorėjote — todėl ja galima drąsiai skenuoti
@@ -26,7 +33,10 @@ net svarbiausius archyvus.
 O Excel ataskaita tam ir skirta: tvarkytis SAVO TEMPU. Nebūtina
 viską daryti iš karto — ataskaita lieka failu, ją galima atsidaryti
 kad ir po savaitės, rūšiuoti, žymėtis spalvomis kas sutvarkyta,
-ir eiti per dublius po kelis kasdien, kol diskas švarus.
+ir eiti per dublius po kelis kasdien, kol diskas švarus. O jei
+peržiūrėję nuspręsite pasilikti visas kopijas iki vienos — tai
+irgi visiškai geras rezultatas. Tikslas čia ne ištrinti gigabaitai,
+o žinojimas, ką tiksliai turite, ir JŪSŲ paties priimtas sprendimas.
 
 KAIP PALEISTI
 -------------
@@ -58,7 +68,9 @@ KAIP NAUDOTIS (žingsnis po žingsnio)
    DIDŽIAUSI dubliai — viršuje. Užvedus pelę matysite failo tipo
    aprašymą.
 6. DVIGUBAS KLIKAS ant eilutės atidaro Explorer su pažymėtu failu —
-   patogu iškart nueiti ir sutvarkyti.
+   patogu iškart nueiti ir sutvarkyti. DEŠINYS KLAVIŠAS (nuo v1.3)
+   siūlo: atidaryti failą / atidaryti katalogą / kopijuoti kelią
+   (vykdomųjų failų atidarymas saugumo sumetimais išjungtas).
 7. „Eksportuoti ataskaitą" — pilnas sąrašas išsaugomas į spalvotą
    Excel failą (paklaus, kur padėti; siūlys Dokumentus).
 
@@ -93,7 +105,10 @@ Kandidatų lange yra papildoma eilutė „Panašios nuotraukos (vizualiai)"
 (varnelė uždėta kaip ir kitoms). Su ja programa palygina nuotraukas
 VIZUALIAI — randa tą pačią nuotrauką net jei ji sumažinta, išsaugota
 kita kokybe ar kitu formatu (MD5 tokių nemato, nes failai skiriasi
-baitais). Rezultatuose tokios grupės rodomos violetine spalva
+baitais). Veikia su įprastais formatais (JPG, PNG, GIF, BMP, TIFF,
+WebP), o nuo v1.3 — ir su iPhone formatais HEIC/AVIF; telefono
+nuotraukos, saugomos „pasuktos" (EXIF orientacija), sulyginamos
+teisingai. Rezultatuose tokios grupės rodomos violetine spalva
 („VIZUALIAI PANAŠŪS"), o Excel ataskaitoje — atskirame lape
 „Similar Images".
 Pastaba dėl laiko: šiam lyginimui reikia atverti KIEKVIENĄ nuotrauką
@@ -104,9 +119,12 @@ tikros „paslėptos" kopijos.
 
 GUDRYBĖS, KURIAS VERTA ŽINOTI
 -----------------------------
-* SKENO ATMINTIS: baigus skenavimą rezultatai įsimenami. Kitą kartą
-  paleidus programą ji pasiūlys įkelti praėjusio skeno rezultatus
-  be pakartotinio skenavimo — galima iškart eksportuoti.
+* SKENO ATMINTIS, ATSPARI LŪŽIMAMS: rezultatai įrašomi į diską vos
+  skenui pasibaigus — dar PRIEŠ piešiant lentelę. Net jei programa
+  būtų nudobta ar nulūžtų iškart po ilgo skeno, rezultatai
+  neprapuola: kitą kartą paleidus ji pasiūlys įkelti praėjusio skeno
+  rezultatus be pakartotinio skenavimo — galima iškart eksportuoti.
+  Valandų trukmės skenas niekada neprarandamas.
 * Lentelėje rodoma iki 2 000 eilučių (didžiausios grupės), kad langas
   neliūžtų — PILNAS sąrašas visada yra Excel ataskaitoje.
 * ITARTINI sekcija (geltona) — failai vienodais vardais ir panašiu
@@ -132,9 +150,9 @@ KUR PROGRAMA KĄ SAUGO
   konvencija) — jis keliauja kartu su fleške.
 * Visus tarnybinius failus galima bet kada ištrinti — programa
   tiesiog pradės nuo švaraus lapo.
-* KALBA (Lietuvių / English) perjungiama išsiskleidžiančiame sąraše
-  kairės juostos apačioje; pasirinkimas įsimenamas ir pritaikomas
-  paleidus programą iš naujo.
+* KALBA (Lietuvių / English / Русский / Deutsch) perjungiama
+  išsiskleidžiančiame sąraše kairės juostos apačioje; pasirinkimas
+  įsimenamas ir pritaikomas paleidus programą iš naujo.
 
 ---------------------------------------------------------------------
 Sukūrė: Robertas + Claude (Anthropic AI) + vietinis AI pagalbininkas

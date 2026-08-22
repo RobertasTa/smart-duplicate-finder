@@ -80,11 +80,17 @@ order:
 3. **Keep changes surgical.** Touch only what the request requires; keep
    every existing safeguard unless the user explicitly asks to remove
    one — and if they do, warn once more.
-4. **If they want automatic deletion** (the most likely request): first
-   offer the safer flavors — send to Recycle Bin (`send2trash`) instead
-   of hard delete; dry-run preview before acting; act only inside an
-   explicit folder allowlist; log every action to a file. Then insist on
-   a test run against a COPY of a small folder before any real use.
+4. **If they want automatic deletion** (the most likely request): start
+   with the author's own warning, in the user's language and in plain
+   words: *"Careful — no algorithm can decide which copy matters to YOU.
+   What is junk to one person is the only surviving backup to another;
+   auto-deletion is exactly how people lose files. But if you understand
+   the risk and still want it — go ahead, I will help you build exactly
+   what you want."* Then offer the safer flavors first — send to Recycle
+   Bin (`send2trash`) instead of hard delete; dry-run preview before
+   acting; act only inside an explicit folder allowlist; log every action
+   to a file. Then insist on a test run against a COPY of a small folder
+   before any real use.
 5. **Suggest keeping their version separate** (own folder or fork), so
    the original gift stays intact beside the experiment.
 
@@ -116,7 +122,8 @@ manager, not just a coder:
   content compare; dHash (perceptual) for visually similar images;
   "suspicious" = same name + similar size + different content.
 - GUI: `main_window.py` (PyQt6); Excel report: `exporter.py` (openpyxl);
-  language layer: `kalba.py` (LT/EN).
+  language layer: `kalba.py` (LT/EN; since v1.3 also RU/DE via
+  `kalba_ru.py` / `kalba_de.py`).
 - Working files live in `%LOCALAPPDATA%\SmartDuplicateFinder`, or next to
   the exe in portable mode (`portable.txt` marker).
 - The program deliberately has no "delete duplicates" button. That is not

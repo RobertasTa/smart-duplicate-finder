@@ -1,0 +1,163 @@
+# -*- coding: utf-8 -*-
+"""SDF GUI lietuviškas žodynas (v1.3, 2026-08-22, Roberto pastaba iš gyvo
+testo: „meškinė be Š varnelių — kliūva, kas lietuvių rimtai žiūri kalbą").
+
+Raktai kode istoriškai ASCII be diakritikų; ŠIS žodynas grąžina taisyklingą
+lietuvių kalbą rodymui. Įtraukti TIK raktai, kuriems reikia pakeitimų —
+kitiems t() grąžina patį raktą. Placeholder'iai {n}/{mb:.2f}... privalo
+sutapti su raktu.
+"""
+
+_LT = {
+    "+   Prideti katalogus": "+   Pridėti katalogus",
+    "-   Pasalinti pasirinktus": "-   Pašalinti pasirinktus",
+    "Eksportuoti ataskaita": "Eksportuoti ataskaitą",
+    "Salinti siuksles": "Šalinti šiukšles",
+    "Itraukti katalogai:": "Įtraukti katalogai:",
+    "Sukurimo data": "Sukūrimo data",
+    "Grupe": "Grupė",
+    "Pasirenges": "Pasirengęs",
+    "Prideti katalogus ir spauskite 'Skenuoti'.":
+        "Pridėkite katalogus ir spauskite „Skenuoti“.",
+    "Pirma prideti bent viena kataloga.":
+        "Pirma pridėkite bent vieną katalogą.",
+    "Zvalgyba: renkami failu dydziai...":
+        "Žvalgyba: renkami failų dydžiai...",
+    "Gilus tikrinimas (MD5 pagal turini)...":
+        "Gilus tikrinimas (MD5 pagal turinį)...",
+    "Skenavimas atsauktas.": "Skenavimas atšauktas.",
+    "Nepazymeta ne viena seima - skenavimas atsauktas.":
+        "Nepažymėta nė viena šeima — skenavimas atšauktas.",
+    "Salinamos siuksles": "Šalinamos šiukšlės",
+    "Pirma atlikti skana.": "Pirma atlikite skeną.",
+    "Exportuojama...": "Eksportuojama...",
+    "Eksportas atsauktas.": "Eksportas atšauktas.",
+    "Kur issaugoti ataskaita?": "Kur išsaugoti ataskaitą?",
+    "Eksportas sekmingas": "Eksportas sėkmingas",
+    "Portable rezimas": "Portable režimas",
+    "Kalba pritaikoma paleidus programa is naujo.":
+        "Kalba pritaikoma paleidus programą iš naujo.",
+    "Kalba pasikeis paleidus programa is naujo.":
+        "Kalba pasikeis paleidus programą iš naujo.",
+    "Kalba issaugota. Perleisti programa dabar?":
+        "Kalba išsaugota. Perleisti programą dabar?",
+    "Nepavyko issaugoti: {}": "Nepavyko išsaugoti: {}",
+    "Ijungta: kesas ir zurnalas saugomi salia programos (pvz., flesiuke) - kompiuteryje pedsaku nelieka.\nIsjungta (numatyta): saugoma vartotojo kataloge %LOCALAPPDATA%\\SmartDuplicateFinder.":
+        "Įjungta: kešas ir žurnalas saugomi šalia programos (pvz., flešiuke) — kompiuteryje pėdsakų nelieka.\nIšjungta (numatyta): saugoma vartotojo kataloge %LOCALAPPDATA%\\SmartDuplicateFinder.",
+    "Nepavyko perjungti rezimo: {}": "Nepavyko perjungti režimo: {}",
+    "Portable rezimas IJUNGTAS - duomenys salia programos":
+        "Portable režimas ĮJUNGTAS — duomenys šalia programos",
+    "Portable rezimas isjungtas - duomenys vartotojo kataloge":
+        "Portable režimas išjungtas — duomenys vartotojo kataloge",
+    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB":
+        "Skenuota {n} failų iš {k} katalogų — {g} dublikatų grupės, {mb:.2f} MB",
+    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
+        "Skenuota {n} failų iš {k} katalogų — {g} dublikatų grupės: dubliai užima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB",
+    "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
+        "; ĮTARTINŲ sąrašas nukirptas ties {n} porų riba (susiaurinkite katalogus, jei norite visų)",
+    "; praleista {n} nepasiekiamu failu":
+        "; praleista {n} nepasiekiamų failų",
+    "Dubliu kandidatu nerasta ({n} failu perziureta{skip}).":
+        "Dublių kandidatų nerasta ({n} failų peržiūrėta{skip}).",
+    "Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?":
+        "Rasti ankstesnio skeno rezultatai ({kada}, {n} dublių grupių).\nĮkelti be pakartotinio skenavimo?",
+    "Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)":
+        "Įkelti {kada} skeno rezultatai: {g} dublikatų grupės, {mb:.2f} MB (galima eksportuoti be skenavimo)",
+    "Keso ikelti nepavyko - skenuok is naujo.":
+        "Kešo įkelti nepavyko — skenuokite iš naujo.",
+    "Siuksliu nerasta - pirma atlik zvalgyba.":
+        "Šiukšlių nerasta — pirma atlikite žvalgybą.",
+    "Salinti Windows/Mac siuksles?": "Šalinti Windows/Mac šiukšles?",
+    "Rasta {n} sistemos siuksliu ({mb:.1f} MB):":
+        "Rasta {n} sistemos šiukšlių ({mb:.1f} MB):",
+    "Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?":
+        "Tai miniatiūrų/naršymo kešai — OS juos atsikuria pati.\nPrieš trynimą kiekvienam failui tikrinamas turinio parašas;\nneatitinkantys NEBUS trinami.\n\nDĖMESIO: tinklo diskuose (NAS) trynimas negrįžtamas\n(šiukšliadėžė ten neveikia). Trinti?",
+    "Siuksliu salinimas atsauktas.": "Šiukšlių šalinimas atšauktas.",
+    "Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB":
+        "Ištrinta {n} šiukšlių, atlaisvinta {mb:.1f} MB",
+    "; praleista {n} (parasas nesutapo arba failas uzrakintas)":
+        "; praleista {n} (parašas nesutapo arba failas užrakintas)",
+    "Rasti kandidatai i dublius": "Rasti kandidatai į dublius",
+    "Vienodo dydzio failu grupes (kandidatai). Pazymekite,\nkurias seimas tikrinti giliai (MD5 pagal turini):":
+        "Vienodo dydžio failų grupės (kandidatai). Pažymėkite,\nkurias šeimas tikrinti giliai (MD5 pagal turinį):",
+    "Seima": "Šeima",
+    "Grupiu": "Grupių",
+    "Failu": "Failų",
+    "Tikrinti pazymetus": "Tikrinti pažymėtus",
+    "Atsaukti": "Atšaukti",
+    "Is viso pazymejus viska: {mb} skaitymo, {t} (disko greitis ~{v} MB/s)":
+        "Iš viso pažymėjus viską: {mb} skaitymo, {t} (disko greitis ~{v} MB/s)",
+    "Prideti katalogus": "Pridėti katalogus",
+    "Iklijuokite kelius is Explorer (Ctrl+V) arba pasirinkite paspausdami mygtuka:":
+        "Įklijuokite kelius iš Explorer (Ctrl+V) arba pasirinkite paspausdami mygtuką:",
+    "C:\\Ap1\nD:\\Ap2\nF:\\Ap3  (kiekvienas - naujoje eiluteje)":
+        "C:\\Ap1\nD:\\Ap2\nF:\\Ap3  (kiekvienas — naujoje eilutėje)",
+    "Pasirinkti kataloga": "Pasirinkti katalogą",
+    "Prideti": "Pridėti",
+    "Grupe {idx}": "Grupė {idx}",
+    "Panasios nuotraukos": "Panašios nuotraukos",
+    "Itartini": "Įtartini",
+    "Itartinas {n}": "Įtartinas {n}",
+    "RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)":
+        "RODOMA {a} IŠ {b} EILUČIŲ — viršyta Excel lapo riba (1 048 576)",
+    "ITARINI": "ĮTARTINAS",
+    "ITARTINI (panasus, bet ne identiski)":
+        "ĮTARTINI (panašūs, bet ne identiški)",
+    "Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
+        "Rodoma {n} eilučių (didžiausios grupės viršuje) — PILNAS sąrašas Excel ataskaitoje",
+    "Zvalgyba: {n} failu...": "Žvalgyba: {n} failų...",
+    "Panasios nuotraukos (vizualiai)": "Panašios nuotraukos (vizualiai)",
+    "VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)":
+        "VIZUALIAI PANAŠŪS (skirtinga rezoliucija/kokybė)",
+    "Vizualus lyginimas: {a}/{b} nuotrauku":
+        "Vizualus lyginimas: {a}/{b} nuotraukų",
+    "; vizualiai panasiu grupiu: {n}": "; vizualiai panašių grupių: {n}",
+    "ITARTINI paieska: {a}/{b} failu": "ĮTARTINŲ paieška: {a}/{b} failų",
+    "Salinamos siuksles: {a}/{b}": "Šalinamos šiukšlės: {a}/{b}",
+    "{f}/{ft} failu": "{f}/{ft} failų",
+    "Atidaryti faila": "Atidaryti failą",
+    "Atidaryti kataloga": "Atidaryti katalogą",
+    "Kopijuoti kelia": "Kopijuoti kelią",
+    "Apie programa": "Apie programą",
+    "Dubliuotu failu paieska pagal turini - nieko netrina.":
+        "Dubliuotų failų paieška pagal turinį — nieko netrina.",
+    "Kurejo puslapis:": "Kūrėjo puslapis:",
+    "Kas ivyks paspaudus OK:\n\n"
+    "1. Atsidarys interneto narsykle su DI padejejo\n"
+    "   claude.ai puslapiu. Zinutes laukelyje jau bus\n"
+    "   irasyta angliska pradzia - prisistatymas, kas per\n"
+    "   programa ir kur jos kodas.\n"
+    "2. NEISSIGASKITE raudono pranesimo virs zinutes -\n"
+    "   claude.ai ji rodo visada, kai tekstas ateina per\n"
+    "   nuoroda. Tai tik priminimas perskaityti, kas\n"
+    "   siunciama.\n"
+    "3. Zinutes gale, po zodziu \"My question:\", irasykite\n"
+    "   SAVO klausima - galima lietuviskai! - ir spauskite\n"
+    "   siuntimo mygtuka (rodykle). Klausti galima visko,\n"
+    "   pvz.: \"kaip atsinaujinti programa i naujesne\n"
+    "   versija? paaiskink zingsnis po zingsnio\".\n"
+    "4. Jei DI atsakys angliskai - tiesiog paprasykite kita\n"
+    "   zinute: \"atsakyk lietuviskai\", ir toliau bendraus\n"
+    "   lietuviskai.\n\n"
+    "Pastaba: claude.ai gali paprasyti prisijungti (nemokama\n"
+    "paskyra). Niekas neissiunciama be jusu rankos.":
+        "Kas įvyks paspaudus OK:\n\n"
+        "1. Atsidarys interneto naršyklė su DI padėjėjo\n"
+        "   claude.ai puslapiu. Žinutės laukelyje jau bus\n"
+        "   įrašyta angliška pradžia — prisistatymas, kas per\n"
+        "   programa ir kur jos kodas.\n"
+        "2. NEIŠSIGĄSKITE raudono pranešimo virš žinutės —\n"
+        "   claude.ai jį rodo visada, kai tekstas ateina per\n"
+        "   nuorodą. Tai tik priminimas perskaityti, kas\n"
+        "   siunčiama.\n"
+        "3. Žinutės gale, po žodžių \"My question:\", įrašykite\n"
+        "   SAVO klausimą — galima lietuviškai! — ir spauskite\n"
+        "   siuntimo mygtuką (rodyklė). Klausti galima visko,\n"
+        "   pvz.: „kaip atsinaujinti programą į naujesnę\n"
+        "   versiją? paaiškink žingsnis po žingsnio“.\n"
+        "4. Jei DI atsakys angliškai — tiesiog paprašykite kita\n"
+        "   žinute: „atsakyk lietuviškai“, ir toliau bendraus\n"
+        "   lietuviškai.\n\n"
+        "Pastaba: claude.ai gali paprašyti prisijungti (nemokama\n"
+        "paskyra). Niekas neišsiunčiama be jūsų rankos.",
+}

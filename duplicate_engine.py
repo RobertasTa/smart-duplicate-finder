@@ -410,6 +410,16 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
         from PIL import Image, ImageOps
     except ImportError:
         return []
+    # HEIC/HEIF (iPhone numatytasis formatas): Pillow pats ju neatidaro -
+    # pillow-heif registruoja atidarytuvus (dupeGuru #455, 17 balsu; v1.3,
+    # gyvas testas 2026-08-22: HEIC+AVIF+JPEG kopijos suguli i viena grupe).
+    # AVIF nuo Pillow 11.2+ atidaromas natyviai. Priedo nesant elgsena
+    # kaip iki siol - tokie failai tyliai praleidziami (except zemiau).
+    try:
+        from pillow_heif import register_heif_opener
+        register_heif_opener()
+    except ImportError:
+        pass
 
     VIS_DIST = 3  # maks. Hamming atstumas (is 64 bitu), kad laikytume "ta pacia"
                   # (resize/kokybes perspaudimas realiai pajudina 0-2 bitus).

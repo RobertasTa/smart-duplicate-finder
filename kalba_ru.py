@@ -1,0 +1,244 @@
+# -*- coding: utf-8 -*-
+"""SDF GUI RU zodynas (v1.3, 2026-08-22). Raktas - lietuviskas
+tekstas is kalba.py _EN. Vertimu juodrastis - dukryte (lokalus
+Hermes agentas), perziura ir taisymai - Claude. Neredaguoti ranka
+be perziuros: placeholder'iai {n}/{mb:.2f}... privalo sutapti su raktu."""
+
+_RU = {
+    'Duplicate Finder':
+        'Duplicate Finder',
+    '+   Prideti katalogus':
+        '+   Добавить папки',
+    '-   Pasalinti pasirinktus':
+        '-   Удалить выбранные',
+    '>>> Skenuoti':
+        '>>> Сканировать',
+    'Eksportuoti ataskaita':
+        'Экспортировать отчёт',
+    'Salinti siuksles':
+        'Очистить мусор',
+    'Itraukti katalogai:':
+        'Папки для сканирования:',
+    'Rezultatai:':
+        'Результаты:',
+    'Failo vardas':
+        'Имя файла',
+    'Pilnas kelias':
+        'Полный путь',
+    'Dydis (MB)':
+        'Размер (МБ)',
+    'Sukurimo data':
+        'Дата создания',
+    'Grupe':
+        'Группа',
+    'Pasirenges':
+        'Готово',
+    "Prideti katalogus ir spauskite 'Skenuoti'.":
+        'Добавьте папки и нажмите «Сканировать».',
+    'Pirma prideti bent viena kataloga.':
+        'Сначала добавьте хотя бы одну папку.',
+    'Zvalgyba: renkami failu dydziai...':
+        'Разведка: собираем размеры файлов...',
+    'Gilus tikrinimas (MD5 pagal turini)...':
+        'Глубокая проверка (MD5 по содержимому)...',
+    'Skenavimas atsauktas.':
+        'Сканирование отменено.',
+    'Nepazymeta ne viena seima - skenavimas atsauktas.':
+        'Не выбрано ни одно семейство — сканирование отменено.',
+    'Vyksta skenavimas':
+        'Идёт сканирование',
+    'Formuojama ataskaita':
+        'Формируется отчёт',
+    'Salinamos siuksles':
+        'Удаляется мусор',
+    'Pirma atlikti skana.':
+        'Сначала выполните сканирование.',
+    'Exportuojama...':
+        'Идёт экспорт...',
+    'Eksportas atsauktas.':
+        'Экспорт отменён.',
+    'Kur issaugoti ataskaita?':
+        'Куда сохранить отчёт?',
+    'Excel failai (*.xlsx)':
+        'Файлы Excel (*.xlsx)',
+    'Eksportas sekmingas':
+        'Экспорт завершён',
+    'Ataskaita sukurta:':
+        'Отчёт создан:',
+    'Failas neberastas:':
+        'Файл больше не существует:',
+    'Klaida:':
+        'Ошибка:',
+    'Exporto klaida:':
+        'Ошибка экспорта:',
+    'veikia':
+        'работает',
+    'Portable rezimas':
+        'Портативный режим',
+    'Kalba':
+        'Язык',
+    'Kalba pritaikoma paleidus programa is naujo.':
+        'Язык будет применён после перезапуска программы.',
+    'Kalba pasikeis paleidus programa is naujo.':
+        'Язык изменится после перезапуска программы.',
+    'Kalba issaugota. Perleisti programa dabar?':
+        'Язык сохранён. Перезапустить программу сейчас?',
+    'Nepavyko issaugoti: {}':
+        'Не удалось сохранить: {}',
+    'Ijungta: kesas ir zurnalas saugomi salia programos (pvz., flesiuke) - kompiuteryje pedsaku nelieka.\nIsjungta (numatyta): saugoma vartotojo kataloge %LOCALAPPDATA%\\SmartDuplicateFinder.':
+        'Вкл.: кэш и журнал хранятся рядом с программой (напр. на флешке) — следов на компьютере не остаётся.\nВыкл. (по умолчанию): хранится в профиле пользователя %LOCALAPPDATA%\\SmartDuplicateFinder.',
+    'Nepavyko perjungti rezimo: {}':
+        'Не удалось переключить режим: {}',
+    'Portable rezimas IJUNGTAS - duomenys salia programos':
+        'Портативный режим ВКЛЮЧЁН — данные рядом с программой',
+    'Portable rezimas isjungtas - duomenys vartotojo kataloge':
+        'Портативный режим выключен — данные в профиле пользователя',
+    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB':
+        'Просканировано {n} файлов из {k} папок — {g} групп дубликатов, {mb:.2f} МБ',
+    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB':
+        'Просканировано {n} файлов из {k} папок — {g} групп дубликатов: дубликаты занимают {mb:.2f} МБ, можно высвободить {fmb:.2f} МБ',
+    '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
+        '; Список ПОДОЗРИТЕЛЬНЫХ обрезан на пределе {n} пар (сузьте папки, чтобы видеть всё)',
+    '; praleista {n} nepasiekiamu failu':
+        '; пропущено {n} недоступных файлов',
+    'Dubliu kandidatu nerasta ({n} failu perziureta{skip}).':
+        'Кандидаты на дубликаты не найдены (проверено {n} файлов{skip}).',
+    ', {n} praleista':
+        ', пропущено {n}',
+    'Ankstesnio skeno rezultatai':
+        'Результаты предыдущего сканирования',
+    'Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?':
+        'Найдены результаты предыдущего сканирования ({kada}, {n} групп дубликатов).\nЗагрузить без повторного сканирования?',
+    'Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)':
+        'Загружены результаты сканирования от {kada}: {g} групп дубликатов, {mb:.2f} МБ (можно экспортировать без сканирования)',
+    'Keso ikelti nepavyko - skenuok is naujo.':
+        'Не удалось загрузить кэш — просканируйте заново.',
+    'Siuksliu nerasta - pirma atlik zvalgyba.':
+        'Мусор не найден — сначала выполните разведку.',
+    'Salinti Windows/Mac siuksles?':
+        'Удалить системный мусор Windows/Mac?',
+    'Rasta {n} sistemos siuksliu ({mb:.1f} MB):':
+        'Найдено {n} файлов системного мусора ({mb:.1f} МБ):',
+    'Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?':
+        'Это кэши миниатюр и просмотра папок — ОС создаёт их заново.\nПеред удалением у каждого файла проверяется сигнатура\nсодержимого; несовпадающие НЕ будут удалены.\n\nВНИМАНИЕ: на сетевых дисках (NAS) удаление необратимо\n(корзина там не работает). Удалить?',
+    'Siuksliu salinimas atsauktas.':
+        'Удаление мусора отменено.',
+    'Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB':
+        'Удалено {n} мусорных файлов, освобождено {mb:.1f} МБ',
+    '; praleista {n} (parasas nesutapo arba failas uzrakintas)':
+        '; пропущено {n} (сигнатура не совпала или файл заблокирован)',
+    'Rasti kandidatai i dublius':
+        'Найдены кандидаты на дубликаты',
+    'Vienodo dydzio failu grupes (kandidatai). Pazymekite,\nkurias seimas tikrinti giliai (MD5 pagal turini):':
+        'Группы файлов одинакового размера (кандидаты).\nОтметьте, какие семейства проверить глубоко (MD5 по содержимому):',
+    'Seima':
+        'Семейство',
+    'Grupiu':
+        'Групп',
+    'Failu':
+        'Файлов',
+    'Apimtis':
+        'Объём',
+    '~Laikas':
+        '~Время',
+    'Tikrinti pazymetus':
+        'Проверить выбранные',
+    'Atsaukti':
+        'Отмена',
+    'Is viso pazymejus viska: {mb} skaitymo, {t} (disko greitis ~{v} MB/s)':
+        'Если отметить всё: чтение {mb}, {t} (скорость диска ~{v} МБ/с)',
+    'akimirka':
+        'мгновенно',
+    'Prideti katalogus':
+        'Добавить папки',
+    'Iklijuokite kelius is Explorer (Ctrl+V) arba pasirinkite paspausdami mygtuka:':
+        'Вставьте пути из Explorer (Ctrl+V) или выберите кнопкой:',
+    'C:\\Ap1\nD:\\Ap2\nF:\\Ap3  (kiekvienas - naujoje eiluteje)':
+        'C:\\Папка1\nD:\\Папка2\nF:\\Папка3  (каждая — с новой строки)',
+    'Pasirinkti katalogus':
+        'Выбрать папки',
+    'Pasirinkti kataloga':
+        'Выбрать папку',
+    'Prideti':
+        'Добавить',
+    'Atstatyti':
+        'Отмена',
+    'Grupe {idx}':
+        'Группа {idx}',
+    'Dublikatai':
+        'Дубликаты',
+    'Panasios nuotraukos':
+        'Похожие изображения',
+    'Itartini':
+        'Подозрительные',
+    'Itartinas {n}':
+        'Подозрительный {n}',
+    'RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)':
+        'ПОКАЗАНО {a} ИЗ {b} СТРОК — превышен лимит листа Excel (1 048 576)',
+    'ITARINI':
+        'ПОДОЗРИТЕЛЬНЫЙ',
+    'ITARTINI (panasus, bet ne identiski)':
+        'ПОДОЗРИТЕЛЬНЫЕ (похожи, но не идентичны)',
+    'Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje':
+        'Показано {n} строк (крупнейшие группы сверху) — ПОЛНЫЙ список в отчёте Excel',
+    'Zvalgyba: {n} failu...':
+        'Разведка: {n} файлов...',
+    'Panasios nuotraukos (vizualiai)':
+        'Похожие фото (визуально)',
+    'VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)':
+        'ВИЗУАЛЬНО ПОХОЖИЕ (другое разрешение/качество)',
+    'Vaizdas {idx}':
+        'Изображение {idx}',
+    'Vizualus lyginimas: {a}/{b} nuotrauku':
+        'Визуальное сравнение: {a}/{b} фото',
+    '; vizualiai panasiu grupiu: {n}':
+        '; групп визуально похожих: {n}',
+    'ITARTINI paieska: {a}/{b} failu':
+        'Поиск ПОДОЗРИТЕЛЬНЫХ: {a}/{b} файлов',
+    'Salinamos siuksles: {a}/{b}':
+        'Удаляется мусор: {a}/{b}',
+    '{f}/{ft} failu':
+        '{f}/{ft} файлов',
+    'liko':
+        'осталось',
+    'Pagalba':
+        'Справка',
+    'Apie...':
+        'О программе...',
+    'Instrukcija':
+        'Руководство пользователя',
+    'Neradote atsakymo? Klauskite DI':
+        'Не нашли ответа? Спросите ИИ',
+    'Nepavyko atidaryti: {}':
+        'Не удалось открыть: {}',
+    'Apie programa':
+        'О программе',
+    'Dubliuotu failu paieska pagal turini - nieko netrina.':
+        'Поиск дубликатов файлов по содержимому — ничего не удаляет.',
+    'Versija {v}':
+        'Версия {v}',
+    'Kurejo puslapis:':
+        'Страница проекта:',
+    'Kas ivyks paspaudus OK:\n\n1. Atsidarys interneto narsykle su DI padejejo\n   claude.ai puslapiu. Zinutes laukelyje jau bus\n   irasyta angliska pradzia - prisistatymas, kas per\n   programa ir kur jos kodas.\n2. NEISSIGASKITE raudono pranesimo virs zinutes -\n   claude.ai ji rodo visada, kai tekstas ateina per\n   nuoroda. Tai tik priminimas perskaityti, kas\n   siunciama.\n3. Zinutes gale, po zodziu "My question:", irasykite\n   SAVO klausima - galima lietuviskai! - ir spauskite\n   siuntimo mygtuka (rodykle). Klausti galima visko,\n   pvz.: "kaip atsinaujinti programa i naujesne\n   versija? paaiskink zingsnis po zingsnio".\n4. Jei DI atsakys angliskai - tiesiog paprasykite kita\n   zinute: "atsakyk lietuviskai", ir toliau bendraus\n   lietuviskai.\n\nPastaba: claude.ai gali paprasyti prisijungti (nemokama\npaskyra). Niekas neissiunciama be jusu rankos.':
+        'Что произойдёт после нажатия OK:\n\n1. Откроется веб-браузер с ИИ-помощником\n   на странице claude.ai. В поле сообщения уже будет\n   вписано английское начало — представление, какая это\n   программа и где находится её код.\n2. НЕ пугайтесь красного уведомления над сообщением —\n   claude.ai показывает его всегда, когда текст приходит\n   по ссылке. Это лишь напоминание прочитать, что\n   Вы отправляете.\n3. В конце сообщения, после слов "My question:",\n   впишите СВОЙ вопрос — на любом языке! — и нажмите\n   кнопку отправки (стрелка). Спрашивать можно о чём\n   угодно, напр.: "как обновить программу до последней\n   версии? объясни шаг за шагом".\n4. Если ИИ ответит не на том языке — просто попросите\n   в следующем сообщении: "ответь по-русски", и тогда\n   беседа пойдёт на русском.\n\nПримечание: claude.ai может попросить войти (бесплатная\nучётная запись). Ничего не будет отправлено без\nВашего действия.',
+    'Atidaryti faila':
+        'Открыть файл',
+    'Atidaryti kataloga':
+        'Открыть папку',
+    'Kopijuoti kelia':
+        'Копировать путь',
+    'Kelias nukopijuotas':
+        'Путь скопирован',
+}
+
+_FAM_RU = {
+    'Paveiksliukai': 'Изображения',
+    'Video': 'Видео',
+    'Audio': 'Аудио',
+    'Dokumentai': 'Документы',
+    'Archyvai': 'Архивы',
+    'CAD': 'CAD',
+    'Kodas': 'Код',
+    'Programos': 'Программы',
+    'Kita': 'Прочее',
+}

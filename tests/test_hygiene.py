@@ -9,8 +9,13 @@ from pathlib import Path
 CYRILLIC = re.compile("[\\u0400-\\u04ff]")
 ROOT = Path(__file__).resolve().parents[1]
 CHECK_SUFFIXES = {".py", ".md", ".yml", ".yaml", ".json", ".txt", ".spec"}
-# Russian-language docs are the one place Cyrillic belongs
-ALLOWED_NAMES = {"README-ru.txt", "README-ru.md"}
+# Russian-language docs and the RU dictionary are where Cyrillic belongs
+# (kalba_ru.py added v1.3, 2026-08-22 - RU UI language)
+ALLOWED_NAMES = {"README-ru.txt", "README-ru.md", "kalba_ru.py"}
+# The language dropdown is quoted verbatim in LT/DE readmes ("Russkij"
+# in Cyrillic); that exact token is deliberate, not a stray lookalike.
+# Escapes keep this file itself pure ASCII (see the header rule).
+ALLOWED_TOKEN = "\u0420\u0443\u0441\u0441\u043a\u0438\u0439"
 
 
 def test_no_stray_cyrillic():
@@ -18,13 +23,16 @@ def test_no_stray_cyrillic():
     for p in ROOT.rglob("*"):
         if (not p.is_file() or p.suffix.lower() not in CHECK_SUFFIXES
                 or p.name in ALLOWED_NAMES
-                or ".venv" in p.parts or ".git" in p.parts):
+                or ".venv" in p.parts or ".git" in p.parts
+                # _darbal - darbine medziaga (pvz., dukrytes RU vertimu
+                # archyvas), ne programos kodas
+                or "_darbal" in p.parts):
             continue
         try:
             text = p.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
         for i, line in enumerate(text.splitlines(), 1):
-            if CYRILLIC.search(line):
+            if CYRILLIC.search(line.replace(ALLOWED_TOKEN, "")):
                 failures.append(f"{p.relative_to(ROOT)}:{i}: {line.strip()[:60]}")
     assert not failures, "Stray Cyrillic found:\n" + "\n".join(failures[:10])

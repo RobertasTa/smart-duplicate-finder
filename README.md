@@ -74,9 +74,11 @@ removal, and nothing happens without your confirmation.
 
 - **Visually similar photos** — a built-in perceptual hash (dHash) finds the same
   picture even after resizing, re-saving at different quality or format conversion.
-  Works across everyday image formats (JPG, PNG, GIF, BMP, TIFF, WebP), and phone
-  photos stored "rotated" (EXIF orientation) are matched correctly too. Shown in a
-  separate violet section and a dedicated Excel sheet.
+  Works across everyday image formats (JPG, PNG, GIF, BMP, TIFF, WebP) and, since
+  v1.3, the iPhone formats **HEIC/AVIF** — it will pair an original `.HEIC` with
+  its resized `.jpg` copy even on a Windows machine that cannot open HEIC itself.
+  Phone photos stored "rotated" (EXIF orientation) are matched correctly too.
+  Shown in a separate violet section and a dedicated Excel sheet.
 - **"Suspicious" section** — files with identical names and similar size but
   *different* content: not duplicates, but often two versions of the same document
   worth a look.
@@ -96,6 +98,10 @@ removal, and nothing happens without your confirmation.
   it offers to load the previous scan so you can review and export immediately,
   without re-scanning. A scan that took hours is never lost.
 - **Double-click any row** → Explorer opens with the file selected.
+  **Right-click** (v1.3) offers *open file / open folder / copy path* — and
+  opening executables (`.exe`, `.bat`, `.py`, …) is deliberately disabled:
+  this program never launches an unknown program with one click. Open the
+  folder instead and decide with your own hands.
 - **Portable** — one exe, no installation, no Python. Working files (scan cache,
   activity log) live in `%LOCALAPPDATA%\SmartDuplicateFinder`; tick **Portable
   mode** and they move next to the exe instead — perfect for a USB stick, no
@@ -111,8 +117,9 @@ removal, and nothing happens without your confirmation.
   step-by-step instructions for a live consultation with the author (details
   in the last section of this page).
 - **No ads, no telemetry, no network access.** MIT licensed.
-- **UI in English and Lithuanian** — switched inside the app; first run follows
-  your Windows language (readmes also in Russian).
+- **UI in English, Lithuanian, Russian and German** (RU/DE new in v1.3) —
+  switched inside the app; first run follows your Windows language. The built-in
+  user guide comes in all four languages too.
 
 ## Download
 
@@ -126,7 +133,7 @@ Or grab the latest exe from **[Releases](../../releases)**:
 
 | File | UI language |
 |---|---|
-| `SmartDuplicateFinder.exe` | English / Lithuanian — switch inside the app |
+| `SmartDuplicateFinder.exe` | English / Lithuanian / Russian / German — switch inside the app |
 
 **Requirements:** Windows 10 or newer, 64-bit. (On Windows 7 the exe will not
 start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
@@ -199,7 +206,8 @@ Requires Python 3.13+, PyQt6, Pillow, openpyxl (see [requirements.txt](requireme
 | `add_dialog.py` | Folder picker dialog |
 | `table_populator.py` | Results table, family colours |
 | `exporter.py` | Excel report (openpyxl write-only) |
-| `kalba.py` | LT/EN i18n layer |
+| `kalba.py` | LT/EN/RU/DE i18n layer |
+| `kalba_lt.py`, `kalba_ru.py`, `kalba_de.py` | language dictionaries (v1.3) |
 | `pletiniai.json` | Editable extension catalog (~190 extensions, 8 families) |
 
 ## Questions? The author is an AI — ask it directly

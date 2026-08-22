@@ -17,7 +17,13 @@ IMPORTANT: the program does NOT delete your duplicates — it only
 finds and shows them; you decide what to do. The only deletion is
 the system-junk cleanup, and that runs only after your confirmation.
 
-This is a DELIBERATE SAFETY PRINCIPLE, not a limitation: no
+Ask anyone who has used duplicate finders for years and you will
+hear the same story: one day the program deleted the wrong files.
+That is not a bug in one particular tool — it is the limit of every
+algorithm. NO ALGORITHM CAN DECIDE WHAT MATTERS TO YOU: what is
+junk to one person is the only surviving backup to another.
+
+So this is a DELIBERATE SAFETY PRINCIPLE, not a limitation: no
 automation should decide which copy to keep — a duplicate may sit
 in a folder on purpose (a backup, a project bundle). The program
 will never delete what you wanted to keep, so it is safe to scan
@@ -26,7 +32,11 @@ even your most precious archives.
 That is also what the Excel report is for: cleaning up AT YOUR OWN
 PACE. Nothing forces you to act immediately — the report is a file
 you can open a week later, sort, colour-mark what is done, and work
-through a few duplicates a day until the drive is clean.
+through a few duplicates a day until the drive is clean. And if
+after the review you decide you want to keep every single copy —
+that is a perfectly good outcome too. The goal here is not
+gigabytes deleted; it is you knowing exactly what you have and
+making the call yourself.
 
 HOW TO RUN
 ----------
@@ -53,6 +63,8 @@ HOW TO USE (step by step)
 5. Results are colour-grouped by type; the BIGGEST duplicates are
    on top. Hover a row to see the file-type description.
 6. DOUBLE-CLICK a row to open Explorer with the file selected.
+   RIGHT-CLICK (since v1.3) offers: open file / open folder /
+   copy path (opening executables is disabled for safety).
 7. "Export report" — the full list is saved to a colour-coded
    Excel file (you choose where; Documents is suggested).
 
@@ -86,7 +98,10 @@ The candidates window has an extra row "Similar photos (visual)"
 (ticked by default, like the others). With it photos are compared VISUALLY —
 the same picture is found even if it was resized, re-saved at a
 different quality or converted to another format (MD5 cannot see
-those, since the bytes differ). Such groups appear in violet
+those, since the bytes differ). Works across everyday image formats
+(JPG, PNG, GIF, BMP, TIFF, WebP) and, since v1.3, the iPhone formats
+HEIC/AVIF; phone photos stored "rotated" (EXIF orientation) are
+matched correctly too. Such groups appear in violet
 ("VISUALLY SIMILAR") and on a separate "Similar Images" sheet in
 the Excel report.
 A note on time: this comparison must open EVERY photo (~40 photos/s),
@@ -97,9 +112,12 @@ reported as duplicates) are not repeated here — only genuinely
 
 GOOD TO KNOW
 ------------
-* SCAN MEMORY: results are cached after each scan. On next start
-  the program offers to load the previous results without
-  re-scanning — you can export immediately.
+* SCAN MEMORY THAT SURVIVES ANYTHING: results are saved to disk the
+  moment scanning finishes, BEFORE the table is even drawn. If the
+  program gets killed or crashes right after a long scan, the
+  results are still there: on next start it offers to load the
+  previous scan so you can review and export immediately, without
+  re-scanning. A scan that took hours is never lost.
 * The table shows up to 2,000 rows (largest groups); the FULL list
   is always in the Excel report.
 * SUSPICIOUS section (yellow) — files with identical names and
@@ -125,9 +143,9 @@ WHERE THINGS ARE STORED
   (the Notepad++ / VS Code convention) - it travels with your stick.
 * All service files can be deleted at any time — the program simply
   starts fresh.
-* LANGUAGE (Lietuviu / English) can be switched in the dropdown at
-  the bottom of the left bar; the choice is remembered and applied
-  after a restart.
+* LANGUAGE (Lietuviu / English / Russian / German) can be switched
+  in the dropdown at the bottom of the left bar; the choice is
+  remembered and applied after a restart.
 
 ---------------------------------------------------------------------
 Created by: Robertas + Claude (Anthropic AI) + local AI assistant

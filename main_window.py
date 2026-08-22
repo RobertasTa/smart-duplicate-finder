@@ -20,7 +20,19 @@ from PyQt6.QtGui import QFont, QIcon
 from kalba import t
 
 # Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
-VERSIJA = "1.2"
+# 1.3 (2026-08-22): desinio klaviso meniu, RU/DE kalbos, HEIC/AVIF
+VERSIJA = "1.3"
+
+# Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
+# vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
+# .py/.pyw Roberto pastaba is gyvo testo: Windows juos sieja su Python
+# launcher'iu, tad "atidarymas" faktiskai PALEISTU skripta.
+_VYKDOMIEJI = {
+    ".exe", ".msi", ".bat", ".cmd", ".ps1", ".vbs", ".vbe", ".js",
+    ".jse", ".wsf", ".wsh", ".scr", ".com", ".jar", ".pif", ".hta",
+    ".cpl", ".msc", ".reg", ".lnk",
+    ".py", ".pyw", ".pyc", ".pyz", ".pyzw",
+}
 
 
 def _res_path(name):
@@ -373,7 +385,13 @@ class MainWindow(QMainWindow):
         self.cmb_kalba.setObjectName("cmb_kalba")
         self.cmb_kalba.addItem("Lietuvi\u0173", "lt")   # rodo "Lietuviu" su u-nosine
         self.cmb_kalba.addItem("English", "en")
-        self.cmb_kalba.setCurrentIndex(1 if _dabartine_kalba == "en" else 0)
+        # v1.3 (2026-08-22): RU (viesas "Ernis" pazadas Telegram 08-13)
+        # ir DE (Vokietijos rinka); UA atideta Roberto verdiktu 08-22.
+        self.cmb_kalba.addItem(
+            "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", "ru")  # "Russkij" kirilica
+        self.cmb_kalba.addItem("Deutsch", "de")
+        _idx = self.cmb_kalba.findData(_dabartine_kalba)
+        self.cmb_kalba.setCurrentIndex(_idx if _idx >= 0 else 0)
         self.cmb_kalba.setToolTip(t(
             "Kalba pritaikoma paleidus programa is naujo."))
         self.cmb_kalba.currentIndexChanged.connect(self._on_kalba_changed)
@@ -553,9 +571,14 @@ class MainWindow(QMainWindow):
         programu ir jokiu failu kopiju diske)."""
         from PyQt6.QtWidgets import QDialog, QPlainTextEdit, QDialogButtonBox
         from kalba import LANG
-        vardas = "README.txt" if LANG == "lt" else "README-en.txt"
+        vardas = {"lt": "README.txt", "ru": "README-ru.txt",
+                  "de": "README-de.txt"}.get(LANG, "README-en.txt")
+        kelias = _res_path(vardas)
+        if not kelias.exists():
+            # Senas buildas be ru/de zinyno - atsarga EN
+            kelias = _res_path("README-en.txt")
         try:
-            tekstas = _res_path(vardas).read_text(
+            tekstas = kelias.read_text(
                 encoding="utf-8", errors="replace")
         except OSError as e:
             QMessageBox.warning(
@@ -609,6 +632,12 @@ class MainWindow(QMainWindow):
         self.results_table.setTextElideMode(Qt.TextElideMode.ElideMiddle)
         self.results_table.setWordWrap(False)
         self.results_table.cellDoubleClicked.connect(self._on_open_folder)
+        # v1.3 desinio klaviso meniu (Roberto sprendimas 2026-08-22;
+        # receptas is TC v2 "Kas tai?" meniu). Double-click nekeiciamas.
+        self.results_table.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu)
+        self.results_table.customContextMenuRequested.connect(
+            self._on_context_menu)
         lay.addWidget(self.results_table, 1); return w
 
     # ---- Mygtuku veiksmai ----
@@ -847,6 +876,52 @@ class MainWindow(QMainWindow):
             subprocess.Popen(f'explorer /select,"{path}"')
         else:
             self.status_label.setText(f"{t('Failas neberastas:')} {path}")
+
+    def _on_context_menu(self, pos):
+        """v1.3 desinio klaviso meniu ant dublio eilutes (receptas is TC v2
+        "Kas tai?" meniu; Roberto sprendimas 2026-08-22).
+
+        "Atidaryti faila" - numatyta programa (os.startfile), vykdomiesiems
+        pletiniams punktas NEAKTYVUS (zr. _VYKDOMIEJI). "Atidaryti kataloga"
+        = tas pats, kaip dvigubas klikas. "Kopijuoti kelia" - konsultacijoms
+        (pvz., "Klausk DI"). Antrasciu eilutes kelio neturi - ignoruojamos.
+        """
+        row = self.results_table.rowAt(pos.y())
+        if row < 0:
+            return
+        item = self.results_table.item(row, 0)
+        if item is None:
+            return
+        path = item.data(Qt.ItemDataRole.UserRole)
+        if not path:
+            return
+        path = os.path.normpath(path)
+        from PyQt6.QtWidgets import QMenu
+        from PyQt6.QtGui import QAction
+        menu = QMenu(self)
+        act_file = QAction(t("Atidaryti faila"), self)
+        act_file.setEnabled(
+            os.path.splitext(path)[1].lower() not in _VYKDOMIEJI)
+        act_dir = QAction(t("Atidaryti kataloga"), self)
+        act_copy = QAction(t("Kopijuoti kelia"), self)
+        menu.addAction(act_file)
+        menu.addAction(act_dir)
+        menu.addSeparator()
+        menu.addAction(act_copy)
+        chosen = menu.exec(self.results_table.viewport().mapToGlobal(pos))
+        if chosen is act_file:
+            if not os.path.exists(path):
+                self.status_label.setText(f"{t('Failas neberastas:')} {path}")
+                return
+            try:
+                os.startfile(path)
+            except OSError as e:
+                self.status_label.setText(f"{t('Klaida:')} {e}")
+        elif chosen is act_dir:
+            self._on_open_folder(row, 0)
+        elif chosen is act_copy:
+            QApplication.clipboard().setText(path)
+            self.status_label.setText(t("Kelias nukopijuotas"))
 
     # ---- Windows/Mac siuksliu salinimas (Thumbs.db, .DS_Store ir pan.) ----
     def _on_junk(self):

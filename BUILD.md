@@ -21,7 +21,8 @@ Since v1.1 a single exe serves both languages — there is no separate `-en` bui
 .venv\Scripts\python -m PyInstaller --noconfirm --onefile --windowed ^
   --name "SmartDuplicateFinder" --icon app.ico ^
   --add-data "pletiniai.json;." --add-data "app.ico;." ^
-  --add-data "README.txt;." --add-data "README-en.txt;." main_window.py
+  --add-data "README.txt;." --add-data "README-en.txt;." ^
+  --add-data "README-ru.txt;." --add-data "README-de.txt;." main_window.py
 ```
 
 Pastabos / Notes:
@@ -32,6 +33,14 @@ Pastabos / Notes:
 - `pletiniai.json` PRIVALO buti supakuotas (`--add-data`): be jo frozen exe
   pletiniu zinynas tyliai degraduotu. / `pletiniai.json` MUST be bundled:
   without it the frozen exe silently degrades the extension catalog.
+- **pillow-heif (nuo v1.3, HEIC/AVIF vizualiniame skene):** PyInstaller
+  DLL'us susirenka pats (hooks-contrib). libx265 (~21,5 MB isskleisto)
+  ismesti NEGALIMA - patikrinta gyvai 2026-08-22: nors tai enkoderis,
+  libheif DLL su juo susietas krovimo metu (be jo `import _pillow_heif`
+  luzta ImportError, dingsta VISAS HEIC palaikymas). Nesvarstyti is
+  naujo. / Excluding libx265 was tested 2026-08-22 and does NOT work:
+  libheif is hard-linked against it at load time - without it the whole
+  plugin fails to import. Ship the full DLL set.
 
 Rezultatas / result: `dist\SmartDuplicateFinder.exe` (~43 MB, portable,
 jokio diegimo / no installation required).
@@ -47,5 +56,6 @@ jokio diegimo / no installation required).
 | `add_dialog.py` | Katalogu pridejimo dialogas / folder picker dialog |
 | `table_populator.py` | Rezultatu lentele, seimu spalvos / results table, family colours |
 | `exporter.py` | Excel ataskaita (openpyxl write-only) / Excel report |
-| `kalba.py` | LT/EN vertimu sluoksnis / i18n layer |
+| `kalba.py` | LT/EN/RU/DE vertimu sluoksnis / i18n layer |
+| `kalba_ru.py`, `kalba_de.py` | RU/DE zodynai (v1.3) / RU-DE dictionaries |
 | `pletiniai.json` | Pletiniu zinynas (redaguojamas) / extension catalog (editable) |
