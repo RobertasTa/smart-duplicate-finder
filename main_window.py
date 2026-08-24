@@ -477,6 +477,10 @@ class MainWindow(QMainWindow):
         meniu = QMenu(b)
         meniu.addAction(t("Apie..."), self._on_apie)
         meniu.addAction(t("Instrukcija"), self._on_instrukcija)
+        # v1.4 (Roberto idėja 2026-08-24): kas parsisiunte ranka, apie
+        # naujas versijas nesuzinodavo NIEKAIP - winget vartotojai suzino
+        # per "winget upgrade". Langelis paaiskina VISUS kelius.
+        meniu.addAction(t("Ar yra naujesne versija?"), self._on_ar_yra_nauju)
         meniu.addAction(t("Neradote atsakymo? Klauskite DI"),
                         self._on_klausk_di)
         b.setMenu(meniu)
@@ -572,6 +576,92 @@ class MainWindow(QMainWindow):
             'font-weight:bold;">GitHub</a>')
         nuoroda.setOpenExternalLinks(True)
         lay.addWidget(nuoroda)
+        mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        mygtukai.rejected.connect(dlg.reject)
+        lay.addWidget(mygtukai)
+        dlg.exec()
+
+    def _on_ar_yra_nauju(self):
+        """"Ar yra naujesne versija?" - Roberto ideja 2026-08-24:
+        "isvesti lentele, kuri paaiskins, kokiais budais pasitikrinti.
+        Suveiks visiems variantams."
+
+        KODEL LENTELE, o ne automatinis tikrinimas: programa NELIECIA
+        tinklo - tai musu garsiai duotas pazadas. Tad pasakom, KAIP
+        pasiziureti, ir paliekam sprendima zmogui. Trys keliai, nes
+        vartotojai ateina skirtingai: dauguma per winget (matuota
+        2026-08-24: po v1.3 merge winget +11 per 6 val., GitHub per
+        14 d. - 21 perziura), dalis - ranka, o treciasis kelias musu
+        unikalus (brief'o skyrius "You are the update channel").
+        Tinklas TIK vartotojui paspaudus mygtuka."""
+        from PyQt6.QtWidgets import QDialog, QDialogButtonBox
+        WINGET_ID = "RobertasTa.SmartDuplicateFinder"
+        RELEASES = ("https://github.com/RobertasTa/"
+                    "smart-duplicate-finder/releases/latest")
+
+        dlg = QDialog(self)
+        dlg.setWindowTitle(t("Ar yra naujesne versija?"))
+        lay = QVBoxLayout(dlg)
+
+        virsus = QHBoxLayout()
+        logo = QLabel()
+        ico = _res_path("app.ico")
+        if ico.exists():
+            logo.setPixmap(QIcon(str(ico)).pixmap(48, 48))
+        virsus.addWidget(logo, alignment=Qt.AlignmentFlag.AlignTop)
+        jusu = QLabel(t("Jusu versija: {v}").format(v=VERSIJA))
+        jusu.setStyleSheet("font-size: 13pt; font-weight: bold;")
+        virsus.addWidget(jusu, alignment=Qt.AlignmentFlag.AlignVCenter)
+        virsus.addStretch(1)
+        lay.addLayout(virsus)
+
+        lay.addWidget(QLabel(t("Ar yra naujesne? Trys keliai:")))
+
+        # 1. Naujienu puslapis
+        p1 = QLabel(t("1. Naujienu puslapyje matysite naujausia versija:"))
+        lay.addWidget(p1)
+        btn_pusl = QPushButton(t("Atidaryti naujienu puslapi"))
+        btn_pusl.setObjectName("btn_naujienos")
+
+        def _atverk():
+            import webbrowser
+            webbrowser.open(RELEASES)
+
+        btn_pusl.clicked.connect(_atverk)
+        lay.addWidget(btn_pusl)
+
+        # 2. winget
+        p2 = QLabel(t("2. Jei diegete per winget - komandu eiluteje:"))
+        lay.addWidget(p2)
+        kom = QLabel("winget upgrade " + WINGET_ID)
+        kom.setStyleSheet("font-family: Consolas, monospace;"
+                          "background: #eef0f5; padding: 6px;"
+                          "border: 1px solid #b6bac8; border-radius: 6px;")
+        kom.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextSelectableByMouse)
+        lay.addWidget(kom)
+        btn_kop = QPushButton(t("Kopijuoti komanda"))
+        btn_kop.setObjectName("btn_kopijuoti_komanda")
+
+        def _kopijuok():
+            app = QApplication.instance()
+            if app is not None:
+                app.clipboard().setText("winget upgrade " + WINGET_ID)
+            self.statusBar().showMessage(t("Komanda nukopijuota"), 4000)
+
+        btn_kop.clicked.connect(_kopijuok)
+        lay.addWidget(btn_kop)
+
+        # 3. Klausk DI - musu unikalus kelias
+        p3 = QLabel(t("3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
+                      "   pasitikrins ir pasakys, ko jums truksta."))
+        lay.addWidget(p3)
+
+        pastaba = QLabel(t("Programa pati interneto neliecia. Sprendziate jus."))
+        pastaba.setStyleSheet("color: #5a5e6b; font-style: italic;"
+                              "margin-top: 8px;")
+        lay.addWidget(pastaba)
+
         mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         mygtukai.rejected.connect(dlg.reject)
         lay.addWidget(mygtukai)

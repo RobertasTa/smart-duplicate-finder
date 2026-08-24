@@ -27,6 +27,23 @@ _LT = {
     "neaisku - pozymiu nera": "neaišku — požymių nėra",
     "visos kopijos laikinuose aplankuose":
         "visos šios grupės kopijos guli laikinuose aplankuose",
+    # v1.4 „Ar yra naujesnė versija?"
+    "Ar yra naujesne versija?": "Ar yra naujesnė versija?",
+    "Jusu versija: {v}": "Jūsų versija: {v}",
+    "Ar yra naujesne? Trys keliai:": "Ar yra naujesnė? Trys keliai:",
+    "1. Naujienu puslapyje matysite naujausia versija:":
+        "1. Naujienų puslapyje matysite naujausią versiją:",
+    "Atidaryti naujienu puslapi": "Atidaryti naujienų puslapį",
+    "2. Jei diegete per winget - komandu eiluteje:":
+        "2. Jei diegėte per winget — komandų eilutėje:",
+    "Kopijuoti komanda": "Kopijuoti komandą",
+    "Komanda nukopijuota": "Komanda nukopijuota",
+    "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
+    "   pasitikrins ir pasakys, ko jums truksta.":
+        "3. Arba spauskite „Klausk DI“ — konsultantas pats\n"
+        "   pasitikrins ir pasakys, ko jums trūksta.",
+    "Programa pati interneto neliecia. Sprendziate jus.":
+        "Programa pati interneto neliečia. Sprendžiate jūs.",
     "Pasirenges": "Pasirengęs",
     "Prideti katalogus ir spauskite 'Skenuoti'.":
         "Pridėkite katalogus ir spauskite „Skenuoti“.",

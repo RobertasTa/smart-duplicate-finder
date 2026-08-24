@@ -25,6 +25,29 @@ _DE = {
         'unklar – keine Unterschiede',
     'visos kopijos laikinuose aplankuose':
         'alle Kopien dieser Gruppe liegen in temporären Ordnern',
+    # v1.4 "Ar yra naujesne versija?" langelis
+    'Ar yra naujesne versija?':
+        'Gibt es eine neuere Version?',
+    'Jusu versija: {v}':
+        'Ihre Version: {v}',
+    'Ar yra naujesne? Trys keliai:':
+        'Gibt es eine neuere? Drei Wege:',
+    '1. Naujienu puslapyje matysite naujausia versija:':
+        '1. Auf der Releases-Seite sehen Sie die neueste Version:',
+    'Atidaryti naujienu puslapi':
+        'Releases-Seite öffnen',
+    '2. Jei diegete per winget - komandu eiluteje:':
+        '2. Falls über winget installiert – in der Kommandozeile:',
+    'Kopijuoti komanda':
+        'Befehl kopieren',
+    'Komanda nukopijuota':
+        'Befehl kopiert',
+    '3. Arba spauskite "Klausk DI" - konsultantas pats\n'
+    '   pasitikrins ir pasakys, ko jums truksta.':
+        '3. Oder klicken Sie auf „KI fragen" – der Assistent prüft es\n'
+        '   selbst und sagt Ihnen, was Ihnen fehlt.',
+    'Programa pati interneto neliecia. Sprendziate jus.':
+        'Das Programm selbst geht nie ins Internet. Sie entscheiden.',
     '+   Prideti katalogus':
         '+   Ordner hinzufügen',
     '-   Pasalinti pasirinktus':

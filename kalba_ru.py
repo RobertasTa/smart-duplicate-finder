@@ -25,6 +25,29 @@ _RU = {
         'неясно — отличий нет',
     'visos kopijos laikinuose aplankuose':
         'все копии этой группы лежат во временных папках',
+    # v1.4 "Ar yra naujesne versija?" langelis
+    'Ar yra naujesne versija?':
+        'Есть ли более новая версия?',
+    'Jusu versija: {v}':
+        'Ваша версия: {v}',
+    'Ar yra naujesne? Trys keliai:':
+        'Есть ли новее? Три пути:',
+    '1. Naujienu puslapyje matysite naujausia versija:':
+        '1. На странице релизов видна самая новая версия:',
+    'Atidaryti naujienu puslapi':
+        'Открыть страницу релизов',
+    '2. Jei diegete per winget - komandu eiluteje:':
+        '2. Если устанавливали через winget — в командной строке:',
+    'Kopijuoti komanda':
+        'Копировать команду',
+    'Komanda nukopijuota':
+        'Команда скопирована',
+    '3. Arba spauskite "Klausk DI" - konsultantas pats\n'
+    '   pasitikrins ir pasakys, ko jums truksta.':
+        '3. Или нажмите «Спросить ИИ» — помощник сам проверит\n'
+        '   и скажет, чего вам не хватает.',
+    'Programa pati interneto neliecia. Sprendziate jus.':
+        'Сама программа в интернет не выходит. Решаете вы.',
     '+   Prideti katalogus':
         '+   Добавить папки',
     '-   Pasalinti pasirinktus':

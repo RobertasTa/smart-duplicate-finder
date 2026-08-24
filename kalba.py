@@ -96,6 +96,24 @@ _EN = {
     "neaisku - pozymiu nera": "unclear - nothing tells them apart",
     "visos kopijos laikinuose aplankuose":
         "every copy here is in a temporary folder",
+    # v1.4 "Ar yra naujesne versija?" langelis (Roberto ideja 2026-08-24).
+    # Programa tinklo NELIECIA - tik paaiskina, kaip pasiziureti paciam.
+    "Ar yra naujesne versija?": "Is there a newer version?",
+    "Jusu versija: {v}": "Your version: {v}",
+    "Ar yra naujesne? Trys keliai:": "Is there a newer one? Three ways:",
+    "1. Naujienu puslapyje matysite naujausia versija:":
+        "1. The releases page shows the latest version:",
+    "Atidaryti naujienu puslapi": "Open the releases page",
+    "2. Jei diegete per winget - komandu eiluteje:":
+        "2. If you installed via winget - in the command line:",
+    "Kopijuoti komanda": "Copy the command",
+    "Komanda nukopijuota": "Command copied",
+    "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
+    "   pasitikrins ir pasakys, ko jums truksta.":
+        "3. Or press \"Ask AI\" - the assistant will check for you\n"
+        "   and tell you what you are missing.",
+    "Programa pati interneto neliecia. Sprendziate jus.":
+        "The app itself never touches the internet. You decide.",
     "Pasirenges": "Ready",
     "Prideti katalogus ir spauskite 'Skenuoti'.": "Add folders and press 'Scan'.",
     "Pirma prideti bent viena kataloga.": "Add at least one folder first.",
