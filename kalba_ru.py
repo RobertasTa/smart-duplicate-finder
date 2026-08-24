@@ -36,8 +36,10 @@ _RU = {
         '1. На странице релизов видна самая новая версия:',
     'Atidaryti naujienu puslapi':
         'Открыть страницу релизов',
-    '2. Jei diegete per winget - komandu eiluteje:':
-        '2. Если устанавливали через winget — в командной строке:',
+    '2. Jei diegete per winget - spauskite Win+R, irasykite cmd,\n'
+    '   spauskite Enter ir iklijuokite:':
+        '2. Если устанавливали через winget — нажмите Win+R, введите cmd,\n'
+        '   нажмите Enter и вставьте:',
     'Kopijuoti komanda':
         'Копировать команду',
     'Komanda nukopijuota':

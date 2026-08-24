@@ -631,7 +631,8 @@ class MainWindow(QMainWindow):
         lay.addWidget(btn_pusl)
 
         # 2. winget
-        p2 = QLabel(t("2. Jei diegete per winget - komandu eiluteje:"))
+        p2 = QLabel(t("2. Jei diegete per winget - spauskite Win+R, irasykite cmd,\n"
+                      "   spauskite Enter ir iklijuokite:"))
         lay.addWidget(p2)
         kom = QLabel("winget upgrade " + WINGET_ID)
         kom.setStyleSheet("font-family: Consolas, monospace;"

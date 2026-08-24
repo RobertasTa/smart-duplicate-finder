@@ -26,19 +26,34 @@ def _rgb(hex_color):
 MAX_COL_WIDTH = 60  # per placiu stulpeliu lentele istampo; ilgesni tekstai
                     # lauzomi langelio viduje (wrap_text)
 
+# Roberto gyvo testo pastaba 2026-08-24: v1.4 "Kodel" stulpelis nukrisdavo
+# UZ EKRANO krasto - matesi tik pirmoji raide. Paaiskinimo, del kurio visa
+# funkcija ir daryta, zmogus paprastai net nepamatydavo. Todel du siauresni
+# rezimai: kelias 45 vietoj 60, o "Kodel" 26 su lauzymu (eilute paaugsta
+# pati, nes Excel su wrap_text auksti pritaiko automatiskai).
+KELIO_WIDTH = 45
+PRIEZASTIES_WIDTH = 26
+# Stulpeliu indeksai (0-based) dublikatu lape
+STULP_KELIAS = 2
+STULP_KODEL = 5
+
 
 def _autofit(sheet, rows, headers):
     """Nustato plocius pagal jau paruostus duomenis (vienas praejimas RAM'e).
-    Plotis ribojamas MAX_COL_WIDTH - likusi dali sutvarko wrap_text."""
+    Plotis ribojamas - likusi dali sutvarko wrap_text (eilute paaugsta pati)."""
     from openpyxl.utils import get_column_letter
-    widths = [len(h) for h in headers]
+    ribos = {STULP_KELIAS: KELIO_WIDTH, STULP_KODEL: PRIEZASTIES_WIDTH}
+    # Antrastes lauziamos (wrap_text), tad joms uztenka ILGIAUSIO ZODZIO -
+    # kitaip "Greiciausiai pirminis" istemptu placia stulpeli varnelei
+    widths = [max((len(z) for z in h.split()), default=len(h)) for h in headers]
     for r in rows:
         for i, v in enumerate(r):
             l = len(str(v))
             if l > widths[i]:
                 widths[i] = l
     for i, w in enumerate(widths, start=1):
-        sheet.column_dimensions[get_column_letter(i)].width = min(w + 3, MAX_COL_WIDTH)
+        riba = ribos.get(i - 1, MAX_COL_WIDTH)
+        sheet.column_dimensions[get_column_letter(i)].width = min(w + 3, riba)
 
 
 def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
@@ -220,12 +235,18 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             notice = _t("RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)").format(
                 a=SAFE_ROWS, b=len(rows))
             rows = rows[:SAFE_ROWS]
-        _autofit(ws, [r[0] for r in rows] + [lapo_headers], lapo_headers)
+        # Antrasciu i eiluciu sarasa NEDEDAM - jos jau ateina atskiru
+        # argumentu ir skaiciuojamos pagal ilgiausia ZODI (nes lauziamos);
+        # idejus dukart laimedavo pilnas ilgis ir stulpelis likdavo platus
+        _autofit(ws, [r[0] for r in rows], lapo_headers)
         hdr = []
         for h in lapo_headers:
             c = WriteOnlyCell(ws, value=h)
             c.fill = header_fill
             c.font = bold_font
+            # Ilgas antrastes lauziam - kitaip "Greiciausiai pirminis"
+            # isteptu 27 simboliu ploti stulpeliui, kuriame tik varnele
+            c.alignment = wrap_align
             hdr.append(c)
         ws.append(hdr)
         for vals, fill, font in rows:
@@ -236,8 +257,12 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
                     c.fill = fill
                 if font is not None:
                     c.font = font
-                if ci == 2 and isinstance(v, str) and len(v) > MAX_COL_WIDTH:
-                    c.alignment = wrap_align  # Full Path lauzymas
+                # Ilgus tekstus lauziam langelio viduje - Excel eilutes
+                # auksti tada pritaiko pats (Roberto prasymas 2026-08-24)
+                if isinstance(v, str) and (
+                        (ci == STULP_KELIAS and len(v) > KELIO_WIDTH)
+                        or (ci == STULP_KODEL and len(v) > PRIEZASTIES_WIDTH)):
+                    c.alignment = wrap_align
                 cells.append(c)
             ws.append(cells)
         if notice:

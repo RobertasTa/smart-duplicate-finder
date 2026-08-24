@@ -34,8 +34,10 @@ _LT = {
     "1. Naujienu puslapyje matysite naujausia versija:":
         "1. Naujienų puslapyje matysite naujausią versiją:",
     "Atidaryti naujienu puslapi": "Atidaryti naujienų puslapį",
-    "2. Jei diegete per winget - komandu eiluteje:":
-        "2. Jei diegėte per winget — komandų eilutėje:",
+    "2. Jei diegete per winget - spauskite Win+R, irasykite cmd,\n"
+    "   spauskite Enter ir iklijuokite:":
+        "2. Jei diegėte per winget — spauskite Win+R, įrašykite cmd,\n"
+        "   spauskite Enter ir įklijuokite:",
     "Kopijuoti komanda": "Kopijuoti komandą",
     "Komanda nukopijuota": "Komanda nukopijuota",
     "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"

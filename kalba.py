@@ -104,8 +104,10 @@ _EN = {
     "1. Naujienu puslapyje matysite naujausia versija:":
         "1. The releases page shows the latest version:",
     "Atidaryti naujienu puslapi": "Open the releases page",
-    "2. Jei diegete per winget - komandu eiluteje:":
-        "2. If you installed via winget - in the command line:",
+    "2. Jei diegete per winget - spauskite Win+R, irasykite cmd,\n"
+    "   spauskite Enter ir iklijuokite:":
+        "2. If you installed via winget - press Win+R, type cmd,\n"
+        "   press Enter and paste:",
     "Kopijuoti komanda": "Copy the command",
     "Komanda nukopijuota": "Command copied",
     "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"

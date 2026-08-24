@@ -36,8 +36,10 @@ _DE = {
         '1. Auf der Releases-Seite sehen Sie die neueste Version:',
     'Atidaryti naujienu puslapi':
         'Releases-Seite öffnen',
-    '2. Jei diegete per winget - komandu eiluteje:':
-        '2. Falls über winget installiert – in der Kommandozeile:',
+    '2. Jei diegete per winget - spauskite Win+R, irasykite cmd,\n'
+    '   spauskite Enter ir iklijuokite:':
+        '2. Falls über winget installiert – Win+R drücken, cmd eingeben,\n'
+        '   Enter drücken und einfügen:',
     'Kopijuoti komanda':
         'Befehl kopieren',
     'Komanda nukopijuota':
