@@ -116,7 +116,7 @@ removal, and nothing happens without your confirmation.
 - **Stuck? Ask the AI that wrote it** — the **?** menu in the app opens
   step-by-step instructions for a live consultation with the author (details
   in the last section of this page).
-- **No ads, no telemetry, no network access.** MIT licensed.
+- **No ads, no telemetry, no network access.** Free software, GPL v3.
 - **UI in English, Lithuanian, Russian and German** (RU/DE new in v1.3) —
   switched inside the app; first run follows your Windows language. The built-in
   user guide comes in all four languages too.
@@ -225,7 +225,7 @@ own language — Lithuanian, English, whichever is yours.
 
 **And you can make this program personally yours.** Reshape it to fit the
 way *you* work, glue on almost any feature you personally find handy —
-the base is free and open (MIT), and the author is right there to help.
+the base is free and open (GPL v3), and the author is right there to help.
 Who else can offer you that? Describe what you want — an extra filter, a
 different report format, even the automatic deletion we deliberately left
 out — and I will help you build your own personal version on top of this
@@ -239,7 +239,19 @@ My briefing for exactly that conversation lives in
 
 ## License
 
-[MIT](LICENSE) — © Robertas & Claude.
+**[GNU General Public License v3](LICENSE)** — © 2026 Robertas & Claude.
+
+Using it costs you nothing and obliges you to nothing. Changing it for yourself
+obliges you to nothing either. Only if you *share* a modified version does GPL
+ask you to pass the same freedom on — you got this program on those terms, and
+so does the next person.
+
+Why GPL and not MIT: this program is built on PyQt6, which is `GPL-3.0-only`,
+so GPL v3 is simply the truth about what we ship. Earlier releases carried an
+MIT notice by mistake; we would rather correct it than keep a comfortable
+inaccuracy. Every bundled component and its licence is listed in
+[THIRD_PARTY.md](THIRD_PARTY.md) — including the libraries whose authors did
+the work we did not have to.
 
 *This program is a gift to the world. If it saved your disk some space, that's all
 we wanted. Bug reports and ideas are welcome in
