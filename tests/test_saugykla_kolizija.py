@@ -144,3 +144,66 @@ def test_isjungiant_portable_svetimi_failai_lieka(flesiukas, monkeypatch, tmp_pa
     assert (la / "SmartDuplicateFinder" / "scan_speed.json").exists()
     assert (svetimas / "cleaning_log.txt").exists(), "kaimyno auditas dingo!"
     assert not savas.exists(), "tuscias musu katalogas neistrintas"
+
+
+# --- Kai NAUJAS vardas jau uzimtas (Roberto gyvas testas 2026-08-24) --------
+
+def test_zurnalai_suliejami_kai_abu_vardai_yra(tmp_path, monkeypatch):
+    """Buvo: apsauga nuo perrasymo virsdavo apsauga nuo susitvarkymo -
+    veiklos.log likdavo guleti amzinai salia activity.log."""
+    la = tmp_path / "localappdata"
+    d = la / "SmartDuplicateFinder"
+    d.mkdir(parents=True)
+    monkeypatch.setenv("LOCALAPPDATA", str(la))
+    monkeypatch.setattr(sg, "exe_dir", lambda: tmp_path / "exe")
+    monkeypatch.setattr(sg, "_migruota", False)
+
+    (d / "veiklos.log").write_text("SENA ISTORIJA\n", encoding="utf-8")
+    (d / "activity.log").write_text("nauja eilute\n", encoding="utf-8")
+
+    sg.migruoti_sena_darbal()
+
+    assert not (d / "veiklos.log").exists(), "senas zurnalas liko guleti"
+    turinys = (d / "activity.log").read_text(encoding="utf-8")
+    assert "SENA ISTORIJA" in turinys, "sena istorija prarasta!"
+    assert "nauja eilute" in turinys
+    assert turinys.index("SENA ISTORIJA") < turinys.index("nauja eilute"), \
+        "istorija turi buti chronologine - sena pirma"
+
+
+def test_duomenu_failas_atidedamas_su_priesaga(tmp_path, monkeypatch):
+    """Ne zurnalo negalima sulieti - senaji atidedam, bet NETRINAM."""
+    la = tmp_path / "localappdata"
+    d = la / "SmartDuplicateFinder"
+    d.mkdir(parents=True)
+    monkeypatch.setenv("LOCALAPPDATA", str(la))
+    monkeypatch.setattr(sg, "exe_dir", lambda: tmp_path / "exe")
+    monkeypatch.setattr(sg, "_migruota", False)
+
+    (d / "paskutinis_skenas.json").write_text('{"senas": 1}', encoding="utf-8")
+    (d / "last_scan.json").write_text('{"naujas": 2}', encoding="utf-8")
+
+    sg.migruoti_sena_darbal()
+
+    assert not (d / "paskutinis_skenas.json").exists()
+    assert (d / "paskutinis_skenas.json.old").read_text(encoding="utf-8") == '{"senas": 1}'
+    assert (d / "last_scan.json").read_text(encoding="utf-8") == '{"naujas": 2}'
+
+
+def test_pervadinama_ir_NEAKTYVIOJE_vietoje(flesiukas, monkeypatch, tmp_path):
+    """Roberto gyvas testas 2026-08-24: portable rezime profilio katalogas
+    likdavo su senais vardais - ir niekada nebebutu sutvarkytas, nes ten
+    nebesikreipiam. Migracija turi apziureti ABI musu vietas."""
+    la = tmp_path / "localappdata"
+    profilis = la / "SmartDuplicateFinder"
+    profilis.mkdir(parents=True)
+    monkeypatch.setenv("LOCALAPPDATA", str(la))
+    (profilis / "veiklos.log").write_text("profilio istorija\n", encoding="utf-8")
+
+    # esam PORTABLE - aktyvi vieta yra flesiukas, ne profilis
+    assert sg.data_dir() == flesiukas / "SmartDuplicateFinder_data"
+    sg.migruoti_sena_darbal()
+
+    assert not (profilis / "veiklos.log").exists(), \
+        "neaktyvioje vietoje liko senas vardas"
+    assert (profilis / "activity.log").read_text(encoding="utf-8") == "profilio istorija\n"
