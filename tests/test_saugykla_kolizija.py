@@ -1,6 +1,9 @@
-# Seimos kolizija flesiuke: SDF ir TempCleaner viename kataloge.
-# Roberto radinys 2026-08-24: "jei abu tuo paciu pavadinimu pasirasys ta
-# failiuka, bedos bus". Ju ir buvo - zr. saugykla.py komentara.
+# Seimos kolizija flesiuke + angliski failu vardai.
+#
+# Roberto radinys 2026-08-24 (I): "jei abu tuo paciu pavadinimu pasirasys ta
+# failiuka, bedos bus" - abi dovanos rase i ta pati _darbal.
+# Roberto klausimas 2026-08-24 (II): "tuos failiukus lietuviu kalba tik meskai
+# supras, kitom kalbom kaip bus?" - vardai pervadinti i angliskus.
 import sys
 from pathlib import Path
 
@@ -19,35 +22,88 @@ def flesiukas(tmp_path, monkeypatch):
     return tmp_path
 
 
-def test_portable_duomenys_gyvena_po_katalogyje(flesiukas):
-    """Ne bendrame _darbal, o _darbal/SmartDuplicateFinder."""
-    assert sg.data_dir() == flesiukas / "_darbal" / "SmartDuplicateFinder"
+# --- Vieta ------------------------------------------------------------------
+
+def test_portable_katalogas_pasirasytas_programos_vardu(flesiukas):
+    """Bendro tevo nebera: susimaisyti nebeturi su kuo."""
+    assert sg.data_dir() == flesiukas / "SmartDuplicateFinder_data"
 
 
-def test_migracija_pasiima_savus_ir_nelieia_svetimu(flesiukas):
+def test_katalogo_vardas_be_lietuvisku_zodziu(flesiukas):
+    """Roberto klausimas: kitakalbis turi suprasti, ka mato flesiuke."""
+    vardas = sg.data_dir().name
+    assert vardas.isascii(), "varde yra ne-ASCII simboliu"
+    assert "darbal" not in vardas.lower()
+
+
+# --- Migracija is BENDRO _darbal (iki 2026-08-24) ---------------------------
+
+def test_migracija_is_bendro_darbal_pervadina_ir_nelieia_svetimu(flesiukas):
     senas = flesiukas / "_darbal"
     senas.mkdir()
-    # musu failai
-    (senas / "paskutinis_skenas.json").write_text("{}", encoding="utf-8")
-    (senas / "scan_speed.json").write_text("123", encoding="utf-8")
-    # bendravardis
+    (senas / "paskutinis_skenas.json").write_text('{"g": 42}', encoding="utf-8")
+    (senas / "veiklos.log").write_text("startas\n", encoding="utf-8")
+    (senas / "scan_speed.json").write_text("999", encoding="utf-8")
     (senas / "kalba.txt").write_text("ru\n", encoding="utf-8")
     # SVETIMAS - TempCleaner valymo zurnalas (auditas!)
-    (senas / "valymo_log.txt").write_text("2026-08-24 isvalyta\n", encoding="utf-8")
+    (senas / "valymo_log.txt").write_text("istrinta 5 GB\n", encoding="utf-8")
 
-    perkelta = sg.migruoti_sena_darbal()
-
+    sg.migruoti_sena_darbal()
     naujas = sg.data_dir()
-    assert perkelta == 3
-    # savi persikele
-    assert (naujas / "paskutinis_skenas.json").exists()
-    assert (naujas / "scan_speed.json").exists()
-    assert not (senas / "scan_speed.json").exists()
-    # bendravardis NUKOPIJUOTAS, ne perkeltas - TempCleaner ji dar ras
-    assert (naujas / "kalba.txt").read_text(encoding="utf-8").strip() == "ru"
+
+    # savi persikele IR pervadinti
+    assert (naujas / "last_scan.json").read_text(encoding="utf-8") == '{"g": 42}'
+    assert (naujas / "activity.log").exists()
+    assert (naujas / "scan_speed.json").read_text(encoding="utf-8") == "999"
+    assert not (naujas / "paskutinis_skenas.json").exists(), "liko senas vardas"
+    assert not (naujas / "veiklos.log").exists(), "liko senas vardas"
+    # bendravardis: KOPIJUOTAS nauju vardu, senasis paliktas kaimynui
+    assert (naujas / "language.txt").read_text(encoding="utf-8").strip() == "ru"
     assert (senas / "kalba.txt").exists(), "kalba.txt dingo TempCleaner'iui!"
     # svetimas nepaliestas
     assert (senas / "valymo_log.txt").exists(), "pagrobtas TempCleaner zurnalas!"
+
+
+# --- Migracija is TARPINES formos (_darbal/SmartDuplicateFinder) ------------
+
+def test_migracija_is_tarpines_formos(flesiukas):
+    """Tokia struktura spejo atsirasti tik Roberto flesiuke (testinis buildas
+    2026-08-24 17:43) - bet ji turi persikelti svariai."""
+    tarpinis = flesiukas / "_darbal" / "SmartDuplicateFinder"
+    tarpinis.mkdir(parents=True)
+    (tarpinis / "paskutinis_skenas.json").write_text("{}", encoding="utf-8")
+    (tarpinis / "kalba.txt").write_text("de\n", encoding="utf-8")
+
+    sg.migruoti_sena_darbal()
+    naujas = sg.data_dir()
+
+    assert (naujas / "last_scan.json").exists()
+    # cia katalogas MUSU, tad bendravardis PERKELIAMAS, ne kopijuojamas
+    assert (naujas / "language.txt").read_text(encoding="utf-8").strip() == "de"
+    assert not tarpinis.exists(), "tuscias tarpinis katalogas neistrintas"
+    assert not (flesiukas / "_darbal").exists(), "tuscias _darbal neistrintas"
+
+
+# --- Vardu pervadinimas VIETOJE (%LOCALAPPDATA% atvejis) --------------------
+
+def test_pervadinimas_vietoje_kai_katalogas_nesikeicia(tmp_path, monkeypatch):
+    """Ne portable vartotojui katalogas lieka tas pats - keiciasi tik vardai."""
+    la = tmp_path / "localappdata"
+    (la / "SmartDuplicateFinder").mkdir(parents=True)
+    monkeypatch.setenv("LOCALAPPDATA", str(la))
+    monkeypatch.setattr(sg, "exe_dir", lambda: tmp_path / "exe")
+    monkeypatch.setattr(sg, "_migruota", False)
+
+    d = la / "SmartDuplicateFinder"
+    (d / "veiklos.log").write_text("senas", encoding="utf-8")
+    (d / "kalba.txt").write_text("lt\n", encoding="utf-8")
+
+    sg.migruoti_sena_darbal()
+
+    assert (d / "activity.log").read_text(encoding="utf-8") == "senas"
+    assert (d / "language.txt").read_text(encoding="utf-8").strip() == "lt"
+    assert not (d / "veiklos.log").exists()
+    assert not (d / "kalba.txt").exists()
 
 
 def test_migracija_neperraso_jau_esamu(flesiukas):
@@ -67,8 +123,9 @@ def test_migracija_saugi_kai_nera_ko_migruoti(flesiukas):
     assert sg.migruoti_sena_darbal() == 0
 
 
+# --- Portable isjungimas ----------------------------------------------------
+
 def test_isjungiant_portable_svetimi_failai_lieka(flesiukas, monkeypatch, tmp_path):
-    """set_portable(False) issivedza TIK savo kataloga."""
     la = tmp_path / "localappdata"
     la.mkdir()
     monkeypatch.setenv("LOCALAPPDATA", str(la))
@@ -76,15 +133,14 @@ def test_isjungiant_portable_svetimi_failai_lieka(flesiukas, monkeypatch, tmp_pa
     savas = sg.data_dir()
     savas.mkdir(parents=True)
     (savas / "scan_speed.json").write_text("mano", encoding="utf-8")
-    # kaimyno duomenys bendrame _darbal
-    svetimas = flesiukas / "_darbal" / "TempCleaner"
-    svetimas.mkdir(parents=True)
-    (svetimas / "valymo_log.txt").write_text("auditas", encoding="utf-8")
+    # kaimyno duomenys - dabar VISAI atskirame kataloge
+    svetimas = flesiukas / "TempCleaner_data"
+    svetimas.mkdir()
+    (svetimas / "cleaning_log.txt").write_text("auditas", encoding="utf-8")
 
     ok, klaida = sg.set_portable(False)
 
     assert ok, klaida
     assert (la / "SmartDuplicateFinder" / "scan_speed.json").exists()
-    assert (svetimas / "valymo_log.txt").exists(), "kaimyno auditas dingo!"
-    # bendras _darbal islieka, nes jame dar gyvena kaimynas
-    assert (flesiukas / "_darbal").is_dir()
+    assert (svetimas / "cleaning_log.txt").exists(), "kaimyno auditas dingo!"
+    assert not savas.exists(), "tuscias musu katalogas neistrintas"

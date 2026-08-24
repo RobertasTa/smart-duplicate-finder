@@ -18,10 +18,15 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont, QIcon
 
 from kalba import t
+# Darbiniu failu vardai gyvena saugykla.py (2026-08-24: pervadinti i
+# angliskus - programa keturkalbe, o vardai buvo lietuviski)
+from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 
 # Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
 # 1.3 (2026-08-22): desinio klaviso meniu, RU/DE kalbos, HEIC/AVIF
-VERSIJA = "1.3"
+# 1.4 (2026-08-24): ataskaita pasako, kuris kopijos greiciausiai pirminis
+#     ir KODEL; portable duomenys - savo po-kataloge (seimos kolizija)
+VERSIJA = "1.4"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
@@ -207,14 +212,14 @@ class MainWindow(QMainWindow):
         """Veiklos zurnalas (%TEMP%\\SmartDuplicateFinder\\veiklos.log) -
         faziu laikai diagnostikai; veikia ir is exe, ir is python."""
         try:
-            with open(_cache_dir() / "veiklos.log", "a", encoding="utf-8") as fh:
+            with open(_cache_dir() / LOG_FAILAS, "a", encoding="utf-8") as fh:
                 fh.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {msg}\n")
         except OSError:
             pass
 
     # ---- Paskutinio skeno atmintis (%TEMP% kesas; Roberto ideja 2026-08-05) ----
     def _cache_file(self):
-        return _cache_dir() / "paskutinis_skenas.json"
+        return _cache_dir() / SKENO_FAILAS
 
     def _save_cache(self):
         """Po gilaus skeno - rezultatai i %TEMP%, kad nulusus/uzdarius neprapultu."""
@@ -853,7 +858,7 @@ class MainWindow(QMainWindow):
     def _load_speed(self):
         import json
         try:
-            with open(_cache_dir() / "scan_speed.json", encoding="utf-8") as fh:
+            with open(_cache_dir() / GREICIO_FAILAS, encoding="utf-8") as fh:
                 return float(json.load(fh).get("mbs", 150.0))
         except (OSError, ValueError, TypeError):
             return 150.0
@@ -863,7 +868,7 @@ class MainWindow(QMainWindow):
         if not mbs or mbs <= 0:
             return
         try:
-            with open(_cache_dir() / "scan_speed.json", "w", encoding="utf-8") as fh:
+            with open(_cache_dir() / GREICIO_FAILAS, "w", encoding="utf-8") as fh:
                 json.dump({"mbs": mbs}, fh)
         except OSError:
             pass
