@@ -26,6 +26,9 @@ def _issaugota_kalba():
     """Skaito GUI pasirinkima is kalba.txt (saugyklos data_dir)."""
     try:
         import saugykla
+        # v1.4: kalba gali dar guleti sename bendrame _darbal - persikeliam
+        # PIRMA, kitaip pirmas paleidimas grizdavo i numatyta kalba
+        saugykla.migruoti_sena_darbal()
         v = (saugykla.data_dir() / "kalba.txt").read_text(
             encoding="utf-8").strip().lower()
         return v if v in ("lt", "en", "ru", "de") else None

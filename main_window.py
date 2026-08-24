@@ -64,6 +64,9 @@ def _cache_dir():
         d = Path(override)
     else:
         import saugykla
+        # v1.4: vienkartinis perkelimas is bendro _darbal (iki-v1.4 vieta,
+        # kuria flesiuke dalinomes su TempCleaner) - zr. saugykla.py
+        saugykla.migruoti_sena_darbal()
         d = saugykla.data_dir()
     try:
         d.mkdir(parents=True, exist_ok=True)
