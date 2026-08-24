@@ -16,6 +16,17 @@ _LT = {
     "Itraukti katalogai:": "Įtraukti katalogai:",
     "Sukurimo data": "Sukūrimo data",
     "Grupe": "Grupė",
+    # v1.4 „Kuris čia pirminis?"
+    "Greiciausiai pirminis": "Greičiausiai pirminis",
+    "Kodel": "Kodėl",
+    "kiti grupeje vardu pazymeti kaip kopijos":
+        "kiti grupėje vardu pažymėti kaip kopijos",
+    "kiti guli laikinuose aplankuose": "kiti guli laikinuose aplankuose",
+    "sekliausias kelias": "sekliausias kelias",
+    "seniausias failas": "seniausias failas",
+    "neaisku - pozymiu nera": "neaišku — požymių nėra",
+    "visos kopijos laikinuose aplankuose":
+        "visos šios grupės kopijos guli laikinuose aplankuose",
     "Pasirenges": "Pasirengęs",
     "Prideti katalogus ir spauskite 'Skenuoti'.":
         "Pridėkite katalogus ir spauskite „Skenuoti“.",

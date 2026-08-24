@@ -7,6 +7,24 @@ be perziuros: placeholder'iai {n}/{mb:.2f}... privalo sutapti su raktu."""
 _RU = {
     'Duplicate Finder':
         'Duplicate Finder',
+    # v1.4 "Kuris cia pirminis?" - ataskaitos skiltys (informacija, ne
+    # nurodymas: programa nieko netrina ir trinti nesiulo)
+    'Greiciausiai pirminis':
+        'Скорее всего оригинал',
+    'Kodel':
+        'Почему',
+    'kiti grupeje vardu pazymeti kaip kopijos':
+        'остальные по имени похожи на копии',
+    'kiti guli laikinuose aplankuose':
+        'остальные лежат во временных папках',
+    'sekliausias kelias':
+        'самый короткий путь',
+    'seniausias failas':
+        'самый старый файл',
+    'neaisku - pozymiu nera':
+        'неясно — отличий нет',
+    'visos kopijos laikinuose aplankuose':
+        'все копии этой группы лежат во временных папках',
     '+   Prideti katalogus':
         '+   Добавить папки',
     '-   Pasalinti pasirinktus':

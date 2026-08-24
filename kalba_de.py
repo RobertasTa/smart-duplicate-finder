@@ -7,6 +7,24 @@ be perziuros: placeholder'iai {n}/{mb:.2f}... privalo sutapti su raktu."""
 _DE = {
     'Duplicate Finder':
         'Duplicate Finder',
+    # v1.4 "Kuris cia pirminis?" - ataskaitos skiltys (informacija, ne
+    # nurodymas: programa nieko netrina ir trinti nesiulo)
+    'Greiciausiai pirminis':
+        'Wahrscheinlich das Original',
+    'Kodel':
+        'Warum',
+    'kiti grupeje vardu pazymeti kaip kopijos':
+        'die anderen heißen wie Kopien',
+    'kiti guli laikinuose aplankuose':
+        'die anderen liegen in temporären Ordnern',
+    'sekliausias kelias':
+        'kürzester Pfad',
+    'seniausias failas':
+        'älteste Datei',
+    'neaisku - pozymiu nera':
+        'unklar – keine Unterschiede',
+    'visos kopijos laikinuose aplankuose':
+        'alle Kopien dieser Gruppe liegen in temporären Ordnern',
     '+   Prideti katalogus':
         '+   Ordner hinzufügen',
     '-   Pasalinti pasirinktus':

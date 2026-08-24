@@ -82,6 +82,17 @@ _EN = {
     "Dydis (MB)": "Size (MB)",
     "Sukurimo data": "Created",
     "Grupe": "Group",
+    # v1.4 - "Kuris cia pirminis?" ataskaitos skiltys. Tai INFORMACIJA,
+    # ne nurodymas: programa netrina nieko ir nesiulo trinti.
+    "Greiciausiai pirminis": "Most likely the original",
+    "Kodel": "Why",
+    "kiti grupeje vardu pazymeti kaip kopijos": "the others are named as copies",
+    "kiti guli laikinuose aplankuose": "the others sit in temporary folders",
+    "sekliausias kelias": "shallowest path",
+    "seniausias failas": "oldest file",
+    "neaisku - pozymiu nera": "unclear - nothing tells them apart",
+    "visos kopijos laikinuose aplankuose":
+        "every copy here is in a temporary folder",
     "Pasirenges": "Ready",
     "Prideti katalogus ir spauskite 'Skenuoti'.": "Add folders and press 'Scan'.",
     "Pirma prideti bent viena kataloga.": "Add at least one folder first.",

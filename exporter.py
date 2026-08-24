@@ -14,6 +14,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+import atranka
 from kalba import fam as _famv, t as _t
 from table_populator import family_of, FAMILY_ORDER, FAMILY_COLORS
 
@@ -92,6 +93,36 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     headers = [_t("Grupe"), _t("Failo vardas"),
                _t("Pilnas kelias"), _t("Dydis (MB)")]
 
+    # v1.4: du papildomi stulpeliai TIK dublikatu lape. Tai INFORMACIJA
+    # ("kuris cia senelis ir kodel"), NE nurodymas trinti - programa
+    # netrina nieko ir siulymo nedaro. Kur pozymiu nera - "neaisku".
+    dup_headers = headers + [_t("Greiciausiai pirminis"), _t("Kodel")]
+
+    # Priezasciu kodai -> tekstai (raktai verciami iprastu keliu)
+    _PRIEZ_TEKSTAI = {
+        atranka.PRIEZASTIS_VARDAS: _t("kiti grupeje vardu pazymeti kaip kopijos"),
+        atranka.PRIEZASTIS_APLANKAS: _t("kiti guli laikinuose aplankuose"),
+        atranka.PRIEZASTIS_GYLIS: _t("sekliausias kelias"),
+        atranka.PRIEZASTIS_DATA: _t("seniausias failas"),
+        atranka.NEAISKU: _t("neaisku - pozymiu nera"),
+    }
+
+    def _pirminis_ir_kodel(grp):
+        """Grazina (zyme_siai_eilutei_dict, kodel_tekstas_grupei).
+        mtime is disko imamas TIK jei pirmos trys taisykles neisspreze -
+        taip dazniausiu atveju disko neliecia is viso."""
+        kelias, priez = atranka.greiciausiai_pirminis(grp)
+        if priez == atranka.NEAISKU and len(grp) > 1:
+            mt = {}
+            for fp in grp:
+                try:
+                    mt[fp] = os.stat(fp).st_mtime
+                except OSError:
+                    pass
+            if mt:
+                kelias, priez = atranka.greiciausiai_pirminis(grp, mtimes=mt)
+        return kelias, _PRIEZ_TEKSTAI.get(priez, "")
+
     # --- 1. Paruosiam eiluciu duomenis RAM'e (tik dubliai - nedidele apimtis) ---
     # (vals, fill, font) - fill/font None = paprastas tekstas
     dup_rows = []
@@ -109,10 +140,17 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
         exts = sorted({Path(fp).suffix.lower()
                        for _, g in fam_groups[fam] for fp in g})
         # Antraste be fono - tik paryskintas spalvotas tekstas (kaip GUI)
-        dup_rows.append(([f"{_famv(fam)} ({', '.join(exts)})", "", "", ""],
+        dup_rows.append(([f"{_famv(fam)} ({', '.join(exts)})", "", "", "", "", ""],
                          None, fam_hdr_fonts[fam]))
         for shade_i, (gid, grp) in enumerate(fam_groups[fam]):
             group_fill = fam_fills[fam][shade_i % 2]
+            pirminis, kodel = _pirminis_ir_kodel(grp)
+            # Grupes lygio ispejimas (DC "warning all marked" atitikmuo musu
+            # kalba): visos sios grupes kopijos guli laikinuose aplankuose
+            if atranka.ZYME_VISI_LAIKINI in atranka.grupes_zymes(grp):
+                zyme = _t("visos kopijos laikinuose aplankuose")
+                kodel = f"{kodel}; {zyme}" if kodel else zyme
+            pirma_eilute = True
             for fp in grp:
                 size_bytes = _size_of(fp)
                 if size_bytes > 1_073_741_824:
@@ -121,11 +159,21 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
                     active = warn_yellow
                 else:
                     active = group_fill
+                # "Kodel" rasom VIENA karta grupeje: prie pazymeto failo,
+                # o jei nepazymeta nieko - prie pirmos grupes eilutes
+                yra_pirminis = bool(pirminis) and fp == pirminis
+                if yra_pirminis or (not pirminis and pirma_eilute):
+                    kodel_langelis = kodel
+                else:
+                    kodel_langelis = ""
                 dup_rows.append(([_t("Grupe {idx}").format(idx=gid),
                                   os.path.basename(fp),
                                   str(Path(fp).resolve()),
-                                  round(size_bytes / 1048576, 2)],
+                                  round(size_bytes / 1048576, 2),
+                                  "✓" if yra_pirminis else "",
+                                  kodel_langelis],
                                  active, None))
+                pirma_eilute = False
 
     # Vizualiai panasios nuotraukos - atskiras lapas (violetiniai atspalviai)
     vis_fills = (_fill("#E9DDF7"), _fill("#CDB4EE"))
@@ -163,16 +211,18 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     SAFE_ROWS = 1_000_000
     wb = Workbook(write_only=True)
 
-    def _write_sheet(title, rows):
+    def _write_sheet(title, rows, lapo_headers=None):
+        # lapo_headers: dublikatu lapas turi dvi papildomas skiltis, kiti - ne
+        lapo_headers = lapo_headers or headers
         ws = wb.create_sheet(title)
         notice = None
         if len(rows) > SAFE_ROWS:
             notice = _t("RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)").format(
                 a=SAFE_ROWS, b=len(rows))
             rows = rows[:SAFE_ROWS]
-        _autofit(ws, [r[0] for r in rows] + [headers], headers)
+        _autofit(ws, [r[0] for r in rows] + [lapo_headers], lapo_headers)
         hdr = []
-        for h in headers:
+        for h in lapo_headers:
             c = WriteOnlyCell(ws, value=h)
             c.fill = header_fill
             c.font = bold_font
@@ -195,7 +245,7 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             c.font = bold_font
             ws.append([c])
 
-    _write_sheet(_t("Dublikatai"), dup_rows)
+    _write_sheet(_t("Dublikatai"), dup_rows, dup_headers)
     if vis_rows:
         _write_sheet(_t("Panasios nuotraukos"), vis_rows)
     _write_sheet(_t("Itartini"), sus_rows)
