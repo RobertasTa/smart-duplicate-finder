@@ -15,12 +15,14 @@ _RU = {
         'Почему',
     'kiti grupeje vardu pazymeti kaip kopijos':
         'остальные по имени похожи на копии',
+    'kiti guli kopiju aplankuose':
+        'остальные лежат в папках с копиями',
     'kiti guli laikinuose aplankuose':
         'остальные лежат во временных папках',
-    'sekliausias kelias':
-        'самый короткий путь',
-    'seniausias failas':
-        'самый старый файл',
+    'kiti guli giliau aplankuose':
+        'остальные лежат глубже в папках',
+    'kiti sukurti veliau':
+        'остальные созданы позже',
     'neaisku - pozymiu nera':
         'неясно — отличий нет',
     'visos kopijos laikinuose aplankuose':

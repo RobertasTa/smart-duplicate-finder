@@ -90,9 +90,10 @@ _EN = {
     "Greiciausiai pirminis": "Most likely the original",
     "Kodel": "Why",
     "kiti grupeje vardu pazymeti kaip kopijos": "the others are named as copies",
+    "kiti guli kopiju aplankuose": "the others sit in copy folders",
     "kiti guli laikinuose aplankuose": "the others sit in temporary folders",
-    "sekliausias kelias": "shallowest path",
-    "seniausias failas": "oldest file",
+    "kiti guli giliau aplankuose": "the others sit deeper in folders",
+    "kiti sukurti veliau": "the others were created later",
     "neaisku - pozymiu nera": "unclear - nothing tells them apart",
     "visos kopijos laikinuose aplankuose":
         "every copy here is in a temporary folder",

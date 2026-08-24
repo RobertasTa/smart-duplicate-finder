@@ -116,9 +116,10 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     # Priezasciu kodai -> tekstai (raktai verciami iprastu keliu)
     _PRIEZ_TEKSTAI = {
         atranka.PRIEZASTIS_VARDAS: _t("kiti grupeje vardu pazymeti kaip kopijos"),
+        atranka.PRIEZASTIS_KOPIJU_APLANKAS: _t("kiti guli kopiju aplankuose"),
         atranka.PRIEZASTIS_APLANKAS: _t("kiti guli laikinuose aplankuose"),
-        atranka.PRIEZASTIS_GYLIS: _t("sekliausias kelias"),
-        atranka.PRIEZASTIS_DATA: _t("seniausias failas"),
+        atranka.PRIEZASTIS_GYLIS: _t("kiti guli giliau aplankuose"),
+        atranka.PRIEZASTIS_DATA: _t("kiti sukurti veliau"),
         atranka.NEAISKU: _t("neaisku - pozymiu nera"),
     }
 

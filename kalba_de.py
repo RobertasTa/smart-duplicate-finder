@@ -15,12 +15,14 @@ _DE = {
         'Warum',
     'kiti grupeje vardu pazymeti kaip kopijos':
         'die anderen heißen wie Kopien',
+    'kiti guli kopiju aplankuose':
+        'die anderen liegen in Kopie-Ordnern',
     'kiti guli laikinuose aplankuose':
         'die anderen liegen in temporären Ordnern',
-    'sekliausias kelias':
-        'kürzester Pfad',
-    'seniausias failas':
-        'älteste Datei',
+    'kiti guli giliau aplankuose':
+        'die anderen liegen tiefer in Ordnern',
+    'kiti sukurti veliau':
+        'die anderen wurden später erstellt',
     'neaisku - pozymiu nera':
         'unklar – keine Unterschiede',
     'visos kopijos laikinuose aplankuose':

@@ -21,10 +21,11 @@ Atskirai isiminti: ZYMEJIMAS pacioje SDF (v1.5 tema) reiskia NE "sita
 salinti", o atvirksciai - "sitie dubliai man REIKALINGI, laikau tycia".
 
 TAISYKLIU TVARKA (pirma, kuri duoda aiskuma, ta ir lemia):
-  1. Vardo pozymiai      - "kopija (1).jpg", "file - Copy.txt" = KOPIJA
-  2. Laikinas aplankas   - Downloads/Temp/Cache = greiciau kopija
-  3. Kelio gylis         - seklesnis kelias = greiciau originalas
-  4. Senesnis mtime      - senesnis = greiciau originalas
+  1. Failo vardas        - "kopija (1).jpg", "file - Copy.txt" = KOPIJA
+  2. Aplanko vardas      - "NAS medziaga kopija", "Atsargine kopija"
+  3. Laikinas aplankas   - Downloads/Temp/Cache = greiciau kopija
+  4. Kelio gylis         - seklesnis kelias = greiciau originalas
+  5. Senesnis mtime      - senesnis = greiciau originalas
 Ne viena netiko -> ("", NEAISKU). Spejimo neisradinejam.
 
 Modulis GRYNAS: neliecia disko (mtime paduodamas is isores), nieko netrina,
@@ -72,7 +73,34 @@ def vardas_rodo_kopija(kelias):
     return False
 
 
-# --- 2 taisykle: laikini aplankai -----------------------------------------
+# --- 2 taisykle: aplanko vardas prisipazista ------------------------------
+# Roberto gyvas testas 2026-08-24: "NAS medziaga kopija\irankis.exe" ir
+# "Atsargine kopija\receptas.jfif" - zmogus perskaito per sekunde, o
+# programa graibstesi silpniausiu taisykliu, nes tikrino TIK failo varda.
+# Aplanku vardai kelyje yra toks pat prisipazinimas kaip failo vardas.
+_KOPIJU_APLANKAI = (
+    "kopij",          # kopija, kopijos, "NAS medziaga kopija"
+    "copy",
+    "backup",
+    "kopie",          # DE
+    "\u043a\u043e\u043f\u0438",   # RU "kopi(ja)" - escape, kad failas liktu ASCII
+    "\u0440\u0435\u0437\u0435\u0440\u0432",   # RU "rezerv(as)"
+)
+
+
+def aplankas_rodo_kopija(kelias):
+    """True, jei bent vienas aplankas kelyje vadinasi kopiju aplanku.
+    Tikrinam TIK aplankus, ne pati faila - failo varda tvarko 1 taisykle."""
+    dalys = os.path.normpath(kelias).replace("/", "\\").split("\\")[:-1]
+    for aplankas in dalys:
+        z = aplankas.lower()
+        for zyme in _KOPIJU_APLANKAI:
+            if zyme in z:
+                return True
+    return False
+
+
+# --- 3 taisykle: laikini aplankai -----------------------------------------
 # Aplankai, kuriuose failas gyvena "pakeliui", o ne namie.
 _LAIKINI = (
     "downloads", "atsisiuntimai", "\u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438",
@@ -101,6 +129,7 @@ def laikinas_aplankas(kelias):
 
 # --- Priezasciu kodai (i teksta verciami kalba.py, ne cia) ----------------
 PRIEZASTIS_VARDAS = "vardas"        # kiti grupes failai vardu prisipazino
+PRIEZASTIS_KOPIJU_APLANKAS = "kopiju_aplankas"  # kiti guli kopiju aplanke
 PRIEZASTIS_APLANKAS = "aplankas"    # kiti guli laikinuose aplankuose
 PRIEZASTIS_GYLIS = "gylis"          # sekliausias kelias
 PRIEZASTIS_DATA = "data"            # seniausias
@@ -137,14 +166,22 @@ def greiciausiai_pirminis(grupe, mtimes=None):
         return nekopijos[0], PRIEZASTIS_VARDAS
     kandidatai = nekopijos if nekopijos else list(grupe)
 
-    # 2. Laikinas aplankas. Ta pati logika: jei lieka lygiai vienas "namie".
+    # 2. Aplanko vardas. "NAS medziaga kopija", "Atsargine kopija" - toks
+    #    pat prisipazinimas kaip failo vardas, tik vienu lygiu auksciau.
+    ne_kopiju_aplanke = [p for p in kandidatai if not aplankas_rodo_kopija(p)]
+    if len(ne_kopiju_aplanke) == 1:
+        return ne_kopiju_aplanke[0], PRIEZASTIS_KOPIJU_APLANKAS
+    if ne_kopiju_aplanke:
+        kandidatai = ne_kopiju_aplanke
+
+    # 3. Laikinas aplankas. Ta pati logika: jei lieka lygiai vienas "namie".
     namie = [p for p in kandidatai if not laikinas_aplankas(p)]
     if len(namie) == 1:
         return namie[0], PRIEZASTIS_APLANKAS
     if namie:
         kandidatai = namie
 
-    # 3. Kelio gylis. Tik jei sekliausias yra VIENAS - kitaip neaisku.
+    # 4. Kelio gylis. Tik jei sekliausias yra VIENAS - kitaip neaisku.
     gyliai = [(_gylis(p), p) for p in kandidatai]
     min_gylis = min(g for g, _ in gyliai)
     sekliausi = [p for g, p in gyliai if g == min_gylis]
@@ -152,7 +189,7 @@ def greiciausiai_pirminis(grupe, mtimes=None):
         return sekliausi[0], PRIEZASTIS_GYLIS
     kandidatai = sekliausi
 
-    # 4. Data. Be mtimes nespejam.
+    # 5. Data. Be mtimes nespejam.
     if mtimes:
         turintys = [(mtimes[p], p) for p in kandidatai if p in mtimes]
         if turintys:

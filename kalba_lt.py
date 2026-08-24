@@ -21,9 +21,10 @@ _LT = {
     "Kodel": "Kodėl",
     "kiti grupeje vardu pazymeti kaip kopijos":
         "kiti grupėje vardu pažymėti kaip kopijos",
+    "kiti guli kopiju aplankuose": "kiti guli kopijų aplankuose",
     "kiti guli laikinuose aplankuose": "kiti guli laikinuose aplankuose",
-    "sekliausias kelias": "sekliausias kelias",
-    "seniausias failas": "seniausias failas",
+    "kiti guli giliau aplankuose": "kiti guli giliau aplankuose",
+    "kiti sukurti veliau": "kiti sukurti vėliau",
     "neaisku - pozymiu nera": "neaišku — požymių nėra",
     "visos kopijos laikinuose aplankuose":
         "visos šios grupės kopijos guli laikinuose aplankuose",

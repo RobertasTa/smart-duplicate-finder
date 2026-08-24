@@ -54,8 +54,11 @@ def test_aplankas_isskiria_kai_kiti_laikinuose():
 # --- 3 taisykle: gylis ------------------------------------------------------
 
 def test_gylis_isskiria_sekliausia():
+    # PASTABA 2026-08-24: cia TYCIA nera aplanko su zodziu "kopij" - nuo
+    # aplanko taisykles atsiradimo toks kelias butu isspresta anksciau,
+    # ir sitas testas tikrintu ne ta, ka teigia
     grupe = [r"D:\archyvas\foto.jpg",
-             r"D:\archyvas\2020\senos\kopijos\foto.jpg"]
+             r"D:\archyvas\2020\senos\gilyn\foto.jpg"]
     kelias, priez = at.greiciausiai_pirminis(grupe)
     assert kelias == r"D:\archyvas\foto.jpg"
     assert priez == at.PRIEZASTIS_GYLIS
@@ -126,3 +129,37 @@ def test_visi_vardai_kopijos_nesugriauna_atrankos():
     kelias, priez = at.greiciausiai_pirminis(grupe)
     assert kelias == r"D:\a\x (1).jpg"
     assert priez == at.PRIEZASTIS_GYLIS
+
+
+# --- Aplanko vardas (Roberto gyvas testas 2026-08-24) ----------------------
+
+def test_aplanko_vardas_prisipazista():
+    """"NAS medziaga kopija", "Atsargine kopija" - zmogus perskaito per
+    sekunde; programa turi irgi."""
+    assert at.aplankas_rodo_kopija(r"D:\t\NAS medziaga kopija\irankis.exe")
+    assert at.aplankas_rodo_kopija(r"D:\t\Atsargine kopija\receptas.jfif")
+    assert at.aplankas_rodo_kopija(r"D:\t\Backup\a.jpg")
+    assert at.aplankas_rodo_kopija(r"D:\t\Kopie\a.jpg")
+
+
+def test_aplanko_taisykle_NEklysta_su_normaliais():
+    assert not at.aplankas_rodo_kopija(r"D:\t\Dokumentai\a.txt")
+    assert not at.aplankas_rodo_kopija(r"D:\t\Nuotraukos\2025\a.jpg")
+    # failo vardas su "copy" NEturi suveikti kaip APLANKO taisykle
+    assert not at.aplankas_rodo_kopija(r"D:\t\foto\copy of a.jpg")
+
+
+def test_kopiju_aplankas_isskiria_ir_paaiskina():
+    grupe = [r"D:\t\NAS medziaga\irankis.exe",
+             r"D:\t\NAS medziaga kopija\irankis.exe"]
+    kelias, priez = at.greiciausiai_pirminis(grupe)
+    assert kelias == r"D:\t\NAS medziaga\irankis.exe"
+    assert priez == at.PRIEZASTIS_KOPIJU_APLANKAS
+
+
+def test_failo_vardas_pirmesnis_uz_aplanka():
+    """Failo vardas yra tikslesnis pozymis nei aplanko - jis pirmas."""
+    grupe = [r"D:\t\Backup\svente.jpg", r"D:\t\foto\svente (1).jpg"]
+    kelias, priez = at.greiciausiai_pirminis(grupe)
+    assert kelias == r"D:\t\Backup\svente.jpg"
+    assert priez == at.PRIEZASTIS_VARDAS
