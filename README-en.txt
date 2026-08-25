@@ -110,6 +110,65 @@ it when in a hurry. Groups where all files are byte-identical (already
 reported as duplicates) are not repeated here — only genuinely
 "hidden" copies are shown.
 
+WHICH ONE IS THE ORIGINAL? (since v1.4)
+---------------------------------------
+The "Duplicates" sheet of the Excel report has two columns: "Most
+likely the original" (a tick) and "Why". The program looks at what the
+files themselves say through their names and locations, and tells you
+which one of the group looks like the elder — AND WHY that one. For
+example:
+  * the others are named as copies ("holiday (1).jpg");
+  * the others sit in copy folders ("Backup", "Copies");
+  * the others sit in temporary folders (Downloads, Temp);
+  * the others sit deeper in folders, or were created later.
+
+Three things worth saying out loud:
+1. This is INFORMATION, not an instruction. The program marks nothing
+   for deletion and deletes nothing — you decide. The tick means "here
+   is what stood out", not "keep this one, destroy the rest".
+2. When nothing tells the files apart, the column says "unclear -
+   nothing tells them apart". An honest "don't know" beats a
+   good-looking guess.
+3. The program does not know your history. It only sees names, folders
+   and dates. If you once moved or renamed a file, those clues can
+   point the wrong way — which is why the last word is always yours.
+
+IS THERE A NEWER VERSION?
+-------------------------
+The program NEVER checks for updates and will never tell you about
+them — it has no internet access at all, and that is deliberate: it
+sends nothing, fetches nothing, knows nothing about you. The price of
+that silence is that checking is up to you. Once every few months is
+plenty.
+
+Quickest route: "?" -> "Is there a newer version?". That panel shows
+your version and all three ways to check (its buttons open the
+releases page or copy the winget command for you).
+
+Checking by hand (half a minute):
+  github.com/RobertasTa/smart-duplicate-finder/releases/latest
+That page always names the newest version and what changed in it.
+Your own version: "?" -> "About".
+
+How to update:
+* If you installed via winget (the Windows package manager), run:
+  winget upgrade RobertasTa.SmartDuplicateFinder
+  (the winget catalogue can trail GitHub by a few days; if it still
+  shows the old version, use the route below).
+* If you simply downloaded the exe — download the new one from the
+  link above and replace the old file. Nothing else to do: there is
+  no installer, nothing is kept in the registry, and the old exe can
+  just be deleted.
+
+Your data survives: scan memory and settings live separately from the
+exe (see "WHERE THINGS ARE STORED"), and your own files are never
+touched.
+
+The lazy way: "?" -> "No answer here? Ask the AI" and ask it to
+"check whether there is a version newer than mine". The AI assistant
+that opens in your browser does have internet — it will check,
+compare with your version and explain what the new one brings.
+
 GOOD TO KNOW
 ------------
 * SCAN MEMORY THAT SURVIVES ANYTHING: results are saved to disk the
@@ -131,16 +190,24 @@ WHERE THINGS ARE STORED
 -----------------------
 * Excel reports — wherever you choose (Documents suggested).
 * Service files — in %LOCALAPPDATA%\SmartDuplicateFinder\:
-    paskutinis_skenas.json  - scan memory
-    scan_speed.json         - disk speed for time estimates
-    veiklos.log             - activity log (useful if something
-                              ever gets stuck)
+    last_scan.json   - scan memory
+    scan_speed.json  - disk speed for time estimates
+    activity.log     - activity log (useful if something ever
+                       gets stuck)
+    language.txt     - the language you picked
+  (Before v1.4 these files had Lithuanian names; the program renames
+  the old ones itself, you need to do nothing.)
 * PORTABLE MODE (checkbox at the bottom of the left bar): when ON,
-  service files are stored in a _darbal folder NEXT TO the app
-  (e.g. on a USB stick) and no traces are left on the computer —
-  the app even removes its previously created %LOCALAPPDATA% folder.
-  The choice is remembered by a portable.txt file next to the exe
-  (the Notepad++ / VS Code convention) - it travels with your stick.
+  service files are stored in a SmartDuplicateFinder_data folder NEXT
+  TO the app (e.g. on a USB stick) and no traces are left on the
+  computer — the app even removes its previously created
+  %LOCALAPPDATA% folder. The choice is remembered by an
+  SDF_portable.txt file next to the exe (the Notepad++ / VS Code
+  convention) - it travels with your stick.
+  (Before v1.4 the data lived in a shared _darbal folder — the same
+  one Temp Cleaner used, so one program could carry off the other's
+  data. Since v1.4 each has its own folder; anything old is moved
+  across automatically on first start.)
 * All service files can be deleted at any time — the program simply
   starts fresh.
 * LANGUAGE (Lietuviu / English / Russian / German) can be switched

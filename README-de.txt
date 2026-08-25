@@ -126,6 +126,66 @@ dauert das — in Eile den Haken abwählen. Gruppen, deren Dateien
 ohnehin byte-identisch sind (bereits als Duplikate gemeldet),
 werden hier nicht wiederholt — nur echte "versteckte" Kopien.
 
+WELCHE IST DAS ORIGINAL? (seit v1.4)
+------------------------------------
+Das Blatt "Duplikate" im Excel-Bericht hat zwei neue Spalten:
+"Wahrscheinlich das Original" (ein Häkchen) und "Warum". Das Programm
+schaut, was die Dateien durch ihre eigenen Namen und Orte über sich
+verraten, und sagt Ihnen, welche der Gruppe die ältere zu sein
+scheint — UND WARUM gerade diese. Zum Beispiel:
+  * die anderen heißen wie Kopien ("Fest (1).jpg");
+  * die anderen liegen in Kopie-Ordnern ("Backup", "Kopien");
+  * die anderen liegen in temporären Ordnern (Downloads, Temp);
+  * die anderen liegen tiefer in Ordnern oder wurden später erstellt.
+
+Drei Dinge, die laut gesagt gehören:
+1. Das ist eine INFORMATION, keine Anweisung. Das Programm markiert
+   nichts zum Löschen und löscht nichts — Sie entscheiden. Das Häkchen
+   heißt "das ist aufgefallen", nicht "diese behalten, Rest weg".
+2. Wenn es keine Unterschiede gibt, steht in der Spalte "unklar –
+   keine Unterschiede". Ein ehrliches "weiß ich nicht" ist hier besser
+   als eine gut aussehende Vermutung.
+3. Das Programm kennt Ihre Geschichte nicht. Es sieht nur Namen,
+   Ordner und Daten. Wenn Sie eine Datei einmal verschoben oder
+   umbenannt haben, können diese Hinweise in die falsche Richtung
+   zeigen — darum haben immer Sie das letzte Wort.
+
+GIBT ES EINE NEUERE VERSION?
+----------------------------
+Das Programm prüft SELBST nie auf Updates und wird Ihnen nie davon
+erzählen — es hat überhaupt keinen Internetzugang, und das ist eine
+bewusste Entscheidung: Es sendet nichts, holt nichts, weiß nichts über
+Sie. Der Preis für diese Stille: Nachsehen müssen Sie selbst. Alle
+paar Monate genügt völlig.
+
+Schnellster Weg: "?" -> "Gibt es eine neuere Version?". Dieses Fenster
+zeigt Ihre Version und alle drei Wege zum Nachsehen (seine Schaltflächen
+öffnen die Releases-Seite oder kopieren den winget-Befehl für Sie).
+
+Von Hand nachsehen (eine halbe Minute):
+  github.com/RobertasTa/smart-duplicate-finder/releases/latest
+Diese Seite nennt immer die neueste Version und was sich geändert hat.
+Ihre eigene Version: "?" -> "Über".
+
+So aktualisieren Sie:
+* Falls über winget installiert (Windows-Paketverwaltung), in der
+  Eingabeaufforderung: winget upgrade RobertasTa.SmartDuplicateFinder
+  (der winget-Katalog kann GitHub um einige Tage hinterherhinken;
+  zeigt er noch die alte Version, nehmen Sie den Weg darunter).
+* Falls Sie einfach die exe geladen haben — laden Sie die neue über
+  den Link oben und ersetzen Sie die alte Datei. Mehr ist nicht zu
+  tun: Es gibt kein Installationsprogramm, in der Registry wird nichts
+  gespeichert, die alte exe können Sie einfach löschen.
+
+Ihre Daten überleben: Scan-Gedächtnis und Einstellungen liegen getrennt
+von der exe (siehe "WO WAS GESPEICHERT WIRD"), und Ihre eigenen Dateien
+rührt das Programm nie an.
+
+Der bequeme Weg: "?" -> "Keine Antwort gefunden? Fragen Sie die KI"
+und bitten Sie: "prüfe, ob es eine neuere Version als meine gibt".
+Der KI-Assistent, der sich im Browser öffnet, hat Internet — er prüft
+selbst, vergleicht mit Ihrer Version und erklärt, was die neue bringt.
+
 GUT ZU WISSEN
 -------------
 * SCAN-GEDÄCHTNIS, DAS ALLES ÜBERLEBT: Die Ergebnisse werden sofort
@@ -149,18 +209,24 @@ WO WAS GESPEICHERT WIRD
 -----------------------
 * Excel-Berichte — wo Sie wollen (Dokumente wird vorgeschlagen).
 * Dienstdateien — in %LOCALAPPDATA%\SmartDuplicateFinder\:
-    paskutinis_skenas.json  - Scan-Gedächtnis
-    scan_speed.json         - Laufwerksgeschwindigkeit für
-                              Zeitschätzungen
-    veiklos.log             - Aktivitätsprotokoll (hilfreich, falls
-                              je etwas hängt)
+    last_scan.json   - Scan-Gedächtnis
+    scan_speed.json  - Laufwerksgeschwindigkeit für Zeitschätzungen
+    activity.log     - Aktivitätsprotokoll (hilfreich, falls je
+                       etwas hängt)
+    language.txt     - die gewählte Sprache
+  (Bis v1.4 hatten diese Dateien litauische Namen; das Programm
+  benennt die alten selbst um, Sie müssen nichts tun.)
 * PORTABLE-MODUS (Häkchen unten in der linken Leiste): Wenn AN,
-  liegen die Dienstdateien im Ordner _darbal NEBEN der App (z. B.
-  auf dem USB-Stick), und am Computer bleiben keine Spuren — die
-  App entfernt sogar ihren zuvor angelegten
-  %LOCALAPPDATA%-Ordner. Die Wahl merkt sich die Datei portable.txt
-  neben der exe (die Notepad++/VS-Code-Konvention) — sie reist mit
-  dem Stick.
+  liegen die Dienstdateien im Ordner SmartDuplicateFinder_data NEBEN
+  der App (z. B. auf dem USB-Stick), und am Computer bleiben keine
+  Spuren — die App entfernt sogar ihren zuvor angelegten
+  %LOCALAPPDATA%-Ordner. Die Wahl merkt sich die Datei
+  SDF_portable.txt neben der exe (die Notepad++/VS-Code-Konvention)
+  — sie reist mit dem Stick.
+  (Bis v1.4 lagen die Daten im gemeinsamen Ordner _darbal — demselben,
+  den auch Temp Cleaner nutzte, sodass ein Programm die Daten des
+  anderen mitnehmen konnte. Seit v1.4 hat jedes seinen eigenen
+  Ordner; Altes wird beim ersten Start automatisch übernommen.)
 * Alle Dienstdateien können Sie jederzeit löschen — das Programm
   beginnt einfach mit einem sauberen Blatt.
 * SPRACHE (Lietuvių / English / Русский / Deutsch) wird in der

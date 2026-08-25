@@ -163,3 +163,56 @@ def test_failo_vardas_pirmesnis_uz_aplanka():
     kelias, priez = at.greiciausiai_pirminis(grupe)
     assert kelias == r"D:\t\Backup\svente.jpg"
     assert priez == at.PRIEZASTIS_VARDAS
+
+
+# --- Nekaltuju gynyba (2026-08-25) -----------------------------------------
+# Sitie testai gime is patikros, kuri parode, kad 37 zali testai nesugavo
+# dvieju vietu, kur ataskaita sakydavo netiesa. Abi klaidos vienodos:
+# pozymio ieskota kaip POEILUTES, be zodzio ribos.
+
+def test_vardas_NEklysta_su_zodziais_kurie_baigiasi_copy():
+    """"Photocopy", "Hardcopy", "Recopy" NERA kopijos - "copy" ten yra
+    zodzio dalis, ne Explorer'io uodega."""
+    assert not at.vardas_rodo_kopija(r"C:\skenai\Photocopy.jpg")
+    assert not at.vardas_rodo_kopija(r"C:\doc\Hardcopy.pdf")
+    assert not at.vardas_rodo_kopija(r"C:\skenai\Recopy.txt")
+    # o tikros uodegos turi likti pagaunamos
+    assert at.vardas_rodo_kopija(r"C:\foto\planas copy 2.docx")
+    assert at.vardas_rodo_kopija(r"C:\foto\planas_copy.docx")
+    assert at.vardas_rodo_kopija(r"C:\foto\planas - Copy.docx")
+
+
+def test_aplankas_NEklysta_su_zodziais_kuriuose_slypi_zyme():
+    """"Copyright materials" turi "copy", "Mikroskopija" turi "kopij" -
+    bet nei vienas nera kopiju aplankas."""
+    assert not at.aplankas_rodo_kopija(r"D:\t\Copyright materials\a.txt")
+    assert not at.aplankas_rodo_kopija(r"D:\mokslas\Mikroskopija\vaizdas.tif")
+    # o tikri kopiju aplankai turi likti pagaunami
+    assert at.aplankas_rodo_kopija(r"D:\t\Kopijos\a.jpg")
+    assert at.aplankas_rodo_kopija(r"D:\t\Backup 2024\a.jpg")
+    assert at.aplankas_rodo_kopija(r"D:\t\Copies\a.jpg")
+    assert at.aplankas_rodo_kopija(r"D:\t\Kopien\a.jpg")
+
+
+def test_kopiju_aplankai_veikia_ir_kirilica():
+    """RU vartotojui "Kopii" / "Rezervnaja kopija" (rasoma kirilica) yra
+    toks pat prisipazinimas kaip lietuviui "Kopijos".
+    Patys vardai rasomi \\u escape'ais - sitas failas lieka ASCII, kaip
+    reikalauja test_hygiene (jis mane cia ir pagavo 2026-08-25)."""
+    assert at.aplankas_rodo_kopija("D:\\t\\\u041a\u043e\u043f\u0438\u0438\\a.jpg")
+    assert at.aplankas_rodo_kopija(
+        "D:\\t\\\u0420\u0435\u0437\u0435\u0440\u0432\u043d\u0430\u044f "
+        "\u043a\u043e\u043f\u0438\u044f\\a.jpg")
+    # "Mikroskopija" rusiskai - irgi neturi buti palaikyta kopija
+    assert not at.aplankas_rodo_kopija(
+        "D:\\t\\\u041c\u0438\u043a\u0440\u043e\u0441\u043a\u043e\u043f\u0438\u044f\\a.jpg")
+
+
+def test_mikroskopijos_grupe_duoda_saziniga_neaisku():
+    """Pilnas scenarijus: kai vienintelis "pozymis" buvo klaidingas,
+    atsakymas turi buti "neaisku", o ne pasufleruotas ne tas failas."""
+    grupe = [r"D:\mokslas\Mikroskopija\vaizdas.tif",
+             r"D:\mokslas\archyvas\vaizdas.tif"]
+    kelias, priez = at.greiciausiai_pirminis(grupe)
+    assert kelias == ""
+    assert priez == at.NEAISKU

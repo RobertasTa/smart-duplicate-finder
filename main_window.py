@@ -80,6 +80,17 @@ def _cache_dir():
     return d
 
 
+def _uzdaryti(mygtuku_deze):
+    """Isverciam QDialogButtonBox "Close" mygtuka (2026-08-25).
+    Qt savo standartiniu mygtuku vertimu nepridedamas, o mes savo .qm
+    failu i exe nededam - tad be sitos eilutes trijuose languose likdavo
+    vienintelis angliskas zodis, nesvarbu kokia kalba pasirinkta."""
+    from PyQt6.QtWidgets import QDialogButtonBox
+    mygtukas = mygtuku_deze.button(QDialogButtonBox.StandardButton.Close)
+    if mygtukas is not None:
+        mygtukas.setText(t("Uzdaryti"))
+
+
 # Modernus mygtuku stilius (2026-08-05, Roberto prasymu): apvalinti kampai,
 # svelnus 3D gradientas, ryskus hover; btn_scan - akcentinis (gintarinis,
 # deranti prie programos ikonos), btn_export - melynas.
@@ -576,7 +587,11 @@ class MainWindow(QMainWindow):
             'font-weight:bold;">GitHub</a>')
         nuoroda.setOpenExternalLinks(True)
         lay.addWidget(nuoroda)
+        # PATAISA 2026-08-25: Qt savo standartiniams mygtukams vertimu
+        # nepridedamas, tad visuose trijuose languose vienintelis zodis
+        # buvo angliskas "Close" - ir lietuviui, ir rusui, ir vokieciui
         mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        _uzdaryti(mygtukai)
         mygtukai.rejected.connect(dlg.reject)
         lay.addWidget(mygtukai)
         dlg.exec()
@@ -644,19 +659,39 @@ class MainWindow(QMainWindow):
         btn_kop = QPushButton(t("Kopijuoti komanda"))
         btn_kop.setObjectName("btn_kopijuoti_komanda")
 
+        # PATAISA 2026-08-25: patvirtinimas buvo rodomas busenos juostoje -
+        # o sitas dialogas MODALUS ir ja uzdengia. Zmogus paspausdavo ir
+        # nematydavo jokio atsako. Dabar atsakas atsiranda cia pat.
+        patvirtinimas = QLabel("")
+        patvirtinimas.setStyleSheet("color: #1b6b2f; font-weight: bold;")
+
         def _kopijuok():
             app = QApplication.instance()
             if app is not None:
                 app.clipboard().setText("winget upgrade " + WINGET_ID)
-            self.statusBar().showMessage(t("Komanda nukopijuota"), 4000)
+            patvirtinimas.setText("✓ " + t("Komanda nukopijuota"))
 
         btn_kop.clicked.connect(_kopijuok)
         lay.addWidget(btn_kop)
+        lay.addWidget(patvirtinimas)
 
-        # 3. Klausk DI - musu unikalus kelias
-        p3 = QLabel(t("3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
-                      "   pasitikrins ir pasakys, ko jums truksta."))
+        # 3. Klausk DI - musu unikalus kelias.
+        # PATAISA 2026-08-25: tekstas siunte zmogu prie mygtuko "Klausk DI",
+        # o meniu punktas vadinasi kitaip - "Neradote atsakymo? Klauskite DI"
+        # (ir taip VISOSE keturiose kalbose). Vietoj vardo, kurio ekrane nera,
+        # dedam pati mygtuka - jis atidaro ta pati langa.
+        p3 = QLabel(t("3. Arba paprasykite DI konsultanto - jis pats\n"
+                      "   pasitikrins ir pasakys, ko jums truksta:"))
         lay.addWidget(p3)
+        btn_di = QPushButton(t("Neradote atsakymo? Klauskite DI"))
+        btn_di.setObjectName("btn_klausk_di_is_naujienu")
+
+        def _klausk_di():
+            dlg.accept()
+            self._on_klausk_di()
+
+        btn_di.clicked.connect(_klausk_di)
+        lay.addWidget(btn_di)
 
         pastaba = QLabel(t("Programa pati interneto neliecia. Sprendziate jus."))
         pastaba.setStyleSheet("color: #5a5e6b; font-style: italic;"
@@ -664,6 +699,7 @@ class MainWindow(QMainWindow):
         lay.addWidget(pastaba)
 
         mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        _uzdaryti(mygtukai)
         mygtukai.rejected.connect(dlg.reject)
         lay.addWidget(mygtukai)
         dlg.exec()
@@ -697,6 +733,7 @@ class MainWindow(QMainWindow):
         rodinys.setFont(QFont("Consolas", 10))
         lay.addWidget(rodinys)
         mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        _uzdaryti(mygtukai)
         mygtukai.rejected.connect(dlg.reject)
         lay.addWidget(mygtukai)
         dlg.resize(780, 560)

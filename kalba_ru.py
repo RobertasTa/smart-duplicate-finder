@@ -46,10 +46,12 @@ _RU = {
         'Копировать команду',
     'Komanda nukopijuota':
         'Команда скопирована',
-    '3. Arba spauskite "Klausk DI" - konsultantas pats\n'
-    '   pasitikrins ir pasakys, ko jums truksta.':
-        '3. Или нажмите «Спросить ИИ» — помощник сам проверит\n'
-        '   и скажет, чего вам не хватает.',
+    '3. Arba paprasykite DI konsultanto - jis pats\n'
+    '   pasitikrins ir pasakys, ko jums truksta:':
+        '3. Или попросите ИИ-помощника — он сам проверит\n'
+        '   и скажет, чего вам не хватает:',
+    'Uzdaryti':
+        'Закрыть',
     'Programa pati interneto neliecia. Sprendziate jus.':
         'Сама программа в интернет не выходит. Решаете вы.',
     '+   Prideti katalogus':

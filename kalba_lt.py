@@ -41,12 +41,13 @@ _LT = {
         "   spauskite Enter ir įklijuokite:",
     "Kopijuoti komanda": "Kopijuoti komandą",
     "Komanda nukopijuota": "Komanda nukopijuota",
-    "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
-    "   pasitikrins ir pasakys, ko jums truksta.":
-        "3. Arba spauskite „Klausk DI“ — konsultantas pats\n"
-        "   pasitikrins ir pasakys, ko jums trūksta.",
+    "3. Arba paprasykite DI konsultanto - jis pats\n"
+    "   pasitikrins ir pasakys, ko jums truksta:":
+        "3. Arba paprašykite DI konsultanto — jis pats\n"
+        "   pasitikrins ir pasakys, ko jums trūksta:",
     "Programa pati interneto neliecia. Sprendziate jus.":
         "Programa pati interneto neliečia. Sprendžiate jūs.",
+    "Uzdaryti": "Uždaryti",
     "Pasirenges": "Pasirengęs",
     "Prideti katalogus ir spauskite 'Skenuoti'.":
         "Pridėkite katalogus ir spauskite „Skenuoti“.",

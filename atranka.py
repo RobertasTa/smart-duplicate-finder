@@ -49,7 +49,11 @@ _KOPIJOS_UODEGOS = [
     r"\s*-\s*[Kk]opie$",         # file - Kopie.txt    <- Explorer DE
     r"_[Cc]opy$",
     r"_[Kk]opija$",
-    r"\s*copy\s*\d*$",           # file copy 2.txt     <- macOS/rankinis
+    # PATAISA 2026-08-25: buvo r"\s*copy\s*\d*$" - o \s* leidzia NULI tarpu,
+    # tad kopija tapdavo bet koks zodis, kuris tiesiog BAIGIASI "copy":
+    # "Photocopy.jpg", "Hardcopy.pdf", "Recopy.txt". Dabar pries "copy"
+    # privalo buti riba - vardo pradzia, tarpas, bruksnys ar pabraukimas.
+    r"(?:^|[\s\-_])[Cc]opy\s*\d*$",   # file copy 2.txt  <- macOS/rankinis
     # NE raw string: raw'e \u escape neveiktu ir ieskotume teksto "\u2014"
     "\\s*\u2014\\s*copy$",       # file - copy.txt su ilguoju bruksniu
 ]
@@ -78,13 +82,27 @@ def vardas_rodo_kopija(kelias):
 # "Atsargine kopija\receptas.jfif" - zmogus perskaito per sekunde, o
 # programa graibstesi silpniausiu taisykliu, nes tikrino TIK failo varda.
 # Aplanku vardai kelyje yra toks pat prisipazinimas kaip failo vardas.
-_KOPIJU_APLANKAI = (
-    "kopij",          # kopija, kopijos, "NAS medziaga kopija"
-    "copy",
-    "backup",
-    "kopie",          # DE
-    "\u043a\u043e\u043f\u0438",   # RU "kopi(ja)" - escape, kad failas liktu ASCII
-    "\u0440\u0435\u0437\u0435\u0440\u0432",   # RU "rezerv(as)"
+#
+# PATAISA 2026-08-25: cia buvo paprasta poeiluciu paieska ("kopij" in vardas),
+# ir ji apkaltindavo nekaltus aplankus - "Copyright materials" (nes turi
+# "copy") ir "Mikroskopija" (nes turi "kopij"). Ta pati klaida, nuo kurios
+# 3 taisykle jau buvo apsaugota ("Templates" nera "temp"), tik cia liko
+# nepataisyta. Dabar zyme turi buti ATSKIRAS ZODIS (\b riba is abieju pusiu),
+# o galunes leidziamos: "kopija", "kopijos", "kopiju", "copies", "backups".
+# Saziningai pripazistam ka PRARANDAM: "Fotokopijos" nebebus atpazintas.
+# Tokia kryptis pasirinkta tycia - modulio doktrina sako, kad geriau
+# nieko nepasakyti, nei apkaltinti nekalta ("Never guess").
+_KOPIJU_APLANKU_RE = re.compile(
+    r"\b("
+    r"kopij\w*"                   # kopija, kopijos, kopiju, "NAS medziaga kopija"
+    r"|copy|copies"
+    r"|backup|backups"
+    r"|kopie|kopien"              # DE
+    # Kirilica - \u escape'ais, kad sitas failas liktu ASCII (zr. 1 taisykle)
+    r"|\u043a\u043e\u043f\u0438\w*"          # RU "kopi(ja/i)"
+    r"|\u0440\u0435\u0437\u0435\u0440\u0432\w*"   # RU "rezerv(as/naja)"
+    r")\b",
+    re.UNICODE,
 )
 
 
@@ -93,10 +111,8 @@ def aplankas_rodo_kopija(kelias):
     Tikrinam TIK aplankus, ne pati faila - failo varda tvarko 1 taisykle."""
     dalys = os.path.normpath(kelias).replace("/", "\\").split("\\")[:-1]
     for aplankas in dalys:
-        z = aplankas.lower()
-        for zyme in _KOPIJU_APLANKAI:
-            if zyme in z:
-                return True
+        if _KOPIJU_APLANKU_RE.search(aplankas.lower()):
+            return True
     return False
 
 

@@ -111,12 +111,17 @@ _EN = {
         "   press Enter and paste:",
     "Kopijuoti komanda": "Copy the command",
     "Komanda nukopijuota": "Command copied",
-    "3. Arba spauskite \"Klausk DI\" - konsultantas pats\n"
-    "   pasitikrins ir pasakys, ko jums truksta.":
-        "3. Or press \"Ask AI\" - the assistant will check for you\n"
-        "   and tell you what you are missing.",
+    # 2026-08-25: raktas pakeistas - senasis siunte prie mygtuko "Klausk DI",
+    # kurio tokiu vardu ekrane nera; dabar dialoge yra pats mygtukas
+    "3. Arba paprasykite DI konsultanto - jis pats\n"
+    "   pasitikrins ir pasakys, ko jums truksta:":
+        "3. Or ask an AI assistant - it will check for you\n"
+        "   and tell you what you are missing:",
     "Programa pati interneto neliecia. Sprendziate jus.":
         "The app itself never touches the internet. You decide.",
+    # 2026-08-25: Qt standartinio mygtuko vertimo nepridedamas, tad "Close"
+    # trijuose languose likdavo angliskas visoms kalboms
+    "Uzdaryti": "Close",
     "Pasirenges": "Ready",
     "Prideti katalogus ir spauskite 'Skenuoti'.": "Add folders and press 'Scan'.",
     "Pirma prideti bent viena kataloga.": "Add at least one folder first.",

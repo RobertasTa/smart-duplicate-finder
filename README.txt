@@ -117,6 +117,64 @@ tai užtrunka — skubant varnelę galima nuimti. Grupės, kur visi failai ir ta
 identiški (jau rasti kaip dubliai), čia nekartojamos — rodomos tik
 tikros „paslėptos" kopijos.
 
+KURIS IŠ JŲ PIRMINIS? (nuo v1.4)
+--------------------------------
+Excel ataskaitos lape „Dublikatai" yra du stulpeliai: „Greičiausiai
+pirminis" (varnelė) ir „Kodėl". Programa pažiūri, ką apie failus sako
+jų pačių vardai ir vietos, ir pasako, kuris grupės failas atrodo esąs
+senelis — IR KODĖL būtent jis. Pavyzdžiui:
+  * kiti grupėje vardu pažymėti kaip kopijos („svente (1).jpg");
+  * kiti guli kopijų aplankuose („Atsarginė kopija", „Backup");
+  * kiti guli laikinuose aplankuose (Atsisiuntimai, Temp);
+  * kiti guli giliau aplankuose arba sukurti vėliau.
+
+Trys dalykai, kuriuos svarbu pasakyti garsiai:
+1. Tai INFORMACIJA, o ne nurodymas. Programa nieko nežymi trynimui ir
+   nieko netrina — sprendžiate jūs. Varnelė reiškia „štai kas krito į
+   akis", ne „šitą palik, kitus naikink".
+2. Kai požymių nėra, stulpelyje rašoma „neaišku — požymių nėra".
+   Sąžiningas „nežinau" čia geriau už gražiai atrodantį spėjimą.
+3. Programa nežino jūsų istorijos. Ji mato tik vardus, aplankus ir
+   datas. Jei failą kadaise persikėlėte ar pervadinote, tie požymiai
+   gali rodyti ne ten — todėl paskutinis žodis visada jūsų.
+
+AR YRA NAUJESNĖ VERSIJA?
+------------------------
+Programa PATI naujinimų netikrina ir niekada apie juos nepraneš —
+ji visiškai neturi prieigos prie interneto, ir tai sąmoningas
+sprendimas: nieko neišsiunčia, nieko neatsiunčia, nieko apie jus
+nežino. Kaina už tą tylą — pasitikrinti turite patys. Verta tai
+padaryti kartą per kelis mėnesius.
+
+Greičiausias kelias: „?" -> „Ar yra naujesnė versija?". Tas langelis
+parodo jūsų versiją ir visus tris būdus pasitikrinti (mygtukai jame
+patys atidaro naujienų puslapį arba nukopijuoja winget komandą).
+
+Kaip pasitikrinti rankomis (pusė minutės):
+  github.com/RobertasTa/smart-duplicate-finder/releases/latest
+Tame puslapyje visada nurodyta naujausia versija ir kas joje
+pasikeitė. Savo versiją rasite programoje: „?" -> „Apie programą".
+
+Kaip atsinaujinti:
+* Jei diegėtės per winget (Windows paketų tvarkyklė) — komandinėje
+  eilutėje: winget upgrade RobertasTa.SmartDuplicateFinder
+  (winget katalogas gali kelias dienas atsilikti nuo GitHub; jei
+  jis dar rodo senąją versiją, naudokite kelią žemiau).
+* Jei tiesiog parsisiuntėte exe — parsisiųskite naują iš nuorodos
+  aukščiau ir pakeiskite senąjį failą. Nieko daugiau daryti
+  nereikia: diegimo programos nėra, registre nieko nesaugoma,
+  senąjį exe galima tiesiog ištrinti.
+
+Jūsų duomenys nepražūva: skenų atmintis ir nustatymai gyvena
+atskirai nuo exe (žr. skyrių „KUR PROGRAMA KĄ SAUGO"), o jūsų
+paties failų programa neliečia niekada.
+
+Tinginio būdas: „?" -> „Neradote atsakymo? Klauskite DI" ir
+paprašykite: „patikrink, ar yra naujesnė versija už mano".
+Naršyklėje atsidariusiam DI padėjėjui internetas prieinamas — jis
+pats pasitikrins, palygins su jūsų versija ir paaiškins, ką
+naujoji duoda.
+
 GUDRYBĖS, KURIAS VERTA ŽINOTI
 -----------------------------
 * SKENO ATMINTIS, ATSPARI LŪŽIMAMS: rezultatai įrašomi į diską vos
@@ -138,16 +196,23 @@ KUR PROGRAMA KĄ SAUGO
 ---------------------
 * Excel ataskaitos — kur pasirinksite (siūlomi Dokumentai).
 * Tarnybiniai failai — %LOCALAPPDATA%\SmartDuplicateFinder\:
-    paskutinis_skenas.json  – skeno atmintis
-    scan_speed.json         – disko greitis laiko prognozėms
-    veiklos.log             – veiklos žurnalas (jei kas stringa,
-                              šis failas padeda išsiaiškinti kur)
+    last_scan.json   – skeno atmintis
+    scan_speed.json  – disko greitis laiko prognozėms
+    activity.log     – veiklos žurnalas (jei kas stringa, šis
+                       failas padeda išsiaiškinti kur)
+    language.txt     – pasirinkta kalba
+  (iki v1.4 šie failai vadinosi lietuviškai; programa senuosius
+  persivadina pati, nieko daryti nereikia.)
 * PORTABLE REŽIMAS (varnelė kairės juostos apačioje): įjungus,
-  tarnybiniai failai saugomi _darbal kataloge ŠALIA programos
-  (pvz., fleškėje), o kompiuteryje pėdsakų nelieka — programa net
-  ištrina savo anksčiau sukurtą %LOCALAPPDATA% katalogą. Pasirinkimą
-  atsimena failas portable.txt šalia exe (Notepad++ / VS Code
-  konvencija) — jis keliauja kartu su fleške.
+  tarnybiniai failai saugomi kataloge SmartDuplicateFinder_data
+  ŠALIA programos (pvz., fleškėje), o kompiuteryje pėdsakų nelieka —
+  programa net ištrina savo anksčiau sukurtą %LOCALAPPDATA% katalogą.
+  Pasirinkimą atsimena failas SDF_portable.txt šalia exe (Notepad++ /
+  VS Code konvencija) — jis keliauja kartu su fleške.
+  (Iki v1.4 duomenys gulėjo bendrame _darbal kataloge — tame pačiame,
+  kurį naudojo ir Temp Cleaner, tad viena programa išsiveždavo kitos
+  duomenis. Nuo v1.4 kiekviena turi savo katalogą; senieji duomenys
+  perkeliami automatiškai pirmo paleidimo metu.)
 * Visus tarnybinius failus galima bet kada ištrinti — programa
   tiesiog pradės nuo švaraus lapo.
 * KALBA (Lietuvių / English / Русский / Deutsch) perjungiama

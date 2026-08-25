@@ -150,6 +150,18 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
         fam = family_of(Path(grp[0]).suffix)
         fam_groups.setdefault(fam, []).append((gid, grp))
 
+    # PATAISA 2026-08-25: ispejimas "visos sios grupes kopijos guli laikinuose
+    # aplankuose" turi prasme tik tada, kai jis ISSKIRIA grupe is kitu.
+    # Zmogui, kuris skenuoja butent "Atsisiuntimus" (viena dazniausiu dubliu
+    # paieskos priezasciu), jis atsirastu prie KIEKVIENOS grupes ir virstu
+    # triuksmu - o kartojamas ispejimas nebera ispejimas. Tokiu atveju
+    # nutylim: tai butu ne informacija apie failus, o konstatavimas, kur
+    # zmogus pats nusprende ieskoti.
+    netuscios = [g for g in groups if g]
+    visos_laikinos = bool(netuscios) and all(
+        atranka.ZYME_VISI_LAIKINI in atranka.grupes_zymes(g)
+        for g in netuscios)
+
     for fam in FAMILY_ORDER:
         if fam not in fam_groups:
             continue
@@ -163,7 +175,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             pirminis, kodel = _pirminis_ir_kodel(grp)
             # Grupes lygio ispejimas (DC "warning all marked" atitikmuo musu
             # kalba): visos sios grupes kopijos guli laikinuose aplankuose
-            if atranka.ZYME_VISI_LAIKINI in atranka.grupes_zymes(grp):
+            if (not visos_laikinos
+                    and atranka.ZYME_VISI_LAIKINI in atranka.grupes_zymes(grp)):
                 zyme = _t("visos kopijos laikinuose aplankuose")
                 kodel = f"{kodel}; {zyme}" if kodel else zyme
             pirma_eilute = True
