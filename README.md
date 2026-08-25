@@ -4,6 +4,8 @@
 
 *Find. Show. Never delete.*
 
+**[Project page](https://robertasta.github.io/smart-duplicate-finder/)** — demo, screenshots and what it does, on one page.
+
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
 
 ![Demo: scan, review, export — it found them, it deleted zero](docs/demo.gif)
