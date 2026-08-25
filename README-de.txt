@@ -92,6 +92,8 @@ man sie nicht sieht.
 So funktioniert es:
 1. Wenn die Vorerkundung Müll gefunden hat, wird der Button
    "Systemmüll entfernen (N)" aktiv — in Klammern die Anzahl.
+   (Fahren Sie mit der Maus darüber, und der Button zählt selbst auf,
+   was genau er anfasst — Ihre eigenen Dateien sind nie dabei.)
 2. Ein Klick zeigt eine Übersicht nach Typ und fragt nach
    Bestätigung.
 3. SICHERUNG: Vor dem Löschen wird bei JEDER Datei die

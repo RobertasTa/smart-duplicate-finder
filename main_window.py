@@ -376,9 +376,17 @@ class MainWindow(QMainWindow):
         _add_buttons([
             (t(">>> Skenuoti"), self._on_scan, "btn_scan"),
             (t("Eksportuoti ataskaita"), self._on_export, "btn_export"),
-            (t("Salinti siuksles"), self._on_junk, "btn_junk"),
+            (t("Salinti OS siuksles"), self._on_junk, "btn_junk"),
         ])
         self.btn_junk.setEnabled(False)
+        # 2026-08-25 (Roberto sprendimas B+C; GPT pastaba 08-14): salia
+        # pazado "niekada netrina" mygtukas "Salinti siuksles" skambejo
+        # dviprasmiskai - zmogus galejo suprasti, kad trinami JO radiniai.
+        # "OS" pasako, kieno tai siuksles, o tooltip'as ivardija failus.
+        self.btn_junk.setToolTip(t(
+            "Windows ir Mac miniatiuru kesai: Thumbs.db, ehthumbs.db,\n"
+            ".DS_Store. Jusu failu neliecia. Pries trynima tikrinamas\n"
+            "kiekvieno failo turinio parasas - neatitinkantys lieka."))
         lay.addStretch(2)
 
         # Portable varnele (2026-08-06, bendras abieju dovanu sprendimas:
@@ -859,8 +867,8 @@ class MainWindow(QMainWindow):
         # Windows/Mac siuksles - aktyvuojam mygtuka (veikia ir atsaukus dialoga)
         self._junk = data.get("junk") or []
         junk_mb = sum(s for _, s in self._junk) / 1048576
-        self.btn_junk.setText(f"{t('Salinti siuksles')} ({len(self._junk)})"
-                              if self._junk else t("Salinti siuksles"))
+        self.btn_junk.setText(f"{t('Salinti OS siuksles')} ({len(self._junk)})"
+                              if self._junk else t("Salinti OS siuksles"))
         self.btn_junk.setEnabled(bool(self._junk))
         self._log(f"ZVALGYBA done: {len(self._all_files)} failu, "
                   f"{self._skipped} praleista, {len(candidates)} kandidatu grupiu, "
@@ -1104,7 +1112,7 @@ class MainWindow(QMainWindow):
                   f"praleista {data['skipped']}, atlaisvinta {freed_mb:.1f} MB")
         self._hide_scan_overlay()
         self._junk = []
-        self.btn_junk.setText(t("Salinti siuksles"))
+        self.btn_junk.setText(t("Salinti OS siuksles"))
         msg = t("Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB").format(
             n=data['deleted'], mb=freed_mb)
         if data["skipped"]:

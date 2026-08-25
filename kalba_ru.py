@@ -62,8 +62,14 @@ _RU = {
         '>>> Сканировать',
     'Eksportuoti ataskaita':
         'Экспортировать отчёт',
-    'Salinti siuksles':
-        'Очистить мусор',
+    'Salinti OS siuksles':
+        'Очистить мусор ОС',
+    'Windows ir Mac miniatiuru kesai: Thumbs.db, ehthumbs.db,\n'
+    '.DS_Store. Jusu failu neliecia. Pries trynima tikrinamas\n'
+    'kiekvieno failo turinio parasas - neatitinkantys lieka.':
+        'Кеши миниатюр Windows и Mac: Thumbs.db, ehthumbs.db,\n'
+        '.DS_Store. Ваших файлов не касается. Перед удалением\n'
+        'проверяется сигнатура содержимого — не совпавшие остаются.',
     'Itraukti katalogai:':
         'Папки для сканирования:',
     'Rezultatai:':

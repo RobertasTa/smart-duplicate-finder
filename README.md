@@ -87,6 +87,9 @@ removal, and nothing happens without your confirmation.
 - **System junk cleanup** — invisible `Thumbs.db` / `ehthumbs.db` / `.DS_Store`
   litter, verified by magic-byte signature before deletion (a file merely *named*
   `Thumbs.db` is left untouched). `desktop.ini` is deliberately never touched.
+  Since v1.4 the button says **Clean OS junk files**, and hovering it lists exactly
+  what it touches — next to a promise that nothing else is ever deleted, "junk"
+  alone was a word that could be read as *your* files.
 - **Which one is the original — and why** *(new in v1.4)* — the report's Duplicates
   sheet gains two columns: **Most likely the original** and **Why**. The program
   reads what the files say about themselves through their names and locations —

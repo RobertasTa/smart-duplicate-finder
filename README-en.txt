@@ -68,8 +68,8 @@ HOW TO USE (step by step)
 7. "Export report" — the full list is saved to a colour-coded
    Excel file (you choose where; Documents is suggested).
 
-SYSTEM JUNK CLEANUP ("Clean junk files" button)
------------------------------------------------
+SYSTEM JUNK CLEANUP ("Clean OS junk files" button)
+--------------------------------------------------
 Windows and macOS litter folders with INVISIBLE cache files that
 Explorer normally hides:
   * Thumbs.db, ehthumbs.db — Windows thumbnail cache
@@ -78,8 +78,9 @@ Harmless but messy — and hard to delete by hand since you can't
 see them.
 
 How it works:
-1. After the recon, if junk was found, the "Clean junk files (N)"
-   button lights up.
+1. After the recon, if junk was found, the "Clean OS junk files (N)"
+   button lights up. ("OS" means these belong to the operating system,
+   not to you — hover the button and it lists exactly what it touches.)
 2. Click it — you get a summary by type and a confirmation prompt.
 3. SAFETY: before deleting, EVERY file's content signature (magic
    bytes) is verified. A file merely NAMED Thumbs.db whose content

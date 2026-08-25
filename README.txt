@@ -74,8 +74,8 @@ KAIP NAUDOTIS (žingsnis po žingsnio)
 7. „Eksportuoti ataskaitą" — pilnas sąrašas išsaugomas į spalvotą
    Excel failą (paklaus, kur padėti; siūlys Dokumentus).
 
-SISTEMOS ŠIUKŠLIŲ VALYMAS (mygtukas „Šalinti šiukšles")
--------------------------------------------------------
+SISTEMOS ŠIUKŠLIŲ VALYMAS (mygtukas „Šalinti OS šiukšles")
+----------------------------------------------------------
 Kas tai: Windows ir Mac naršant katalogus palieka NEMATOMUS kešo
 failiukus, kurių Explorer paprastai nerodo (jie paslėpti sisteminiai):
   * Thumbs.db, ehthumbs.db — Windows miniatiūrų (peržiūros ikonėlių)
@@ -86,7 +86,9 @@ nematomi, ranka jų ištrinti sunku.
 
 Kaip veikia:
 1. Po žvalgybos (jei šiukšlių rasta) suaktyvėja mygtukas
-   „Šalinti šiukšles (N)" — skliaustuose kiekis.
+   „Šalinti OS šiukšles (N)" — skliaustuose kiekis. („OS" reiškia,
+   kad tai operacinės sistemos, o ne jūsų failai — užvedus pelę
+   mygtukas pats išvardija, ką konkrečiai liečia.)
 2. Paspaudus rodoma santrauka pagal tipą ir prašoma patvirtinti.
 3. SAUGIKLIS: prieš trinant KIEKVIENAM failui patikrinamas turinio
    parašas (magic bytes). Jei failas tik vadinasi Thumbs.db, bet jo

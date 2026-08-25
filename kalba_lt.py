@@ -12,7 +12,13 @@ _LT = {
     "+   Prideti katalogus": "+   Pridėti katalogus",
     "-   Pasalinti pasirinktus": "-   Pašalinti pasirinktus",
     "Eksportuoti ataskaita": "Eksportuoti ataskaitą",
-    "Salinti siuksles": "Šalinti šiukšles",
+    "Salinti OS siuksles": "Šalinti OS šiukšles",
+    "Windows ir Mac miniatiuru kesai: Thumbs.db, ehthumbs.db,\n"
+    ".DS_Store. Jusu failu neliecia. Pries trynima tikrinamas\n"
+    "kiekvieno failo turinio parasas - neatitinkantys lieka.":
+        "Windows ir Mac miniatiūrų kešai: Thumbs.db, ehthumbs.db,\n"
+        ".DS_Store. Jūsų failų neliečia. Prieš trynimą tikrinamas\n"
+        "kiekvieno failo turinio parašas — neatitinkantys lieka.",
     "Itraukti katalogai:": "Įtraukti katalogai:",
     "Sukurimo data": "Sukūrimo data",
     "Grupe": "Grupė",

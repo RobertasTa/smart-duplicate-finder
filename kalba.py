@@ -77,7 +77,16 @@ _EN = {
     "-   Pasalinti pasirinktus": "-   Remove selected",
     ">>> Skenuoti": ">>> Scan",
     "Eksportuoti ataskaita": "Export report",
-    "Salinti siuksles": "Clean junk files",
+    # 2026-08-25: buvo "Clean junk files" - salia pazado "never deletes"
+    # skambejo taip, lyg trintu vartotojo radinius (GPT pastaba 08-14,
+    # Roberto sprendimas B+C). "OS" pasako, kieno tai siuksles.
+    "Salinti OS siuksles": "Clean OS junk files",
+    "Windows ir Mac miniatiuru kesai: Thumbs.db, ehthumbs.db,\n"
+    ".DS_Store. Jusu failu neliecia. Pries trynima tikrinamas\n"
+    "kiekvieno failo turinio parasas - neatitinkantys lieka.":
+        "Windows and Mac thumbnail caches: Thumbs.db, ehthumbs.db,\n"
+        ".DS_Store. Your own files are never touched. Each file's\n"
+        "content signature is checked first - mismatches are kept.",
     "Itraukti katalogai:": "Folders to scan:",
     "Rezultatai:": "Results:",
     "Failo vardas": "File name",

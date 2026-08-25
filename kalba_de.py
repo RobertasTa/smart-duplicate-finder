@@ -62,8 +62,16 @@ _DE = {
         '>>> Scannen',
     'Eksportuoti ataskaita':
         'Bericht exportieren',
-    'Salinti siuksles':
+    # DE jau buvo konkretus ("Systemmüll" = sistemos siuksles), tad
+    # teksto nekeiciam - tik rakta, kad sutaptu su kitomis kalbomis
+    'Salinti OS siuksles':
         'Systemmüll entfernen',
+    'Windows ir Mac miniatiuru kesai: Thumbs.db, ehthumbs.db,\n'
+    '.DS_Store. Jusu failu neliecia. Pries trynima tikrinamas\n'
+    'kiekvieno failo turinio parasas - neatitinkantys lieka.':
+        'Miniaturansicht-Caches von Windows und Mac: Thumbs.db,\n'
+        'ehthumbs.db, .DS_Store. Ihre eigenen Dateien bleiben unberührt.\n'
+        'Vor dem Löschen wird die Inhaltssignatur jeder Datei geprüft.',
     'Itraukti katalogai:':
         'Zu scannende Ordner:',
     'Rezultatai:':
