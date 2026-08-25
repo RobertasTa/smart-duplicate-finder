@@ -87,6 +87,17 @@ removal, and nothing happens without your confirmation.
 - **System junk cleanup** — invisible `Thumbs.db` / `ehthumbs.db` / `.DS_Store`
   litter, verified by magic-byte signature before deletion (a file merely *named*
   `Thumbs.db` is left untouched). `desktop.ini` is deliberately never touched.
+- **Which one is the original — and why** *(new in v1.4)* — the report's Duplicates
+  sheet gains two columns: **Most likely the original** and **Why**. The program
+  reads what the files say about themselves through their names and locations —
+  *the others are named as copies*, *the others sit in copy folders*, *the others
+  sit in temporary folders*, *the others were created later* — and names the one
+  that looks like the elder, together with the reason it thinks so. Where nothing
+  tells them apart it says **"unclear — nothing tells them apart"** rather than
+  producing a confident-looking guess. Nothing is ever marked for deletion: this
+  is information, and the decision stays yours. (Other tools will happily tick
+  57 kinds of files for removal without telling you why they picked them. The
+  reason column is the whole point of ours.)
 - **Colour-coded Excel report** — the full result list, grouped and coloured by file
   family, with a separate sheet for visually similar images.
 
@@ -107,8 +118,10 @@ removal, and nothing happens without your confirmation.
 - **Portable** — one exe, no installation, no Python. Working files (scan cache,
   activity log) live in `%LOCALAPPDATA%\SmartDuplicateFinder`; tick **Portable
   mode** and they move next to the exe instead — perfect for a USB stick, no
-  traces left on the host machine (a `portable.txt` marker makes the mode travel
-  with your stick, the Notepad++ convention).
+  traces left on the host machine (an `SDF_portable.txt` marker makes the mode
+  travel with your stick, the Notepad++ convention). Since v1.4 the portable
+  data lives in its own `SmartDuplicateFinder_data` folder — before that both
+  gifts shared one folder on the stick and could carry off each other's files.
 - **Make it truly yours — with the author's help.** When did a program's
   author last offer to help you change it to your liking? Paste this
   repository's link at [claude.ai](https://claude.ai), say what you wish
@@ -118,6 +131,12 @@ removal, and nothing happens without your confirmation.
 - **Stuck? Ask the AI that wrote it** — the **?** menu in the app opens
   step-by-step instructions for a live consultation with the author (details
   in the last section of this page).
+- **"Is there a newer version?"** *(new in v1.4)* — also under **?**. The program
+  never checks for updates by itself, because it has no network access at all;
+  instead the panel shows your version and the three ways to find out — the
+  releases page, a one-click copy of `winget upgrade RobertasTa.SmartDuplicateFinder`,
+  and asking the AI assistant to check for you. Honest by design: it tells you
+  *how to look*, never pretends to know.
 - **No ads, no telemetry, no network access.** Free software, GPL v3.
 - **UI in English, Lithuanian, Russian and German** (RU/DE new in v1.3) —
   switched inside the app; first run follows your Windows language. The built-in
