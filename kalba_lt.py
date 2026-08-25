@@ -53,7 +53,6 @@ _LT = {
         "   pasitikrins ir pasakys, ko jums trūksta:",
     "Programa pati interneto neliecia. Sprendziate jus.":
         "Programa pati interneto neliečia. Sprendžiate jūs.",
-    "Uzdaryti": "Uždaryti",
     "Pasirenges": "Pasirengęs",
     "Prideti katalogus ir spauskite 'Skenuoti'.":
         "Pridėkite katalogus ir spauskite „Skenuoti“.",

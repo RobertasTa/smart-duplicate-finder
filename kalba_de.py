@@ -50,8 +50,6 @@ _DE = {
     '   pasitikrins ir pasakys, ko jums truksta:':
         '3. Oder fragen Sie einen KI-Assistenten – er prüft es\n'
         '   selbst und sagt Ihnen, was Ihnen fehlt:',
-    'Uzdaryti':
-        'Schließen',
     'Programa pati interneto neliecia. Sprendziate jus.':
         'Das Programm selbst geht nie ins Internet. Sie entscheiden.',
     '+   Prideti katalogus':

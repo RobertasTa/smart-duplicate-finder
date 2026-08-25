@@ -128,9 +128,6 @@ _EN = {
         "   and tell you what you are missing:",
     "Programa pati interneto neliecia. Sprendziate jus.":
         "The app itself never touches the internet. You decide.",
-    # 2026-08-25: Qt standartinio mygtuko vertimo nepridedamas, tad "Close"
-    # trijuose languose likdavo angliskas visoms kalboms
-    "Uzdaryti": "Close",
     "Pasirenges": "Ready",
     "Prideti katalogus ir spauskite 'Skenuoti'.": "Add folders and press 'Scan'.",
     "Pirma prideti bent viena kataloga.": "Add at least one folder first.",
