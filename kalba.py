@@ -168,32 +168,32 @@ _EN = {
     "Portable rezimas isjungtas - duomenys vartotojo kataloge":
         "Portable mode off - data lives in the user profile",
     # skeno santrauka
-    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB":
-        "Scanned {n} files in {k} folder(s) - {g} duplicate groups, {mb:.2f} MB",
-    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
-        "Scanned {n} files in {k} folder(s) - {g} duplicate groups: duplicates take {mb:.2f} MB, {fmb:.2f} MB can be freed",
+    "Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}, {mb:.2f} MB":
+        "Files scanned: {n}, folders: {k} - duplicate groups: {g}, {mb:.2f} MB",
+    "Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}; dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
+        "Files scanned: {n}, folders: {k} - duplicate groups: {g}; duplicates take {mb:.2f} MB, {fmb:.2f} MB can be freed",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; SUSPICIOUS list truncated at the {n}-pair limit (narrow the folders to see all)",
-    "; praleista {n} nepasiekiamu failu": "; {n} unreadable files skipped",
-    "Dubliu kandidatu nerasta ({n} failu perziureta{skip}).":
-        "No duplicate candidates found ({n} files checked{skip}).",
+    "; nepasiekiamu failu praleista: {n}": "; unreadable files skipped: {n}",
+    "Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).":
+        "No duplicate candidates found (files checked: {n}{skip}).",
     ", {n} praleista": ", {n} skipped",
     # skeno atmintis
     "Ankstesnio skeno rezultatai": "Previous scan results",
-    "Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?":
-        "Previous scan results found ({kada}, {n} duplicate groups).\nLoad them without re-scanning?",
-    "Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)":
-        "Loaded scan results from {kada}: {g} duplicate groups, {mb:.2f} MB (export available without scanning)",
+    "Rasti ankstesnio skeno rezultatai ({kada}; dubliu grupiu: {n}).\nIkelti be pakartotinio skenavimo?":
+        "Previous scan results found ({kada}; duplicate groups: {n}).\nLoad them without re-scanning?",
+    "Ikelti {kada} skeno rezultatai - dublikatu grupiu: {g}, {mb:.2f} MB (galima eksportuoti be skenavimo)":
+        "Loaded scan results from {kada} - duplicate groups: {g}, {mb:.2f} MB (export available without scanning)",
     "Keso ikelti nepavyko - skenuok is naujo.": "Could not load cache - scan again.",
     # siuksles
     "Siuksliu nerasta - pirma atlik zvalgyba.": "No junk found - run a scan first.",
     "Salinti Windows/Mac siuksles?": "Delete Windows/Mac junk files?",
-    "Rasta {n} sistemos siuksliu ({mb:.1f} MB):": "Found {n} system junk files ({mb:.1f} MB):",
+    "Sistemos siuksliu rasta: {n} ({mb:.1f} MB):": "System junk found: {n} ({mb:.1f} MB):",
     "Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?":
         "These are thumbnail/browsing caches - the OS recreates them.\nBefore deletion every file's content signature is verified;\nnon-matching files will NOT be deleted.\n\nWARNING: on network drives (NAS) deletion is permanent\n(no recycle bin there). Delete?",
     "Siuksliu salinimas atsauktas.": "Junk cleanup cancelled.",
-    "Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB":
-        "Deleted {n} junk files, freed {mb:.1f} MB",
+    "Siuksliu istrinta: {n}, atlaisvinta {mb:.1f} MB":
+        "Junk files deleted: {n}, freed {mb:.1f} MB",
     "; praleista {n} (parasas nesutapo arba failas uzrakintas)":
         "; {n} skipped (signature mismatch or file locked)",
     # select_dialog
@@ -231,9 +231,9 @@ _EN = {
         "SHOWING {a} OF {b} ROWS - Excel sheet limit exceeded (1,048,576)",
     "ITARINI": "SUSPECT",
     "ITARTINI (panasus, bet ne identiski)": "SUSPICIOUS (similar, but not identical)",
-    "Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
+    "Rodoma eiluciu: {n} (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
         "Showing {n} rows (largest groups on top) - FULL list in the Excel report",
-    "Zvalgyba: {n} failu...": "Recon: {n} files...",
+    "Zvalgyba - failu: {n}...": "Recon - files: {n}...",
     "Panasios nuotraukos (vizualiai)": "Similar photos (visual)",
     "VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)":
         "VISUALLY SIMILAR (different resolution/quality)",

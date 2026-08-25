@@ -45,7 +45,7 @@ class SizeScanWorker(QObject):
 
             def _cb(found):
                 self.updateStats.emit(
-                    _t("Zvalgyba: {n} failu...")
+                    _t("Zvalgyba - failu: {n}...")
                     .format(n=f"{found:,}").replace(",", " "))
 
             files, skipped = scan_folders_stats(self.folders, progress_cb=_cb)

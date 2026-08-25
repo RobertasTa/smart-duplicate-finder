@@ -144,38 +144,38 @@ _RU = {
         'Портативный режим ВКЛЮЧЁН — данные рядом с программой',
     'Portable rezimas isjungtas - duomenys vartotojo kataloge':
         'Портативный режим выключен — данные в профиле пользователя',
-    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB':
-        'Просканировано {n} файлов из {k} папок — {g} групп дубликатов, {mb:.2f} МБ',
-    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB':
-        'Просканировано {n} файлов из {k} папок — {g} групп дубликатов: дубликаты занимают {mb:.2f} МБ, можно высвободить {fmb:.2f} МБ',
+    'Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}, {mb:.2f} MB':
+        'Просмотрено файлов: {n}, папок: {k} — групп дубликатов: {g}, {mb:.2f} МБ',
+    'Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}; dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB':
+        'Просмотрено файлов: {n}, папок: {k} — групп дубликатов: {g}; дубликаты занимают {mb:.2f} МБ, можно высвободить {fmb:.2f} МБ',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Список ПОДОЗРИТЕЛЬНЫХ обрезан на пределе {n} пар (сузьте папки, чтобы видеть всё)',
-    '; praleista {n} nepasiekiamu failu':
-        '; пропущено {n} недоступных файлов',
-    'Dubliu kandidatu nerasta ({n} failu perziureta{skip}).':
-        'Кандидаты на дубликаты не найдены (проверено {n} файлов{skip}).',
+    '; nepasiekiamu failu praleista: {n}':
+        '; недоступных файлов пропущено: {n}',
+    'Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).':
+        'Кандидаты на дубликаты не найдены (проверено файлов: {n}{skip}).',
     ', {n} praleista':
         ', пропущено {n}',
     'Ankstesnio skeno rezultatai':
         'Результаты предыдущего сканирования',
-    'Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?':
-        'Найдены результаты предыдущего сканирования ({kada}, {n} групп дубликатов).\nЗагрузить без повторного сканирования?',
-    'Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)':
-        'Загружены результаты сканирования от {kada}: {g} групп дубликатов, {mb:.2f} МБ (можно экспортировать без сканирования)',
+    'Rasti ankstesnio skeno rezultatai ({kada}; dubliu grupiu: {n}).\nIkelti be pakartotinio skenavimo?':
+        'Найдены результаты предыдущего сканирования ({kada}; групп дубликатов: {n}).\nЗагрузить без повторного сканирования?',
+    'Ikelti {kada} skeno rezultatai - dublikatu grupiu: {g}, {mb:.2f} MB (galima eksportuoti be skenavimo)':
+        'Загружены результаты сканирования от {kada} — групп дубликатов: {g}, {mb:.2f} МБ (можно экспортировать без сканирования)',
     'Keso ikelti nepavyko - skenuok is naujo.':
         'Не удалось загрузить кэш — просканируйте заново.',
     'Siuksliu nerasta - pirma atlik zvalgyba.':
         'Мусор не найден — сначала выполните разведку.',
     'Salinti Windows/Mac siuksles?':
         'Удалить системный мусор Windows/Mac?',
-    'Rasta {n} sistemos siuksliu ({mb:.1f} MB):':
-        'Найдено {n} файлов системного мусора ({mb:.1f} МБ):',
+    'Sistemos siuksliu rasta: {n} ({mb:.1f} MB):':
+        'Системного мусора найдено: {n} ({mb:.1f} МБ):',
     'Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?':
         'Это кэши миниатюр и просмотра папок — ОС создаёт их заново.\nПеред удалением у каждого файла проверяется сигнатура\nсодержимого; несовпадающие НЕ будут удалены.\n\nВНИМАНИЕ: на сетевых дисках (NAS) удаление необратимо\n(корзина там не работает). Удалить?',
     'Siuksliu salinimas atsauktas.':
         'Удаление мусора отменено.',
-    'Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB':
-        'Удалено {n} мусорных файлов, освобождено {mb:.1f} МБ',
+    'Siuksliu istrinta: {n}, atlaisvinta {mb:.1f} MB':
+        'Мусорных файлов удалено: {n}, освобождено {mb:.1f} МБ',
     '; praleista {n} (parasas nesutapo arba failas uzrakintas)':
         '; пропущено {n} (сигнатура не совпала или файл заблокирован)',
     'Rasti kandidatai i dublius':
@@ -230,10 +230,10 @@ _RU = {
         'ПОДОЗРИТЕЛЬНЫЙ',
     'ITARTINI (panasus, bet ne identiski)':
         'ПОДОЗРИТЕЛЬНЫЕ (похожи, но не идентичны)',
-    'Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje':
-        'Показано {n} строк (крупнейшие группы сверху) — ПОЛНЫЙ список в отчёте Excel',
-    'Zvalgyba: {n} failu...':
-        'Разведка: {n} файлов...',
+    'Rodoma eiluciu: {n} (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje':
+        'Показано строк: {n} (крупнейшие группы сверху) — ПОЛНЫЙ список в отчёте Excel',
+    'Zvalgyba - failu: {n}...':
+        'Разведка — файлов: {n}...',
     'Panasios nuotraukos (vizualiai)':
         'Похожие фото (визуально)',
     'VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)':

@@ -86,32 +86,32 @@ _LT = {
         "Portable režimas ĮJUNGTAS — duomenys šalia programos",
     "Portable rezimas isjungtas - duomenys vartotojo kataloge":
         "Portable režimas išjungtas — duomenys vartotojo kataloge",
-    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB":
-        "Skenuota {n} failų iš {k} katalogų — {g} dublikatų grupės, {mb:.2f} MB",
-    "Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
-        "Skenuota {n} failų iš {k} katalogų — {g} dublikatų grupės: dubliai užima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB",
+    "Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}, {mb:.2f} MB":
+        "Peržiūrėta failų: {n}, katalogų: {k} — dublikatų grupių: {g}, {mb:.2f} MB",
+    "Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}; dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB":
+        "Peržiūrėta failų: {n}, katalogų: {k} — dublikatų grupių: {g}; dubliai užima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; ĮTARTINŲ sąrašas nukirptas ties {n} porų riba (susiaurinkite katalogus, jei norite visų)",
-    "; praleista {n} nepasiekiamu failu":
-        "; praleista {n} nepasiekiamų failų",
-    "Dubliu kandidatu nerasta ({n} failu perziureta{skip}).":
-        "Dublių kandidatų nerasta ({n} failų peržiūrėta{skip}).",
-    "Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?":
+    "; nepasiekiamu failu praleista: {n}":
+        "; nepasiekiamų failų praleista: {n}",
+    "Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).":
+        "Dublių kandidatų nerasta (peržiūrėta failų: {n}{skip}).",
+    "Rasti ankstesnio skeno rezultatai ({kada}; dubliu grupiu: {n}).\nIkelti be pakartotinio skenavimo?":
         "Rasti ankstesnio skeno rezultatai ({kada}, {n} dublių grupių).\nĮkelti be pakartotinio skenavimo?",
-    "Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)":
-        "Įkelti {kada} skeno rezultatai: {g} dublikatų grupės, {mb:.2f} MB (galima eksportuoti be skenavimo)",
+    "Ikelti {kada} skeno rezultatai - dublikatu grupiu: {g}, {mb:.2f} MB (galima eksportuoti be skenavimo)":
+        "Įkelti {kada} skeno rezultatai — dublikatų grupių: {g}, {mb:.2f} MB (galima eksportuoti be skenavimo)",
     "Keso ikelti nepavyko - skenuok is naujo.":
         "Kešo įkelti nepavyko — skenuokite iš naujo.",
     "Siuksliu nerasta - pirma atlik zvalgyba.":
         "Šiukšlių nerasta — pirma atlikite žvalgybą.",
     "Salinti Windows/Mac siuksles?": "Šalinti Windows/Mac šiukšles?",
-    "Rasta {n} sistemos siuksliu ({mb:.1f} MB):":
-        "Rasta {n} sistemos šiukšlių ({mb:.1f} MB):",
+    "Sistemos siuksliu rasta: {n} ({mb:.1f} MB):":
+        "Sistemos šiukšlių rasta: {n} ({mb:.1f} MB):",
     "Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?":
         "Tai miniatiūrų/naršymo kešai — OS juos atsikuria pati.\nPrieš trynimą kiekvienam failui tikrinamas turinio parašas;\nneatitinkantys NEBUS trinami.\n\nDĖMESIO: tinklo diskuose (NAS) trynimas negrįžtamas\n(šiukšliadėžė ten neveikia). Trinti?",
     "Siuksliu salinimas atsauktas.": "Šiukšlių šalinimas atšauktas.",
-    "Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB":
-        "Ištrinta {n} šiukšlių, atlaisvinta {mb:.1f} MB",
+    "Siuksliu istrinta: {n}, atlaisvinta {mb:.1f} MB":
+        "Šiukšlių ištrinta: {n}, atlaisvinta {mb:.1f} MB",
     "; praleista {n} (parasas nesutapo arba failas uzrakintas)":
         "; praleista {n} (parašas nesutapo arba failas užrakintas)",
     "Rasti kandidatai i dublius": "Rasti kandidatai į dublius",
@@ -140,9 +140,9 @@ _LT = {
     "ITARINI": "ĮTARTINAS",
     "ITARTINI (panasus, bet ne identiski)":
         "ĮTARTINI (panašūs, bet ne identiški)",
-    "Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
-        "Rodoma {n} eilučių (didžiausios grupės viršuje) — PILNAS sąrašas Excel ataskaitoje",
-    "Zvalgyba: {n} failu...": "Žvalgyba: {n} failų...",
+    "Rodoma eiluciu: {n} (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":
+        "Rodoma eilučių: {n} (didžiausios grupės viršuje) — PILNAS sąrašas Excel ataskaitoje",
+    "Zvalgyba - failu: {n}...": "Žvalgyba — failų: {n}...",
     "Panasios nuotraukos (vizualiai)": "Panašios nuotraukos (vizualiai)",
     "VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)":
         "VIZUALIAI PANAŠŪS (skirtinga rezoliucija/kokybė)",

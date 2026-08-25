@@ -250,7 +250,7 @@ class MainWindow(QMainWindow):
             return
         atsakymas = QMessageBox.question(
             self, t("Ankstesnio skeno rezultatai"),
-            t("Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\n"
+            t("Rasti ankstesnio skeno rezultatai ({kada}; dubliu grupiu: {n}).\n"
               "Ikelti be pakartotinio skenavimo?").format(kada=kada, n=n_groups))
         if atsakymas != QMessageBox.StandardButton.Yes:
             return
@@ -269,7 +269,7 @@ class MainWindow(QMainWindow):
                            visual=self.visual_results)
             st = self.scan_results["stats"]
             self.status_label.setText(
-                t("Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, "
+                t("Ikelti {kada} skeno rezultatai - dublikatu grupiu: {g}, "
                   "{mb:.2f} MB (galima eksportuoti be skenavimo)")
                 .format(kada=kada, g=st['duplicate_groups'],
                         mb=st['duplicated_mb']))
@@ -342,17 +342,20 @@ class MainWindow(QMainWindow):
 
     # ---- Kaire: vertikali mygtuku juosta ----
     def _build_left_bar(self):
-        bar = QWidget(); bar.setFixedWidth(180)
+        bar = QWidget()
         lay = QVBoxLayout(bar)
         lay.setSpacing(12)
         la = QLabel("Duplicate Finder")
         la.setFont(_title_font()); lay.addWidget(la); lay.addSpacing(8)
+
+        juostos_mygtukai = []
 
         def _add_buttons(defs):
             for txt, cb, name in defs:
                 b = QPushButton(txt); b.setMinimumHeight(38)
                 b.setObjectName(name)
                 setattr(self, name, b)
+                juostos_mygtukai.append(b)
                 b.clicked.connect(cb); lay.addWidget(b)
 
         # Virsuje - katalogu sarasa valdantys mygtukai
@@ -412,7 +415,31 @@ class MainWindow(QMainWindow):
             "Kalba pritaikoma paleidus programa is naujo."))
         self.cmb_kalba.currentIndexChanged.connect(self._on_kalba_changed)
         lay.addWidget(self.cmb_kalba)
+
+        # PATAISA 2026-08-25 (Roberto gyvas testas): juosta buvo prikalta
+        # prie 180 px, ir vokiskas "Ausgewahlte entfernen" NUKRISDAVO -
+        # matesi "...entferne". Sena beda nuo v1.3, kai atsirado DE.
+        # Dabar juosta issimatuoja pagal ILGIAUSIA savo mygtuka, tad
+        # tinka bet kuriai kalbai ir bet kokiam DPI masteliui.
+        bar.setFixedWidth(self._juostos_plotis(juostos_mygtukai))
         return bar
+
+    def _juostos_plotis(self, mygtukai):
+        """Kiek pikseliu reikia, kad NE VIENAS mygtuko tekstas nebutu
+        nukirptas. Skaiciuojam is tikro srifto, o ne is spejimo:
+        2026-08-25 spejimas apie parastes suklydo 10 px, ir isvada
+        "telpa" buvo klaidinga."""
+        if not mygtukai:
+            return 180
+        fm = mygtukai[0].fontMetrics()
+        reikia = max(fm.horizontalAdvance(b.text()) for b in mygtukai)
+        # Siuksliu mygtukas po zvalgybos gauna "(N)" - vietos jam reikia
+        # is anksto, kitaip juosta pasikeistu skenui pasibaigus
+        reikia = max(reikia, fm.horizontalAdvance(
+            t("Salinti OS siuksles") + " (99999)"))
+        # +44 px: Qt mygtuko vidines parastes + layout marginai (pamatuota
+        # 34 px) ir 10 px atsarga kitokiam sriftui ar masteliui
+        return max(180, reikia + 44)
 
     def _perleisti_programa(self):
         """Paleidzia nauja programos kopija ir uzdaro sia (kalbos keitimui).
@@ -866,7 +893,7 @@ class MainWindow(QMainWindow):
         vis_files_early = [fl for fl in self._all_files
                            if family_of(Path(fl[0]).suffix) == "Paveiksliukai"]
         if not candidates and not vis_files_early:
-            self._scan_idle(t("Dubliu kandidatu nerasta ({n} failu perziureta{skip}).")
+            self._scan_idle(t("Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).")
                             .format(n=len(self._all_files), skip=skip_txt))
             return
 
@@ -958,14 +985,14 @@ class MainWindow(QMainWindow):
         self._log(f"LENTELE: {self.results_table.rowCount()} eiluciu "
                   f"per {time.time() - t_populate:.1f} s")
         st = data["stats"]
-        msg = t("Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: "
+        msg = t("Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}; "
                 "dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB"
                 ).format(n=st['total_files'], k=len(self.folders),
                          g=st['duplicate_groups'],
                          mb=st['duplicated_mb'],
                          fmb=st.get('freeable_mb', 0.0))
         if self._skipped:
-            msg += t("; praleista {n} nepasiekiamu failu").format(n=self._skipped)
+            msg += t("; nepasiekiamu failu praleista: {n}").format(n=self._skipped)
         if self.visual_results:
             msg += t("; vizualiai panasiu grupiu: {n}").format(
                 n=len(self.visual_results))
@@ -1071,7 +1098,7 @@ class MainWindow(QMainWindow):
                             for n, c in pagal_varda.most_common(6))
         atsakymas = QMessageBox.question(
             self, t("Salinti Windows/Mac siuksles?"),
-            t("Rasta {n} sistemos siuksliu ({mb:.1f} MB):").format(n=len(junk), mb=mb)
+            t("Sistemos siuksliu rasta: {n} ({mb:.1f} MB):").format(n=len(junk), mb=mb)
             + f"\n{israsas}\n\n"
             + t("Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\n"
                 "Pries trynima kiekvienam failui tikrinamas turinio parasas;\n"
@@ -1099,7 +1126,7 @@ class MainWindow(QMainWindow):
         self._hide_scan_overlay()
         self._junk = []
         self.btn_junk.setText(t("Salinti OS siuksles"))
-        msg = t("Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB").format(
+        msg = t("Siuksliu istrinta: {n}, atlaisvinta {mb:.1f} MB").format(
             n=data['deleted'], mb=freed_mb)
         if data["skipped"]:
             msg += t("; praleista {n} (parasas nesutapo arba failas uzrakintas)"

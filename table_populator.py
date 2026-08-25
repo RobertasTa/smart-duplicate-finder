@@ -183,7 +183,7 @@ def populate_table(table_widget, scan_results, suspect_results, sizes=None,
 
     notice = None
     if max_rows and len(entries) > max_rows:
-        notice = _t("Rodoma {n} eiluciu (didziausios grupes virsuje) - "
+        notice = _t("Rodoma eiluciu: {n} (didziausios grupes virsuje) - "
                     "PILNAS sarasas Excel ataskaitoje").format(n=max_rows)
         entries = entries[:max_rows]
 

@@ -146,38 +146,38 @@ _DE = {
         'Portable-Modus AN – Daten liegen neben der App',
     'Portable rezimas isjungtas - duomenys vartotojo kataloge':
         'Portable-Modus aus – Daten liegen im Benutzerprofil',
-    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes, {mb:.2f} MB':
-        'Gescannt: {n} Dateien aus {k} Ordnern – {g} Duplikatgruppen, {mb:.2f} MB',
-    'Skeniruota {n} failu is {k} katalogu - {g} dublikatu grupes: dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB':
-        'Gescannt: {n} Dateien aus {k} Ordnern – {g} Duplikatgruppen: Duplikate belegen {mb:.2f} MB, {fmb:.2f} MB können freigegeben werden',
+    'Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}, {mb:.2f} MB':
+        'Geprüfte Dateien: {n}, Ordner: {k} – Duplikatgruppen: {g}, {mb:.2f} MB',
+    'Perziureta failu: {n}, katalogu: {k} - dublikatu grupiu: {g}; dubliai uzima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB':
+        'Geprüfte Dateien: {n}, Ordner: {k} – Duplikatgruppen: {g}; Duplikate belegen {mb:.2f} MB, {fmb:.2f} MB können freigegeben werden',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Liste der VERDÄCHTIGEN bei {n} Paaren abgeschnitten (Ordner eingrenzen, um alle zu sehen)',
-    '; praleista {n} nepasiekiamu failu':
-        '; {n} unlesbare Dateien übersprungen',
-    'Dubliu kandidatu nerasta ({n} failu perziureta{skip}).':
-        'Keine Duplikat-Kandidaten gefunden ({n} Dateien geprüft{skip}).',
+    '; nepasiekiamu failu praleista: {n}':
+        '; unlesbare Dateien übersprungen: {n}',
+    'Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).':
+        'Keine Duplikat-Kandidaten gefunden (geprüfte Dateien: {n}{skip}).',
     ', {n} praleista':
         ', {n} übersprungen',
     'Ankstesnio skeno rezultatai':
         'Ergebnisse des letzten Scans',
-    'Rasti ankstesnio skeno rezultatai ({kada}, {n} dubliu grupiu).\nIkelti be pakartotinio skenavimo?':
-        'Ergebnisse des letzten Scans gefunden ({kada}, {n} Duplikatgruppen).\nOhne erneuten Scan laden?',
-    'Ikelti {kada} skeno rezultatai: {g} dublikatu grupes, {mb:.2f} MB (galima eksportuoti be skenavimo)':
-        'Scan-Ergebnisse von {kada} geladen: {g} Duplikatgruppen, {mb:.2f} MB (Export ohne Scan möglich)',
+    'Rasti ankstesnio skeno rezultatai ({kada}; dubliu grupiu: {n}).\nIkelti be pakartotinio skenavimo?':
+        'Ergebnisse des letzten Scans gefunden ({kada}; Duplikatgruppen: {n}).\nOhne erneuten Scan laden?',
+    'Ikelti {kada} skeno rezultatai - dublikatu grupiu: {g}, {mb:.2f} MB (galima eksportuoti be skenavimo)':
+        'Scan-Ergebnisse von {kada} geladen – Duplikatgruppen: {g}, {mb:.2f} MB (Export ohne Scan möglich)',
     'Keso ikelti nepavyko - skenuok is naujo.':
         'Cache konnte nicht geladen werden – bitte neu scannen.',
     'Siuksliu nerasta - pirma atlik zvalgyba.':
         'Kein Systemmüll gefunden – bitte zuerst die Vorerkundung ausführen.',
     'Salinti Windows/Mac siuksles?':
         'Windows/Mac-Systemmüll löschen?',
-    'Rasta {n} sistemos siuksliu ({mb:.1f} MB):':
-        'Gefunden: {n} Systemmüll-Dateien ({mb:.1f} MB):',
+    'Sistemos siuksliu rasta: {n} ({mb:.1f} MB):':
+        'Systemmüll gefunden: {n} ({mb:.1f} MB):',
     'Tai miniaturu/narsymo kesai - OS juos atsikuria pati.\nPries trynima kiekvienam failui tikrinamas turinio parasas;\nneatitinkantys NEBUS trinami.\n\nDEMESIO: tinklo diskuose (NAS) trynimas negriztamas\n(siuksliadeze ten neveikia). Trinti?':
         'Das sind Miniaturansichten- und Ordner-Caches – das\nBetriebssystem legt sie bei Bedarf neu an.\nVor dem Löschen wird die Inhalts-Signatur jeder Datei geprüft;\nabweichende werden NICHT gelöscht.\n\nACHTUNG: Auf Netzlaufwerken (NAS) ist das Löschen endgültig\n(dort gibt es keinen Papierkorb). Löschen?',
     'Siuksliu salinimas atsauktas.':
         'Aufräumen abgebrochen.',
-    'Istrinta {n} siuksliu, atlaisvinta {mb:.1f} MB':
-        '{n} Müll-Dateien gelöscht, {mb:.1f} MB freigegeben',
+    'Siuksliu istrinta: {n}, atlaisvinta {mb:.1f} MB':
+        'Müll-Dateien gelöscht: {n}, {mb:.1f} MB freigegeben',
     '; praleista {n} (parasas nesutapo arba failas uzrakintas)':
         '; {n} übersprungen (Signatur weicht ab oder Datei gesperrt)',
     'Rasti kandidatai i dublius':
@@ -232,10 +232,10 @@ _DE = {
         'VERDÄCHTIG',
     'ITARTINI (panasus, bet ne identiski)':
         'VERDÄCHTIG (ähnlich, aber nicht identisch)',
-    'Rodoma {n} eiluciu (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje':
-        '{n} Zeilen angezeigt (größte Gruppen oben) – VOLLE Liste im Excel-Bericht',
-    'Zvalgyba: {n} failu...':
-        'Vorerkundung: {n} Dateien...',
+    'Rodoma eiluciu: {n} (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje':
+        'Zeilen angezeigt: {n} (größte Gruppen oben) – VOLLE Liste im Excel-Bericht',
+    'Zvalgyba - failu: {n}...':
+        'Vorerkundung – Dateien: {n}...',
     'Panasios nuotraukos (vizualiai)':
         'Ähnliche Fotos (visuell)',
     'VIZUALIAI PANASUS (skirtinga rezoliucija/kokybe)':
