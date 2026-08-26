@@ -211,7 +211,7 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     # 2026-08-26): tai daznai ne kopija, o BROKAS - "pasuko ir pamirso
     # grazinti", ir zmogui verta ta pamatyti pries siunciant krūva klientui.
     pasukti = set(visual_rotated or [])
-    zyme = _t("pasukta arba veidrodine - patikrinkite, ar taip ir turi buti")
+    zyme = _t("kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti")
     vis_rows = []
     for vidx, grp in enumerate(visual or [], 1):
         fill = vis_fills[(vidx - 1) % 2]

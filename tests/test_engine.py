@@ -208,9 +208,31 @@ def test_finds_physically_rotated_copies(tmp_path):
     assert len(groups) == 1, "the three variants belong together"
     assert len(groups[0]) == 3, "and the unrelated picture stays out"
     assert "unrelated.jpg" not in {os.path.basename(f) for f in groups[0]}
-    # and the report must name WHICH files are the turned ones
+    # Three different orientations and no majority: the program must not
+    # guess which one is "right", so it flags them all and lets the person
+    # decide. (Robertas' live test 2026-08-26 caught the earlier version
+    # pinning the note on whichever file came first - sometimes the original.)
     turned = {os.path.basename(f) for f in stats.get("rotated_files", [])}
-    assert turned == {"turned.jpg", "mirrored.jpg"}
+    assert turned == {"orig.jpg", "turned.jpg", "mirrored.jpg"}
+
+
+def test_only_the_odd_one_out_is_flagged_when_there_is_a_majority(tmp_path):
+    """With a clear majority, only the pictures that differ are named."""
+    from PIL import Image
+    im = _gradient_image()
+    upright = []
+    for n, q in ((1, 92), (2, 88), (3, 84)):          # three upright copies
+        p = tmp_path / f"upright{n}.jpg"
+        im.save(p, quality=q)
+        upright.append(p)
+    turned = tmp_path / "turned.jpg"
+    im.transpose(Image.ROTATE_270).save(turned, quality=92)
+
+    stats = {}
+    de.find_similar_images(
+        [(str(x), 1) for x in upright] + [(str(turned), 1)], stats_out=stats)
+    flagged = {os.path.basename(f) for f in stats.get("rotated_files", [])}
+    assert flagged == {"turned.jpg"}
 
 
 def test_upright_copies_are_not_reported_as_turned(tmp_path):

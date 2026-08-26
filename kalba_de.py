@@ -12,8 +12,8 @@ _DE = {
     'Greiciausiai pirminis':
         'Wahrscheinlich das Original',
     'Pastaba': 'Hinweis',
-    'pasukta arba veidrodine - patikrinkite, ar taip ir turi buti':
-        'gedreht oder gespiegelt – prüfen Sie, ob das so gewollt ist',
+    'kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti':
+        'andere Ausrichtung als die übrigen – prüfen Sie, ob das so gewollt ist',
     'Kodel':
         'Warum',
     'kiti grupeje vardu pazymeti kaip kopijos':

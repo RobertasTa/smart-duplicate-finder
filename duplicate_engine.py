@@ -645,6 +645,14 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
             pogrupiai[_f(i)].append(i)
         if len(pogrupiai) < 2:
             return []          # visi vienodai pasukti - nera ka sakyti
+        dydziai = sorted((len(v) for v in pogrupiai.values()), reverse=True)
+        if len(dydziai) > 1 and dydziai[0] == dydziai[1]:
+            # NERA daugumos (dazniausiai grupe is dvieju: vienas pries viena).
+            # Roberto gyvas testas 2026-08-26: tada zyme prilipdavo ATSITIKTINIAM
+            # nariui - kartais originalui. Spejimas, kurio mes nedarome: kai
+            # negalima pasakyti, KURIS pasuktas, sakom apie abu ir sprendima
+            # paliekam zmogui.
+            return [keliai[i] for i in idxs]
         norma = max(pogrupiai.values(), key=len)
         normos = set(norma)
         return [keliai[idxs[i]] for i in range(len(idxs)) if i not in normos]

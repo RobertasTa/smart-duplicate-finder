@@ -25,8 +25,8 @@ _LT = {
     # v1.4 „Kuris čia pirminis?"
     "Greiciausiai pirminis": "Greičiausiai pirminis",
     "Pastaba": "Pastaba",
-    "pasukta arba veidrodine - patikrinkite, ar taip ir turi buti":
-        "pasukta arba veidrodinė – patikrinkite, ar taip ir turi būti",
+    "kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti":
+        "kita orientacija nei kiti grupėje – patikrinkite, ar taip ir turi būti",
     "Kodel": "Kodėl",
     "kiti grupeje vardu pazymeti kaip kopijos":
         "kiti grupėje vardu pažymėti kaip kopijos",

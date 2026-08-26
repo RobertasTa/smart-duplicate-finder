@@ -12,8 +12,8 @@ _RU = {
     'Greiciausiai pirminis':
         'Скорее всего оригинал',
     'Pastaba': 'Примечание',
-    'pasukta arba veidrodine - patikrinkite, ar taip ir turi buti':
-        'повёрнуто или зеркально — проверьте, так ли задумано',
+    'kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti':
+        'другая ориентация, чем у остальных — проверьте, так ли задумано',
     'Kodel':
         'Почему',
     'kiti grupeje vardu pazymeti kaip kopijos':
