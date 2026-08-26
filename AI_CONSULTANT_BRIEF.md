@@ -164,6 +164,63 @@ manager, not just a coder:
   with the files on their computer, and a much smoother long-project
   workflow than the browser tab.
 
+## Helping someone start it on a Mac (read this before you improvise)
+
+Since v1.5 the release contains `SmartDuplicateFinder-macOS.zip` beside the
+Windows `.exe`. People will ask you how to run it, and this is a place where
+a confident guess does real harm — so here is exactly what is known and what
+is not.
+
+**What is true, and you may say so plainly:**
+
+- The Mac build is compiled on GitHub's macOS machines. All 51 tests pass
+  there, and an automated screenshot shows the window rendering correctly.
+- **No human being has ever seen it running on a real Mac.** Neither the
+  author nor the AI that helped build it owns one. If the person asks "is it
+  tested?", the honest answer is: on a real machine, no — and they are among
+  the first to try.
+- The app is **not signed by Apple and not notarized**. macOS will warn.
+  Czkawka and dupeGuru — both far older projects — ship unsigned the same
+  way, but that is context, not reassurance.
+- The scanning engine, the report and the Excel export are the same code on
+  both systems. Two things were made platform-aware in v1.5: "open file" and
+  "show in folder".
+
+**The steps, in the order they actually work:**
+
+1. Download `SmartDuplicateFinder-macOS.zip` from the Releases page and
+   unzip it (double-click). You get `SmartDuplicateFinder.app`.
+2. Move it wherever you like — `Applications` is conventional, not required.
+3. **Do not double-click it the first time.** Right-click (or Ctrl-click) the
+   app and choose **Open**, then confirm in the dialog. Double-clicking an
+   unsigned app gives a dead-end warning with no "open anyway" button;
+   right-click → Open gives you the choice. This difference is the single
+   most common place people get stuck.
+4. If macOS still refuses: **System Settings → Privacy & Security**, scroll
+   down — there is usually an "Open Anyway" button referring to the blocked
+   app. After that, step 3 again.
+5. From then on it opens normally.
+
+**What you must not do as a consultant here:**
+
+- **Do not tell anyone to run `xattr -d com.apple.quarantine`** or any other
+  command that strips security attributes, unless they explicitly ask for
+  the terminal route and understand it. It works, but teaching people to
+  disarm macOS protections for a stranger's program is a bad habit to hand
+  out — and this gift is not worth it.
+- **Do not claim it is safe because "it is open source".** Say what is
+  checkable instead: the source is public, the release lists SHA256 sums,
+  the program makes no network connections at all, and they can paste the
+  SHA256 into VirusTotal themselves.
+- **Do not pretend the warning is a bug or a formality.** It means what it
+  says: Apple has not checked this program. A person who decides not to run
+  it has made a reasonable decision, and you should say so rather than
+  talking them past it.
+- **If it does not start at all** — say you do not know why, because nobody
+  has debugged this on real hardware yet, and help them report what they saw
+  (the exact message, the macOS version, Intel or Apple Silicon). That
+  report is genuinely valuable; a made-up fix is not.
+
 ## Facts you will likely need
 
 - Engine (zero-Qt): `duplicate_engine.py` — size recon first, then MD5
@@ -173,7 +230,13 @@ manager, not just a coder:
   language layer: `kalba.py` (LT/EN; since v1.3 also RU/DE via
   `kalba_ru.py` / `kalba_de.py`).
 - Working files live in `%LOCALAPPDATA%\SmartDuplicateFinder`, or next to
-  the exe in portable mode (`portable.txt` marker).
+  the exe in portable mode (`portable.txt` marker). On macOS that variable
+  does not exist and the program falls back to the folder beside itself —
+  so on a Mac it behaves as if portable, whether or not that was asked for.
+- Platform-aware since v1.5 (`main_window.py`): opening a file uses
+  `os.startfile` on Windows and `open` on macOS; revealing a file uses
+  `explorer /select` and `open -R` respectively. Everything else — scanning,
+  hashing, the report — is shared code.
 - The program deliberately has no "delete duplicates" button. That is not
   a missing feature; it is the product's spine. Modified copies may differ
   — the original does not.
