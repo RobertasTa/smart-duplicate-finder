@@ -57,7 +57,8 @@ def _autofit(sheet, rows, headers):
 
 
 def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
-                 sizes=None, visual=None, visual_rotated=None):
+                 sizes=None, visual=None, visual_rotated=None,
+                 visual_smaller=None):
     """Export Excel ataskaita su openpyxl (write_only srautas).
     Sheet 'Duplicates': Group | File Name | Full Path | Size (MB),
     rusiuota seima -> grupe, su seimu antrastemis (kaip GUI lenteleje).
@@ -211,16 +212,23 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     # 2026-08-26): tai daznai ne kopija, o BROKAS - "pasuko ir pamirso
     # grazinti", ir zmogui verta ta pamatyti pries siunciant krūva klientui.
     pasukti = set(visual_rotated or [])
-    zyme = _t("kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti")
+    mazesni = set(visual_smaller or [])
+    zyme_orient = _t("kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti")
+    zyme_raiska = _t("mazesnes raiskos nei kiti grupeje")
     vis_rows = []
     for vidx, grp in enumerate(visual or [], 1):
         fill = vis_fills[(vidx - 1) % 2]
         for fp in grp:
+            pastabos = []
+            if fp in mazesni:
+                pastabos.append(zyme_raiska)
+            if fp in pasukti:
+                pastabos.append(zyme_orient)
             vis_rows.append(([_t("Vaizdas {idx}").format(idx=vidx),
                               os.path.basename(fp),
                               str(Path(fp).resolve()),
                               round(_size_of(fp) / 1048576, 2),
-                              zyme if fp in pasukti else ""],
+                              "; ".join(pastabos)],
                              fill, None))
 
     sus_rows = []

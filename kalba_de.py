@@ -12,6 +12,7 @@ _DE = {
     'Greiciausiai pirminis':
         'Wahrscheinlich das Original',
     'Pastaba': 'Hinweis',
+    'mazesnes raiskos nei kiti grupeje': 'geringere Auflösung als die übrigen',
     'kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti':
         'andere Ausrichtung als die übrigen – prüfen Sie, ob das so gewollt ist',
     'Kodel':

@@ -186,6 +186,7 @@ class MainWindow(QMainWindow):
         self._skipped = 0
         self.visual_results = []
         self.visual_rotated = []
+        self.visual_smaller = []
         # Thread guards (pyqt6_threading_guard)
         self._worker = None
         self._thread = None
@@ -965,6 +966,7 @@ class MainWindow(QMainWindow):
         self.suspect_results = data["suspects"]
         self.visual_results = data.get("visual") or []
         self.visual_rotated = data.get("visual_rotated") or []
+        self.visual_smaller = data.get("visual_smaller") or []
         self._sizes = data.get("sizes") or {}
         st0 = data["stats"]
         vis_skipped = data.get("visual_skipped_pictures", 0)
@@ -1182,7 +1184,8 @@ class MainWindow(QMainWindow):
                               self.suspect_results if hasattr(self, 'suspect_results') else [],
                               target, getattr(self, "_sizes", None),
                               getattr(self, "visual_results", None),
-                              getattr(self, "visual_rotated", None))
+                              getattr(self, "visual_rotated", None),
+                              getattr(self, "visual_smaller", None))
         self._start_worker(worker, [
             (worker.exportDone, self._on_export_done),
             (worker.scanError, self._on_export_error),

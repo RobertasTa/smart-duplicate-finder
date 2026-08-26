@@ -98,6 +98,7 @@ _EN = {
     # ne nurodymas: programa netrina nieko ir nesiulo trinti.
     "Greiciausiai pirminis": "Most likely the original",
     "Pastaba": "Note",
+    "mazesnes raiskos nei kiti grupeje": "a lower resolution than the rest",
     "kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti":
         "a different orientation from the rest - check whether it is meant to be",
     "Kodel": "Why",

@@ -524,6 +524,7 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
     keliai = []
     atspaudai = []
     neatidaryti = []      # nuotraukos, kuriu nepavyko atverti (zr. zemiau)
+    taskeliai = []        # kiek taskeliu turi kiekviena (raiskai palyginti)
     total = len(image_files)
     for i, (p, s) in enumerate(image_files, 1):
         try:
@@ -539,8 +540,15 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
                 # pillow_foto_guard taisykle #1)
                 img = ImageOps.exif_transpose(img)
                 hs = _visos_padetys(img)
+                # Taskeliu kiekis - Roberto prasymas 2026-08-26: ataskaita
+                # turi pasakyti ne tik "kita orientacija", bet ir kad kopija
+                # MAZESNE. Matmenys jau rankoje - failas ir taip atidarytas.
+                # DEMESIO: skaiciuojam taskelius (w*h), o ne matmenis: pasukta
+                # kopija turi juos apkeistus, bet raiska ta pati.
+                tasku = img.size[0] * img.size[1]
             keliai.append(p)
             atspaudai.append(hs)
+            taskeliai.append(tasku)
         except Exception:
             # 2026-08-26: anksciau cia buvo "pass" - nuotrauka dingdavo TYLIAI.
             # Priezastys tikros: sugadintas failas, nezinomas formatas, be
@@ -668,8 +676,22 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
         normos = set(norma)
         return [keliai[idxs[i]] for i in range(len(idxs)) if i not in normos]
 
+    # Kiek maziau taskeliu turi kopija, kad ta verta paminėti. 0.9 imtu ir
+    # 2 % apkarpyma - o tai ne "mazesne raiska", o kitas kadras. Pusantro
+    # karto skirtumas jau matomas plika akimi.
+    RAISKOS_RIBA = 0.66
+
+    def _mazesnes_raiskos(idxs):
+        """Grupes nariai, kuriu raiska pastebimai mazesne uz didziausia."""
+        didziausia = max(taskeliai[i] for i in idxs)
+        if not didziausia:
+            return []
+        return [keliai[i] for i in idxs
+                if taskeliai[i] < didziausia * RAISKOS_RIBA]
+
     groups = []
     pasukti_failai = []
+    mazesnes_raiskos = []
     for idxs in merged.values():
         if len(idxs) < 2:
             continue
@@ -681,9 +703,11 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
             sources.add(exact_gid.get(fp, f"solo:{fp}"))
         if len(sources) >= 2:
             pasukti_failai.extend(_nukrype_nuo_normos(idxs))
+            mazesnes_raiskos.extend(_mazesnes_raiskos(idxs))
             groups.append(sorted(paths))
     if stats_out is not None:
         stats_out["rotated_files"] = pasukti_failai
+        stats_out["smaller_files"] = mazesnes_raiskos
         stats_out["unreadable_pictures"] = neatidaryti
     return groups
 

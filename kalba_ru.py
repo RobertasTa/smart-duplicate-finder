@@ -12,6 +12,7 @@ _RU = {
     'Greiciausiai pirminis':
         'Скорее всего оригинал',
     'Pastaba': 'Примечание',
+    'mazesnes raiskos nei kiti grupeje': 'меньшее разрешение, чем у остальных',
     'kita orientacija nei kiti grupeje - patikrinkite, ar taip ir turi buti':
         'другая ориентация, чем у остальных — проверьте, так ли задумано',
     'Kodel':
