@@ -38,6 +38,26 @@ that is a perfectly good outcome too. The goal here is not
 gigabytes deleted; it is you knowing exactly what you have and
 making the call yourself.
 
+WHY A SPREADSHEET, AND NOT MARKS INSIDE THE PROGRAM
+The report is an ordinary .xlsx file, and that is deliberate: it is
+YOUR file, not our database. The program remembers nothing about
+your decisions — it scans, shows what is there, and steps aside.
+The spreadsheet is where the decisions live, and it can do far more
+than we would ever build into a window:
+  * switch on the filters and sort or filter by ANY column — size,
+    folder, group, "Most likely the original";
+  * filter by colour, so one file family or one group at a time;
+  * ADD YOUR OWN COLUMNS — "keep", "ask the family", "check later",
+    a note to yourself — and then filter by those as well;
+  * save it, come back in a month, and your marks are still there.
+Nobody has to learn a new interface for this: you already know this
+one. The file opens in Excel, LibreOffice or Google Sheets, it will
+still be readable in ten years, and it does not depend on us.
+This program is a general tool — it does not know whether it is
+looking at your photos, your invoices or your CAD drawings, and it
+should not pretend to. So it puts the facts in front of you and
+leaves the judgement, and the marking, to you.
+
 HOW TO RUN
 ----------
 1. You only need one file: SmartDuplicateFinder-en.exe

@@ -34,6 +34,11 @@ FAMILY_COLORS = {
 }
 SUSPECT_BG = "#ffffcc"  # geltona, ITARINI
 SUSPECT_TXT = "#5F5E5A"
+# Visi musu fonai sviesus, tad eiluciu tekstas - fiksuotas tamsus. BUTINA:
+# nustacius tik fona, teksto spalva lieka sistemos, o tamsios temos sistema
+# duoda BALTA -> baltas ant sviesaus (rado fotografas macOS, 2026-08-26).
+ROW_TXT = "#1A1A1A"
+HEADER_BG = "#FFFFFF"
 # Vizualiai panasios nuotraukos: rysk. violetine (skiriasi nuo Video svelnios)
 VISUAL_COLORS = ("#E9DDF7", "#CDB4EE", "#3F2B70")
 
@@ -200,6 +205,7 @@ def populate_table(table_widget, scan_results, suspect_results, sizes=None,
     if notice:
         item = QTableWidgetItem(notice)
         item.setForeground(QColor("#5F5E5A"))
+        item.setBackground(QColor(HEADER_BG))
         f = item.font(); f.setBold(True); item.setFont(f)
         item.setFlags(Qt.ItemFlag.ItemIsEnabled)
         table_widget.setItem(len(entries), 0, item)
@@ -216,6 +222,7 @@ def populate_table(table_widget, scan_results, suspect_results, sizes=None,
             # Antraste baltu fonu (kaip Excel) - geriau issiskiria tarp spalvotu eiluciu
             item = QTableWidgetItem(e["label"])
             item.setForeground(QColor(txt))
+            item.setBackground(QColor(HEADER_BG))
             f = item.font(); f.setBold(True); item.setFont(f)
             item.setFlags(Qt.ItemFlag.ItemIsEnabled)
             table_widget.setItem(i, 0, item)
@@ -231,6 +238,7 @@ def populate_table(table_widget, scan_results, suspect_results, sizes=None,
         for col, val in enumerate(vals):
             item = QTableWidgetItem(val)
             item.setBackground(bg)
+            item.setForeground(QColor(ROW_TXT))
             # Pilnas kelias - dvigubam klikui (atidaro kataloga Explorer'yje)
             item.setData(Qt.ItemDataRole.UserRole, e["path"])
             if tooltip:

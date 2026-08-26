@@ -32,7 +32,10 @@ from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 #     atpazistamos visomis keturiomis kalbomis; metai skliaustuose nebe
 #     kopijos numeris; ataskaita pasako, kuo kopija kitokia (kita
 #     orientacija, mazesne raiska) ir kiek nuotrauku nepavyko atverti
-VERSIJA = "1.5"
+# 1.5.1 (2026-08-26): tamsioje sistemos temoje matomas rezultatu lenteles
+#     tekstas (rado fotografas macOS; ta pati spraga buvo ir Windows
+#     tamsioje temoje - langeliams buvo nustatomas tik fonas arba tik tekstas)
+VERSIJA = "1.5.1"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
@@ -206,11 +209,16 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(t("Pasirenges"))
         # Gyvas skaitliukas apatiniame desiniame kampe (programistu kampelis):
         # [veikia MM:SS] [darbininko statistika]
+        # Spalva IS PALETES, ne fiksuota: fiksuota tamsi pilka tamsioje
+        # sistemos temoje beveik nesimato (ta pati klaida, kaip lenteleje;
+        # svarbu ir del macOS - ten temos spalvu nespelioti negalim).
         self.elapsed_label = QLabel("")
-        self.elapsed_label.setStyleSheet("color: #5a5e6b; font-size: 8pt;")
+        self.elapsed_label.setStyleSheet(
+            "color: palette(placeholder-text); font-size: 8pt;")
         self.statusBar().addPermanentWidget(self.elapsed_label)
         self.stats_label = QLabel("")
-        self.stats_label.setStyleSheet("color: #5a5e6b; font-size: 8pt;")
+        self.stats_label.setStyleSheet(
+            "color: palette(placeholder-text); font-size: 8pt;")
         self.statusBar().addPermanentWidget(self.stats_label)
         self._build_scan_overlay()
         self._log("PROGRAMA paleista")
@@ -607,7 +615,7 @@ class MainWindow(QMainWindow):
             t("Dubliuotu failu paieska pagal turini - nieko netrina.")))
         info.addWidget(QLabel(t("Versija {v}").format(v=VERSIJA)))
         autoriai = QLabel("Robertas & Claude")
-        autoriai.setStyleSheet("color: #5a5e6b;")
+        autoriai.setStyleSheet("color: palette(placeholder-text);")
         info.addWidget(autoriai)
         virsus.addLayout(info)
         lay.addLayout(virsus)
@@ -694,7 +702,11 @@ class MainWindow(QMainWindow):
         # o sitas dialogas MODALUS ir ja uzdengia. Zmogus paspausdavo ir
         # nematydavo jokio atsako. Dabar atsakas atsiranda cia pat.
         patvirtinimas = QLabel("")
-        patvirtinimas.setStyleSheet("color: #1b6b2f; font-weight: bold;")
+        # Buvo tamsiai zalia (#1b6b2f) - tamsioje temoje beveik nesimate.
+        # Sekmes reiksme lieka per varnele "V" tekste, ne per spalva
+        # (taip mato ir spalvu neskiriantys zmones).
+        patvirtinimas.setStyleSheet(
+            "color: palette(window-text); font-weight: bold;")
 
         def _kopijuok():
             app = QApplication.instance()
@@ -725,8 +737,8 @@ class MainWindow(QMainWindow):
         lay.addWidget(btn_di)
 
         pastaba = QLabel(t("Programa pati interneto neliecia. Sprendziate jus."))
-        pastaba.setStyleSheet("color: #5a5e6b; font-style: italic;"
-                              "margin-top: 8px;")
+        pastaba.setStyleSheet("color: palette(placeholder-text);"
+                              "font-style: italic; margin-top: 8px;")
         lay.addWidget(pastaba)
 
         mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)

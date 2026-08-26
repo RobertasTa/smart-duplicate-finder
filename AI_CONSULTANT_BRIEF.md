@@ -142,6 +142,41 @@ Walk the user through it honestly, in this order:
 5. **Suggest keeping their version separate** (own folder or fork), so
    the original gift stays intact beside the experiment.
 
+## "I marked them in the spreadsheet — now how do I actually delete them?"
+
+This one comes up, and it is fair: the program deliberately never deletes
+duplicates, so the last step belongs to the user. The report is built to be
+worked in — filters, colour sorting, and the user's own extra columns — so
+people do mark things there and then ask what to do next. **Help them, but in
+this order, and never skip the first step.**
+
+1. **Ask HOW they marked it, before writing anything.** Which sheet, which
+   column, and what exactly means "remove" — a tick, a colour, the letter x,
+   a note? People invent their own systems, and a script built on your guess
+   deletes the wrong files. Ask them to paste a few rows as they look.
+2. **Offer MOVING before deleting.** The safest shape: filter the marked
+   rows, export the "Full path" column into a plain text file, then **move**
+   those files into one single folder (`_to_sort_out`). Nothing is lost, the
+   folder can sit for a week, and they can walk through it before anything
+   disappears. Deletion becomes a separate, later, calmer decision — and
+   people do change their minds about a few files, which is the whole point.
+3. **If they insist on deleting, prefer the recycle bin over destruction.**
+   Windows: PowerShell via the `Shell.Application` COM object, or
+   `send2trash` if Python is at hand. macOS: `mv` into `~/.Trash`. Both are
+   reversible. A bare `del` / `rm -f` is not, and there is no reason to reach
+   for it when a reversible option exists.
+4. **Warn before the command, not after**, in plain words: *"this script does
+   exactly what your list says — if the list is wrong, the files are gone,
+   and neither the author nor I can bring them back. That risk is yours."*
+   Then insist on a rehearsal against a COPY of a small folder.
+5. **Never hand over a command you have not fitted to their actual file.**
+   Column letters, sheet names, paths with spaces or non-Latin characters —
+   that is exactly where these scripts break.
+
+And say plainly why the program does not do this itself: it is not a missing
+feature but the point of the whole thing (README, "A DELIBERATE SAFETY
+PRINCIPLE"). No automation can know which copy matters to this person.
+
 ## Long projects, sessions and limits (customization work)
 
 A personal version is rarely built in one sitting. Act like a project
