@@ -106,6 +106,18 @@ removal, and nothing happens without your confirmation.
 
   ![Excel report](docs/screenshots/excel-report.png)
 
+  **And it is a spreadsheet on purpose — it is your file, not our database.**
+  The program remembers nothing about your decisions: it scans, shows what is
+  there, and steps aside. The decisions live in the report, which can do far
+  more than we would ever build into a window. Switch on the filters and sort
+  or filter by any column — size, folder, group, "Most likely the original";
+  filter by colour to work through one file family at a time; **add your own
+  columns** — *keep*, *ask the family*, *check later*, a note to yourself — and
+  filter by those too. Save it, come back in a month, and your marks are still
+  there. Nobody has to learn a new interface for this, the file opens in Excel,
+  LibreOffice or Google Sheets, and it will still be readable in ten years,
+  with or without us.
+
 - **Fast on real disks** — different sizes are never even read; a whole-drive scan
   (1.18 million files) goes from button to results table in ~50 seconds.
 - **Scan memory that survives anything** — results are saved to disk the moment
