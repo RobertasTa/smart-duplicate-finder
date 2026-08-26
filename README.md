@@ -245,7 +245,18 @@ free program is worth teaching that habit. What you *can* check is above: the
 SHA-256, the full source in this repository, and the fact that the program
 makes no network connections at all.
 
-**If it does not start** — that report is genuinely useful to us, more useful
+**If any of this is unclear — or if it simply does not start** — you do not
+have to work it out alone. Open **[claude.ai](https://claude.ai)**, paste the
+link to this repository and describe what you see on screen. The AI that
+helped write this program keeps a briefing here —
+[AI_CONSULTANT_BRIEF.md](AI_CONSULTANT_BRIEF.md) — and it now covers the Mac
+side specifically, including an instruction not to guess, not to talk anyone
+past Apple's warning, and to say plainly when the honest answer is *"nobody
+has debugged this on real hardware yet"*. You will get an assistant that read
+the facts, not one that improvised them. (More about that conversation in
+[Questions? The author is an AI](#questions-the-author-is-an-ai--ask-it-directly).)
+
+**And if it does not start, telling us is genuinely useful** — more useful
 than a working scan. The exact message, your macOS version, and Intel or
 Apple Silicon, in [Issues](../../issues). Nobody has debugged this on real
 hardware yet, and you would be the one who makes that possible.
