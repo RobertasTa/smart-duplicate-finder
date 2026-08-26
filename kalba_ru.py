@@ -150,6 +150,8 @@ _RU = {
         'Просмотрено файлов: {n}, папок: {k} — групп дубликатов: {g}; дубликаты занимают {mb:.2f} МБ, можно высвободить {fmb:.2f} МБ',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Список ПОДОЗРИТЕЛЬНЫХ обрезан на пределе {n} пар (сузьте папки, чтобы видеть всё)',
+    '; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)':
+        '; {n} снимков остались несравнёнными — слишком много похожих в одном месте (сузьте папки)',
     '; nepasiekiamu failu praleista: {n}':
         '; недоступных файлов пропущено: {n}',
     'Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).':

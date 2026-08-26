@@ -174,6 +174,8 @@ _EN = {
         "Files scanned: {n}, folders: {k} - duplicate groups: {g}; duplicates take {mb:.2f} MB, {fmb:.2f} MB can be freed",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; SUSPICIOUS list truncated at the {n}-pair limit (narrow the folders to see all)",
+    "; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)":
+        "; {n} pictures were left uncompared - too many look-alikes in one place (narrow the folders)",
     "; nepasiekiamu failu praleista: {n}": "; unreadable files skipped: {n}",
     "Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).":
         "No duplicate candidates found (files checked: {n}{skip}).",

@@ -26,7 +26,7 @@ from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 # 1.3 (2026-08-22): desinio klaviso meniu, RU/DE kalbos, HEIC/AVIF
 # 1.4 (2026-08-24): ataskaita pasako, kuris kopijos greiciausiai pirminis
 #     ir KODEL; portable duomenys - savo po-kataloge (seimos kolizija)
-VERSIJA = "1.4"
+VERSIJA = "1.4.1"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
@@ -965,12 +965,15 @@ class MainWindow(QMainWindow):
         self.visual_results = data.get("visual") or []
         self._sizes = data.get("sizes") or {}
         st0 = data["stats"]
+        vis_skipped = data.get("visual_skipped_hashes", 0)
+        vis_skipped_note = f" (PRALEISTA {vis_skipped} atspaudu)" if vis_skipped else ""
         self._log(f"GILUS done: {st0['duplicate_groups']} grupiu, "
                   f"{st0['duplicated_mb']:.0f} MB dubliu "
                   f"(atlaisvinama {st0.get('freeable_mb', 0):.0f} MB), "
                   f"{len(self.suspect_results)} ITARTINI poru"
                   f"{' (NUKIRPTA)' if data.get('suspects_truncated') else ''}, "
-                  f"{len(self.visual_results)} vizualiu grupiu, "
+                  f"{len(self.visual_results)} vizualiu grupiu"
+                  f"{vis_skipped_note}, "
                   f"greitis {data.get('speed_mbs', 0)} MB/s")
         # Kesas PRIES lentele: jei vartotojas nudobtu programa lentelei pildantis,
         # rezultatai jau issaugoti
@@ -1001,6 +1004,10 @@ class MainWindow(QMainWindow):
             msg += t("; ITARTINI sarasas nukirptas ties {n} poru riba "
                      "(susiaurink katalogus, jei nori visu)").format(
                 n=MAX_SUSPECT_PAIRS)
+        if vis_skipped:
+            msg += t("; {n} nuotrauku liko nepalygintos - per daug panasiu "
+                     "vienoje vietoje (susiaurink katalogus)"
+                     ).format(n=vis_skipped)
         self._scan_idle(msg)
 
     # ---- Disko greicio prisiminimas laiko prognozei (scan_speed.json) ----

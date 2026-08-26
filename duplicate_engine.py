@@ -390,7 +390,20 @@ def find_suspects(file_list, progress_cb=None):
     return suspects, truncated
 
 
-def find_similar_images(image_files, progress_cb=None, exact_groups=None):
+# Apkrovos lubos vienam atspaudu kibirui (zr. find_similar_images).
+# Kibire lyginama kiekvienas su kiekvienu, tad kaina auga kvadratu:
+# 10 000 atspaudu = 50 mln. poru ~ 15 s (isMATUOTA 2026-08-26: 3,3 mln.
+# poru/s). Buvusi riba 300 nukirsdavo jau prie ~20 000 unikaliu atspaudu -
+# t. y. prie EILINIO namu archyvo: gyvas matavimas ant Roberto NAS
+# (66 537 nuotraukos) rado kibira su 334 atspaudais, ir jie is paieskos
+# iskrito TYLIAI. Ribos dydis rezultatu TEISINGUMO nekeicia (balandides
+# principo garantija su 4x16 bitu lieka ta pati) - tik tai, kiek darbo
+# sutinkame padaryti.
+MAX_BUCKET = 10_000
+
+
+def find_similar_images(image_files, progress_cb=None, exact_groups=None,
+                        stats_out=None, max_bucket=None):
     """VIZUALIAI panasiu nuotrauku paieska (2026-08-05 vakaras, Roberto
     uzsakymas 'kad luzeriu neisvadintu').
 
@@ -403,6 +416,11 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
     exact_groups - tiksliuju (MD5) dubliu grupes: vizualines grupes, kurios
     nieko naujo neprideda (visi nariai jau vienoje MD5 grupeje), atmetamos.
     progress_cb(done, total) - po kiekvienos nuotraukos.
+    stats_out - neprivalomas zodynas; jei paduotas, uzpildomas raktais
+    "skipped_buckets" ir "skipped_hashes" (kiek kibiru virsijo apkrovos luba
+    ir kiek atspaudu del to liko VISAI nepalyginti). Kvieteju, kurie jo
+    neduoda, elgsena nesikeicia.
+    max_bucket - apkrovos lubos perrasymas (numatyta MAX_BUCKET); tik testams.
 
     Returns list of groups (list of paths). Neatidaromi failai praleidziami.
     """
@@ -487,13 +505,27 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None):
     for idx, hv in enumerate(uniq):
         for c in range(4):
             buckets[(c, (hv >> (c * 16)) & 0xFFFF)].append(idx)
+    riba = MAX_BUCKET if max_bucket is None else max_bucket
+    per_dideli = set()     # atspaudai, kuriuos kibiras atmete
+    palyginti = set()      # atspaudai, kurie bent viename kibire buvo lyginti
+    praleista_kibiru = 0
     for idxs in buckets.values():
-        if len(idxs) < 2 or len(idxs) > 300:  # saugiklis nuo isigimusiu kibiru
+        if len(idxs) < 2:
             continue
+        if len(idxs) > riba:     # saugiklis nuo isigimusiu kibiru
+            praleista_kibiru += 1
+            per_dideli.update(idxs)
+            continue
+        palyginti.update(idxs)
         for i in range(len(idxs)):
             for j in range(i + 1, len(idxs)):
                 if bin(uniq[idxs[i]] ^ uniq[idxs[j]]).count("1") <= VIS_DIST:
                     _union(idxs[i], idxs[j])
+    if stats_out is not None:
+        # Atspaudas nukenteja tik tada, kai NE VIENAS jo kibiras nebuvo
+        # palygintas - kitaip ji isgelbejo kitas gabalas.
+        stats_out["skipped_buckets"] = praleista_kibiru
+        stats_out["skipped_hashes"] = len(per_dideli - palyginti)
 
     merged = defaultdict(list)
     for idx, hv in enumerate(uniq):

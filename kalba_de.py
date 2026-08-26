@@ -152,6 +152,8 @@ _DE = {
         'Geprüfte Dateien: {n}, Ordner: {k} – Duplikatgruppen: {g}; Duplikate belegen {mb:.2f} MB, {fmb:.2f} MB können freigegeben werden',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Liste der VERDÄCHTIGEN bei {n} Paaren abgeschnitten (Ordner eingrenzen, um alle zu sehen)',
+    '; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)':
+        '; {n} Bilder blieben unverglichen – zu viele Ähnliche an einer Stelle (Ordner eingrenzen)',
     '; nepasiekiamu failu praleista: {n}':
         '; unlesbare Dateien übersprungen: {n}',
     'Dubliu kandidatu nerasta (perziureta failu: {n}{skip}).':

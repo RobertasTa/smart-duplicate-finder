@@ -138,6 +138,7 @@ class DeepScanWorker(QObject):
 
             # Vizualiai panasios nuotraukos (95..99%), jei pazymeta dialoge
             visual = []
+            visual_stats = {}
             if self.visual_files:
                 from duplicate_engine import find_similar_images
                 last_vis = [-1]
@@ -155,7 +156,8 @@ class DeepScanWorker(QObject):
 
                 visual = find_similar_images(self.visual_files,
                                              progress_cb=_vis_cb,
-                                             exact_groups=results["groups"])
+                                             exact_groups=results["groups"],
+                                             stats_out=visual_stats)
 
             elapsed = time.time() - t0
             bytes_read = sum(s * len(ps) for s, ps in self.candidates)
@@ -171,6 +173,7 @@ class DeepScanWorker(QObject):
                 "suspects": suspects,
                 "suspects_truncated": suspects_truncated,
                 "visual": visual,
+                "visual_skipped_hashes": visual_stats.get("skipped_hashes", 0),
                 "total_files": self.total_files,
                 "speed_mbs": round(speed_mbs, 1),
                 "sizes": sizes,
