@@ -1054,9 +1054,19 @@ class MainWindow(QMainWindow):
             return
         path = os.path.normpath(path)
         if os.path.exists(path):
-            # Viena eilute su kabutemis TIK aplink kelia - su sarasu subprocess
-            # apkabintu visa '/select,kelia' ir Explorer atidarytu ne ta kataloga
-            subprocess.Popen(f'explorer /select,"{path}"')
+            try:
+                if sys.platform == "darwin":
+                    # macOS Finder: -R pazymi faila jo kataloge
+                    subprocess.Popen(["open", "-R", path])
+                elif sys.platform.startswith("linux"):
+                    subprocess.Popen(["xdg-open", os.path.dirname(path)])
+                else:
+                    # Viena eilute su kabutemis TIK aplink kelia - su sarasu
+                    # subprocess apkabintu visa '/select,kelia' ir Explorer
+                    # atidarytu ne ta kataloga
+                    subprocess.Popen(f'explorer /select,"{path}"')
+            except OSError as e:
+                self.status_label.setText(f"{t('Klaida:')} {e}")
         else:
             self.status_label.setText(f"{t('Failas neberastas:')} {path}")
 
@@ -1097,8 +1107,15 @@ class MainWindow(QMainWindow):
                 self.status_label.setText(f"{t('Failas neberastas:')} {path}")
                 return
             try:
-                os.startfile(path)
-            except OSError as e:
+                # os.startfile YRA tik Windows; macOS/Linux - per sistemos
+                # atidarymo komanda (2026-08-26, ruosiantis Mac versijai)
+                if sys.platform == "darwin":
+                    subprocess.Popen(["open", path])
+                elif sys.platform.startswith("linux"):
+                    subprocess.Popen(["xdg-open", path])
+                else:
+                    os.startfile(path)
+            except (OSError, AttributeError) as e:
                 self.status_label.setText(f"{t('Klaida:')} {e}")
         elif chosen is act_dir:
             self._on_open_folder(row, 0)

@@ -1,5 +1,6 @@
 # Atranka tests - grynas modulis, disko neliecia (keliai tik kaip tekstas).
 # Run: pytest tests/
+import os
 import sys
 from pathlib import Path
 
@@ -10,10 +11,15 @@ import atranka as at
 # --- 1 taisykle: vardas -----------------------------------------------------
 
 def test_vardas_gaudo_explorer_uodegas():
-    assert at.vardas_rodo_kopija(r"C:\foto\nuotrauka (1).jpg")
-    assert at.vardas_rodo_kopija(r"C:\foto\ataskaita - Copy.txt")
-    assert at.vardas_rodo_kopija(r"C:\foto\ataskaita - kopija.txt")
-    assert at.vardas_rodo_kopija(r"C:\foto\Copy of planas.docx")
+    # Kelius statom per os.path.join. Uzrasyti su kairiniu bruksniu jie
+    # macOS/Linux nera keliai is viso: basename grazina VISA eilute, ir
+    # priesdelio taisykle ("Copy of ...") nebeatpazista. Rasta 2026-08-26,
+    # paleidus siuos testus macOS masinoje.
+    d = os.path.join("foto", "")
+    assert at.vardas_rodo_kopija(d + "nuotrauka (1).jpg")
+    assert at.vardas_rodo_kopija(d + "ataskaita - Copy.txt")
+    assert at.vardas_rodo_kopija(d + "ataskaita - kopija.txt")
+    assert at.vardas_rodo_kopija(d + "Copy of planas.docx")
 
 
 def test_vardas_NEklysta_su_teisetais_vardais():

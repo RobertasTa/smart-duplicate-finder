@@ -59,15 +59,26 @@ jobs:
               print("LANGAS NESUSIKURE")
           PY
 
-      - name: 4. Ar PyInstaller sukuria .app
+      - name: 4. PyInstaller .app + archyvas
         continue-on-error: true
         run: |
           pyinstaller --noconfirm --clean --windowed --name SmartDuplicateFinder \
+            --osx-bundle-identifier com.robertasta.smartduplicatefinder \
             --add-data "pletiniai.json:." \
             --add-data "app.ico:." \
             main_window.py 2>&1 | tail -20
           echo "--- kas gavosi ---"
           ls -la dist/ || true
+          # .app yra KATALOGAS - GitHub Release ji priima tik suspausta.
+          # ditto issaugo macOS atributus (skirtingai nei paprastas zip).
+          if [ -d "dist/SmartDuplicateFinder.app" ]; then
+            ditto -c -k --sequesterRsrc --keepParent \
+              "dist/SmartDuplicateFinder.app" "SmartDuplicateFinder-macOS.zip"
+            shasum -a 256 SmartDuplicateFinder-macOS.zip
+            ls -la SmartDuplicateFinder-macOS.zip
+          else
+            echo ".app NESUKURTAS"
+          fi
 
       - name: Rezultatai
         if: always()
@@ -76,6 +87,6 @@ jobs:
           name: macos-zvalgyba
           path: |
             macos_langas.png
-            dist/
+            SmartDuplicateFinder-macOS.zip
           if-no-files-found: warn
           retention-days: 7
