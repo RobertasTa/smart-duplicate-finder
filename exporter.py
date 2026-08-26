@@ -33,8 +33,13 @@ MAX_COL_WIDTH = 60  # per placiu stulpeliu lentele istampo; ilgesni tekstai
 # pati, nes Excel su wrap_text auksti pritaiko automatiskai).
 KELIO_WIDTH = 45
 PRIEZASTIES_WIDTH = 26
-# Stulpeliu indeksai (0-based) dublikatu lape
+# Pastabu stulpelis "Panasiu nuotrauku" lape (2026-08-26). Dvi pastabos
+# kartu ("mazesnes raiskos...; kita orientacija...") duoda iki 105 simboliu -
+# be lauzymo tai nukristu uz krasto lygiai taip pat, kaip v1.4 "Kodel".
+PASTABOS_WIDTH = 34
+# Stulpeliu indeksai (0-based)
 STULP_KELIAS = 2
+STULP_PASTABA = 4      # tik vizualiniame lape; dublikatu lape ten varnele
 STULP_KODEL = 5
 
 
@@ -42,7 +47,8 @@ def _autofit(sheet, rows, headers):
     """Nustato plocius pagal jau paruostus duomenis (vienas praejimas RAM'e).
     Plotis ribojamas - likusi dali sutvarko wrap_text (eilute paaugsta pati)."""
     from openpyxl.utils import get_column_letter
-    ribos = {STULP_KELIAS: KELIO_WIDTH, STULP_KODEL: PRIEZASTIES_WIDTH}
+    ribos = {STULP_KELIAS: KELIO_WIDTH, STULP_KODEL: PRIEZASTIES_WIDTH,
+             STULP_PASTABA: PASTABOS_WIDTH}
     # Antrastes lauziamos (wrap_text), tad joms uztenka ILGIAUSIO ZODZIO -
     # kitaip "Greiciausiai pirminis" istemptu placia stulpeli varnelei
     widths = [max((len(z) for z in h.split()), default=len(h)) for h in headers]
@@ -290,7 +296,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
                 # auksti tada pritaiko pats (Roberto prasymas 2026-08-24)
                 if isinstance(v, str) and (
                         (ci == STULP_KELIAS and len(v) > KELIO_WIDTH)
-                        or (ci == STULP_KODEL and len(v) > PRIEZASTIES_WIDTH)):
+                        or (ci == STULP_KODEL and len(v) > PRIEZASTIES_WIDTH)
+                        or (ci == STULP_PASTABA and len(v) > PASTABOS_WIDTH)):
                     c.alignment = wrap_align
                 cells.append(c)
             ws.append(cells)

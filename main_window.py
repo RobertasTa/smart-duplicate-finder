@@ -26,7 +26,13 @@ from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 # 1.3 (2026-08-22): desinio klaviso meniu, RU/DE kalbos, HEIC/AVIF
 # 1.4 (2026-08-24): ataskaita pasako, kuris kopijos greiciausiai pirminis
 #     ir KODEL; portable duomenys - savo po-kataloge (seimos kolizija)
-VERSIJA = "1.4.1"
+# 1.4.1 (2026-08-26): per tankus atspaudu kibiras nebeprarija panasiu
+#     nuotrauku tyliai
+# 1.5 (2026-08-26): randamos PASUKTOS ir veidrodines kopijos; kopijos
+#     atpazistamos visomis keturiomis kalbomis; metai skliaustuose nebe
+#     kopijos numeris; ataskaita pasako, kuo kopija kitokia (kita
+#     orientacija, mazesne raiska) ir kiek nuotrauku nepavyko atverti
+VERSIJA = "1.5"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
