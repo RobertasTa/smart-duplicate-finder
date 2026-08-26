@@ -501,9 +501,17 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
         pasukimu palaikymas kainuoja apie desimtadali greicio, ne kartus.
         Kvadratas butinas: 9x8 tinklelis pasuktas 90 laipsniu virstu 8x9
         ir nebutu su kuo lyginti.
+
+        ⚠️ TIESIOGINIS atspaudas ([0]) skaiciuojamas TIESIAI i 9x8 - lygiai
+        kaip iki v1.5, BITAS I BITA. Kai ji trumpam buvau perleides per
+        tarpini kvadrata, SUMAZINTOS per puse nuotraukos nustojo buti
+        randamos (skirtumas augo 3 -> 4 bitai, o riba yra 3). Roberto
+        klausimas 2026-08-26 - "ar praleis, jei mastelis skirtingas?" -
+        ta ir isaiskino. Pamoka: naujas dalykas dedamas SALIA to, kas
+        veikia, o ne per ji.
         """
+        rez = [_dhash64(img)]          # tiesioginis - nepaliestas v1.4 kelias
         maz = img.convert("L").resize((_KVADRATAS, _KVADRATAS), Image.LANCZOS)
-        rez = [_dhash64(maz)]
         for tr in _POZOS[1:4]:
             rez.append(_dhash64(maz.transpose(tr)))
         veidrodis = maz.transpose(_POZOS[4])
@@ -521,8 +529,11 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
         try:
             with Image.open(p) as img:
                 # JPEG: draft dekoduoja is karto sumazinta - keliskart greiciau
-                # (miniatiurai 9x8 pilnos rezoliucijos nereikia)
-                img.draft("L", (9, 8))
+                # (miniatiurai 9x8 pilnos rezoliucijos nereikia). Prasom
+                # KVADRATO dydzio: pasukimams reikia daugiau detaliu, o
+                # tiesioginis atspaudas nuo to nesikeicia ne per bita
+                # (patikrinta 2026-08-26).
+                img.draft("L", (_KVADRATAS, _KVADRATAS))
                 # EXIF Orientation: telefonu "pasukta" kopija be sito gautu
                 # KITA atspauda ir dublio nerastume (claude.ai radinys, 2026-08-08;
                 # pillow_foto_guard taisykle #1)

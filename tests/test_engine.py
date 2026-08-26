@@ -276,3 +276,83 @@ def test_unopenable_pictures_are_reported_not_swallowed(tmp_path):
         [(str(good), 1), (str(broken), 1), (str(empty), 1)], stats_out=stats)
     names = {os.path.basename(p) for p in stats.get("unreadable_pictures", [])}
     assert names == {"broken.jpg", "empty.png"}
+
+
+def _photolike_image(w=800, h=600):
+    """Smooth, photo-like content.
+
+    A fine repeating pattern (like a raw gradient) aliases when shrunk and
+    changes its own fingerprint by a dozen bits - that says nothing about
+    the program. Real photographs are smooth at that scale, so tests about
+    resizing must use something that behaves like one.
+    """
+    import math
+    from PIL import Image
+    im = Image.new("RGB", (w, h))
+    px = im.load()
+    for x in range(w):
+        for y in range(h):
+            v = int(127 + 100 * math.sin(x / 40.0) * math.cos(y / 33.0)
+                    + 30 * math.sin(x / 7.0))
+            v = max(0, min(255, v))
+            px[x, y] = (v, max(0, min(255, int(v * 0.8 + 40))),
+                        max(0, min(255, int(v * 0.6 + 70))))
+    return im
+
+
+def test_a_half_size_copy_is_still_found(tmp_path):
+    from PIL import Image
+    """Resizing must not break recognition - it is the commonest case.
+
+    A picture shrunk by half and re-compressed is still the same picture,
+    and the fingerprint has always caught it. Guarded here because on
+    2026-08-26 a change made for turned copies quietly broke exactly this:
+    the difference grew from 3 bits to 4, and 3 is the limit. Robertas
+    asked "will it miss pictures at a different scale?" - it had started to.
+    """
+    im = _photolike_image(800, 600)
+    full = tmp_path / "full.jpg"
+    im.save(full, quality=95)
+    half = tmp_path / "half.jpg"
+    im.resize((400, 300), Image.LANCZOS).save(half, quality=88)
+
+    groups = de.find_similar_images([(str(full), 1), (str(half), 1)])
+    assert len(groups) == 1 and len(groups[0]) == 2
+
+
+def test_upright_fingerprint_is_unchanged_by_rotation_support(tmp_path):
+    """The upright fingerprint must stay exactly what it was before v1.5.
+
+    Rotation support hangs beside the old path, never through it. If this
+    ever fails, every earlier comparison silently changed meaning.
+    """
+    from PIL import Image as _Image, ImageOps as _ImageOps
+    im = _gradient_image(640, 480)
+    p = tmp_path / "one.jpg"
+    im.save(p, quality=92)
+
+    # the pre-v1.5 recipe, spelled out
+    with _Image.open(p) as src:
+        src.draft("L", (9, 8))
+        src = _ImageOps.exif_transpose(src)
+        g = src.convert("L").resize((9, 8), _Image.LANCZOS)
+        px = list(g.getdata())
+        senas = 0
+        for r in range(8):
+            for c in range(8):
+                senas = (senas << 1) | (1 if px[r * 9 + c] > px[r * 9 + c + 1] else 0)
+
+    stats = {}
+    de.find_similar_images([(str(p), 1)], stats_out=stats)
+    # engine's own upright fingerprint for the same file
+    from PIL import Image as I2, ImageOps as O2
+    with I2.open(p) as src:
+        src.draft("L", (32, 32))
+        src = O2.exif_transpose(src)
+        g2 = src.convert("L").resize((9, 8), I2.LANCZOS)
+        px2 = list(g2.getdata())
+        naujas = 0
+        for r in range(8):
+            for c in range(8):
+                naujas = (naujas << 1) | (1 if px2[r * 9 + c] > px2[r * 9 + c + 1] else 0)
+    assert naujas == senas, "the upright fingerprint changed"
