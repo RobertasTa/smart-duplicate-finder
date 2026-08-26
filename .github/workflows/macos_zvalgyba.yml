@@ -1,0 +1,81 @@
+# Ar programa apskritai gyva macOS? RANKINE zvalgyba, ne kasdienis CI.
+#
+# Paleidziama tik ranka (workflow_dispatch) - kasdienio darbo neliecia.
+# Klausimai, i kuriuos atsako:
+#   1. ar priklausomybes issidiegia (PyQt6, Pillow, pillow-heif);
+#   2. ar 51 testas prazysta be pakeitimu;
+#   3. ar Qt langas apskritai susikuria ir ar ji galima NUFOTOGRAFUOTI
+#      (Windows offscreen rezime sriftai virsdavo kvadrateliais - reikia
+#      zinoti, ar macOS geriau);
+#   4. ar PyInstaller sukuria .app.
+# Nieko neskelbia ir nieko nekeicia programoje.
+name: macOS zvalgyba
+
+on:
+  workflow_dispatch:
+
+jobs:
+  zvalgyba:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 1. Priklausomybes
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest pyinstaller
+          python -c "import PyQt6, PIL, openpyxl; print('importai OK')"
+          python -c "import pillow_heif; print('pillow_heif OK')" || echo "pillow_heif NEPAVYKO (HEIC neveiktu)"
+
+      - name: 2. Testai
+        continue-on-error: true
+        run: pytest tests/ -v
+
+      - name: 3. Ar langas susikuria ir ar ji galima nufotografuoti
+        continue-on-error: true
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          python - <<'PY'
+          import sys, traceback
+          try:
+              from PyQt6.QtWidgets import QApplication
+              app = QApplication(sys.argv)
+              import main_window
+              w = main_window.MainWindow()
+              w.resize(1100, 700)
+              w.show()
+              app.processEvents()
+              pix = w.grab()
+              ok = pix.save("macos_langas.png")
+              print("LANGAS SUSIKURE, skrinsotas issaugotas:", ok)
+              print("dydis:", pix.width(), "x", pix.height())
+          except Exception:
+              traceback.print_exc()
+              print("LANGAS NESUSIKURE")
+          PY
+
+      - name: 4. Ar PyInstaller sukuria .app
+        continue-on-error: true
+        run: |
+          pyinstaller --noconfirm --clean --windowed --name SmartDuplicateFinder \
+            --add-data "pletiniai.json:." \
+            --add-data "app.ico:." \
+            main_window.py 2>&1 | tail -20
+          echo "--- kas gavosi ---"
+          ls -la dist/ || true
+
+      - name: Rezultatai
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-zvalgyba
+          path: |
+            macos_langas.png
+            dist/
+          if-no-files-found: warn
+          retention-days: 7
