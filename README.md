@@ -155,9 +155,10 @@ winget install RobertasTa.SmartDuplicateFinder
 
 Or grab the latest exe from **[Releases](../../releases)**:
 
-| File | UI language |
-|---|---|
-| `SmartDuplicateFinder.exe` | English / Lithuanian / Russian / German — switch inside the app |
+| File | For | UI language |
+|---|---|---|
+| `SmartDuplicateFinder.exe` | Windows | English / Lithuanian / Russian / German — switch inside the app |
+| `SmartDuplicateFinder-macOS.zip` | macOS — **see the section below first** | same four |
 
 **Requirements:** Windows 10 or newer, 64-bit. (On Windows 7 the exe will not
 start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
@@ -177,6 +178,77 @@ platform limit of the Qt6/Python toolchain, not a bug.)
 > link, so you can verify what you downloaded.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
+
+### On a Mac (new in v1.5 — and nobody has seen it run yet)
+
+`SmartDuplicateFinder-macOS.zip` is in [Releases](../../releases). Before you
+download it, the part we would want to know in your place:
+
+> **No human being has ever seen this running on a real Mac.** It is compiled
+> on GitHub's macOS machines, all 51 tests pass there, and an automated
+> screenshot shows the window rendering correctly — but neither the author nor
+> the AI that helped build it owns an Apple computer. On Windows this program
+> has been through live testing on tens of thousands of real files. On macOS
+> you would be among the first.
+>
+> It is also **not signed by Apple and not notarized**, so macOS will warn you.
+> If that is enough to put you off, that is a reasonable decision and we would
+> rather you made it than not.
+
+If you do want to try:
+
+1. Download and unzip — you get `SmartDuplicateFinder.app`.
+2. Move it wherever you like (`Applications` is conventional, not required).
+3. **Right-click the app and choose Open**, then confirm. Do *not* just
+   double-click it the first time: an unsigned app opened that way gives a
+   dead-end warning with no way through, while right-click → Open gives you
+   the choice. This is where almost everyone gets stuck.
+4. If macOS still refuses: **System Settings → Privacy & Security**, scroll
+   down to the message about the blocked app and press **Open Anyway**. Then
+   repeat step 3.
+5. After that it opens like any other app.
+
+**What macOS will actually say.** The exact wording depends on your macOS
+version, and — being honest — we have not seen these dialogs ourselves on this
+app; this is what an unsigned application produces in general:
+
+- Double-clicking usually gives a **dead end**: older systems say the app
+  *"cannot be opened because it is from an unidentified developer"*, newer ones
+  that *"Apple could not verify"* it is free of malware. Either way there is no
+  button that lets you through — which is why step 3 above matters.
+- Right-click → **Open** gives the same concern phrased as a **question**,
+  with an **Open** button next to Cancel. That button is the whole difference.
+- Some systems only offer the way through afterwards, in **System Settings →
+  Privacy & Security**, as an **Open Anyway** button.
+
+None of this means the program was found to be harmful. It means Apple has not
+checked it, because checking costs a yearly developer fee we have not paid for
+a free gift.
+
+**How to verify what you downloaded**, before opening anything. In Terminal:
+
+```
+shasum -a 256 ~/Downloads/SmartDuplicateFinder-macOS.zip
+```
+
+Compare the result with the SHA-256 printed in the [release
+description](../../releases). If they match, the file is byte-for-byte what we
+built. If they do not match, do not open it — tell us instead.
+
+You can also paste that same SHA-256 into [virustotal.com](https://www.virustotal.com/)
+and see what several dozen antivirus engines say about it, without downloading
+anything from us at all.
+
+**Please do not disable macOS security to run this.** Commands that strip the
+quarantine attribute work, and we are deliberately not printing one here — no
+free program is worth teaching that habit. What you *can* check is above: the
+SHA-256, the full source in this repository, and the fact that the program
+makes no network connections at all.
+
+**If it does not start** — that report is genuinely useful to us, more useful
+than a working scan. The exact message, your macOS version, and Intel or
+Apple Silicon, in [Issues](../../issues). Nobody has debugged this on real
+hardware yet, and you would be the one who makes that possible.
 
 ## How it compares
 
