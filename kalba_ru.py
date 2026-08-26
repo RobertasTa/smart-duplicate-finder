@@ -11,6 +11,9 @@ _RU = {
     # nurodymas: programa nieko netrina ir trinti nesiulo)
     'Greiciausiai pirminis':
         'Скорее всего оригинал',
+    'Pastaba': 'Примечание',
+    'pasukta arba veidrodine - patikrinkite, ar taip ir turi buti':
+        'повёрнуто или зеркально — проверьте, так ли задумано',
     'Kodel':
         'Почему',
     'kiti grupeje vardu pazymeti kaip kopijos':

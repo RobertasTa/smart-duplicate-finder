@@ -173,7 +173,8 @@ class DeepScanWorker(QObject):
                 "suspects": suspects,
                 "suspects_truncated": suspects_truncated,
                 "visual": visual,
-                "visual_skipped_hashes": visual_stats.get("skipped_hashes", 0),
+                "visual_skipped_pictures": visual_stats.get("skipped_pictures", 0),
+                "visual_rotated": visual_stats.get("rotated_files", []),
                 "total_files": self.total_files,
                 "speed_mbs": round(speed_mbs, 1),
                 "sizes": sizes,
@@ -191,20 +192,22 @@ class ExportWorker(QObject):
     scanError = pyqtSignal(str)
 
     def __init__(self, scan_results, suspect_results, out_path, sizes=None,
-                 visual=None):
+                 visual=None, visual_rotated=None):
         super().__init__()
         self.scan_results = scan_results
         self.suspect_results = suspect_results
         self.out_path = out_path
         self.sizes = sizes
         self.visual = visual
+        self.visual_rotated = visual_rotated
 
     def run(self):
         try:
             from exporter import export_excel
             p = export_excel(self.scan_results, self.suspect_results,
                              out_path=self.out_path, sizes=self.sizes,
-                             visual=self.visual)
+                             visual=self.visual,
+                             visual_rotated=self.visual_rotated)
             self.exportDone.emit(p or "")
         except Exception as exc:
             self.scanError.emit(str(exc))

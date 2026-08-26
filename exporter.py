@@ -57,7 +57,7 @@ def _autofit(sheet, rows, headers):
 
 
 def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
-                 sizes=None, visual=None):
+                 sizes=None, visual=None, visual_rotated=None):
     """Export Excel ataskaita su openpyxl (write_only srautas).
     Sheet 'Duplicates': Group | File Name | Full Path | Size (MB),
     rusiuota seima -> grupe, su seimu antrastemis (kaip GUI lenteleje).
@@ -112,6 +112,7 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
     # ("kuris cia senelis ir kodel"), NE nurodymas trinti - programa
     # netrina nieko ir siulymo nedaro. Kur pozymiu nera - "neaisku".
     dup_headers = headers + [_t("Greiciausiai pirminis"), _t("Kodel")]
+    vis_headers = headers + [_t("Pastaba")]
 
     # Priezasciu kodai -> tekstai (raktai verciami iprastu keliu)
     _PRIEZ_TEKSTAI = {
@@ -206,6 +207,11 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
 
     # Vizualiai panasios nuotraukos - atskiras lapas (violetiniai atspalviai)
     vis_fills = (_fill("#E9DDF7"), _fill("#CDB4EE"))
+    # Pasuktos/veidrodines kopijos zymimos ATSKIRAI (Roberto pastaba
+    # 2026-08-26): tai daznai ne kopija, o BROKAS - "pasuko ir pamirso
+    # grazinti", ir zmogui verta ta pamatyti pries siunciant krūva klientui.
+    pasukti = set(visual_rotated or [])
+    zyme = _t("pasukta arba veidrodine - patikrinkite, ar taip ir turi buti")
     vis_rows = []
     for vidx, grp in enumerate(visual or [], 1):
         fill = vis_fills[(vidx - 1) % 2]
@@ -213,7 +219,8 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
             vis_rows.append(([_t("Vaizdas {idx}").format(idx=vidx),
                               os.path.basename(fp),
                               str(Path(fp).resolve()),
-                              round(_size_of(fp) / 1048576, 2)],
+                              round(_size_of(fp) / 1048576, 2),
+                              zyme if fp in pasukti else ""],
                              fill, None))
 
     sus_rows = []
@@ -286,7 +293,7 @@ def export_excel(scan_results, suspect_results, output_dir=".", out_path=None,
 
     _write_sheet(_t("Dublikatai"), dup_rows, dup_headers)
     if vis_rows:
-        _write_sheet(_t("Panasios nuotraukos"), vis_rows)
+        _write_sheet(_t("Panasios nuotraukos"), vis_rows, vis_headers)
     _write_sheet(_t("Itartini"), sus_rows)
 
     if out_path is None:

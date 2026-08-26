@@ -417,7 +417,7 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
     nieko naujo neprideda (visi nariai jau vienoje MD5 grupeje), atmetamos.
     progress_cb(done, total) - po kiekvienos nuotraukos.
     stats_out - neprivalomas zodynas; jei paduotas, uzpildomas raktais
-    "skipped_buckets" ir "skipped_hashes" (kiek kibiru virsijo apkrovos luba
+    "skipped_buckets" ir "skipped_pictures" (kiek kibiru virsijo apkrovos luba
     ir kiek atspaudu del to liko VISAI nepalyginti). Kvieteju, kurie jo
     neduoda, elgsena nesikeicia.
     max_bucket - apkrovos lubos perrasymas (numatyta MAX_BUCKET); tik testams.
@@ -463,8 +463,48 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
                 hv = (hv << 1) | (1 if px[r * 9 + c] > px[r * 9 + c + 1] else 0)
         return hv
 
-    # 1) dHash kiekvienai nuotraukai; identiski atspaudai suglaudziami is karto
-    by_hash = defaultdict(list)
+    # Astuonios padetys: 4 pasukimai x 2 (su veidrodziu). PIRMOJI (indeksas 0)
+    # yra TIESIOGINE - jos atspaudas sutampa su tuo, kuris buvo skaiciuojamas
+    # iki 2026-08-26, tad senas elgesys nesikeicia.
+    # Kodel reikia: exif_transpose isgelbeja tik tas nuotraukas, kurias
+    # PAZYMEJO fotoaparatas. Kai pikselius perraso redaktorius, pokalbiu
+    # programa ar skeneris, zymes nebelieka ir atspaudas pasidaro visai kitas.
+    # Gyvas matavimas 2026-08-26: originalas + fiziskai pasukta 90 laipsniu +
+    # veidrodine davė NULI grupiu. dupeGuru tokias randa (8 orientacijos) -
+    # is jos ir perimta IDEJA (ne kodas).
+    _POZOS = (None,
+              getattr(Image, "ROTATE_90", 2),
+              getattr(Image, "ROTATE_180", 3),
+              getattr(Image, "ROTATE_270", 4),
+              getattr(Image, "FLIP_LEFT_RIGHT", 0))
+
+    _KVADRATAS = 32     # tarpine sumazinta kopija, is kurios sukama
+
+    def _visos_padetys(img):
+        """8 atspaudai: tiesioginis, 3 pasukimai, veidrodinis ir jo 3 pasukimai.
+
+        GREICIO ESME (isMATUOTA 2026-08-26 ant 200 tikru nuotrauku):
+          1 padetis (kaip buvo)      71,1 nuotr./s
+          8 sukant DIDELI vaizda      9,8 nuotr./s   <- 7 kartus letesne
+          8 per maza KVADRATA        65,4 nuotr./s   <- si versija
+        Pirma vienas sumazinimas i 32x32, o sukama jau ta smulkme - tad
+        pasukimu palaikymas kainuoja apie desimtadali greicio, ne kartus.
+        Kvadratas butinas: 9x8 tinklelis pasuktas 90 laipsniu virstu 8x9
+        ir nebutu su kuo lyginti.
+        """
+        maz = img.convert("L").resize((_KVADRATAS, _KVADRATAS), Image.LANCZOS)
+        rez = [_dhash64(maz)]
+        for tr in _POZOS[1:4]:
+            rez.append(_dhash64(maz.transpose(tr)))
+        veidrodis = maz.transpose(_POZOS[4])
+        rez.append(_dhash64(veidrodis))
+        for tr in _POZOS[1:4]:
+            rez.append(_dhash64(veidrodis.transpose(tr)))
+        return rez
+
+    # 1) Atspaudai kiekvienai nuotraukai (po 8; [0] - tiesioginis)
+    keliai = []
+    atspaudai = []
     total = len(image_files)
     for i, (p, s) in enumerate(image_files, 1):
         try:
@@ -476,8 +516,9 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
                 # KITA atspauda ir dublio nerastume (claude.ai radinys, 2026-08-08;
                 # pillow_foto_guard taisykle #1)
                 img = ImageOps.exif_transpose(img)
-                hv = _dhash64(img)
-            by_hash[hv].append(p)
+                hs = _visos_padetys(img)
+            keliai.append(p)
+            atspaudai.append(hs)
         except Exception:
             pass  # sugadinta/neatpazinta nuotrauka - tyliai praleidziama
         if progress_cb:
@@ -487,8 +528,9 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
     # po 16 bitu; jei atstumas <= 3, bent vienas gabalas sutampa (balandides
     # principas) - lyginam tik bendro gabalo kibiruose. Garantija galioja
     # butent <=3, todel VIS_DIST=3 (zr. aukciau).
-    uniq = list(by_hash.keys())
-    parent = list(range(len(uniq)))
+    # Jungiam FAILUS (ne atspaudus): viena nuotrauka dabar turi 8 atspaudus,
+    # ir sutapti gali bet kuri jos padetis su bet kuria kito failo padetimi.
+    parent = list(range(len(keliai)))
 
     def _find(a):
         while parent[a] != a:
@@ -502,34 +544,40 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
             parent[rb] = ra
 
     buckets = defaultdict(list)
-    for idx, hv in enumerate(uniq):
-        for c in range(4):
-            buckets[(c, (hv >> (c * 16)) & 0xFFFF)].append(idx)
+    for idx, hs in enumerate(atspaudai):
+        for poz, hv in enumerate(hs):
+            for c in range(4):
+                buckets[(c, (hv >> (c * 16)) & 0xFFFF)].append((idx, poz))
     riba = MAX_BUCKET if max_bucket is None else max_bucket
-    per_dideli = set()     # atspaudai, kuriuos kibiras atmete
-    palyginti = set()      # atspaudai, kurie bent viename kibire buvo lyginti
+    per_dideli = set()     # failai, kuriuos kibiras atmete
+    palyginti = set()      # failai, kurie bent viename kibire buvo lyginti
     praleista_kibiru = 0
-    for idxs in buckets.values():
-        if len(idxs) < 2:
+    for items in buckets.values():
+        if len(items) < 2:
             continue
-        if len(idxs) > riba:     # saugiklis nuo isigimusiu kibiru
+        if len(items) > riba:     # saugiklis nuo isigimusiu kibiru
             praleista_kibiru += 1
-            per_dideli.update(idxs)
+            per_dideli.update(fi for fi, _ in items)
             continue
-        palyginti.update(idxs)
-        for i in range(len(idxs)):
-            for j in range(i + 1, len(idxs)):
-                if bin(uniq[idxs[i]] ^ uniq[idxs[j]]).count("1") <= VIS_DIST:
-                    _union(idxs[i], idxs[j])
+        palyginti.update(fi for fi, _ in items)
+        for i in range(len(items)):
+            fi, pi = items[i]
+            hi = atspaudai[fi][pi]
+            for j in range(i + 1, len(items)):
+                fj, pj = items[j]
+                if fi == fj:
+                    continue      # ta pati nuotrauka kita padetimi
+                if bin(hi ^ atspaudai[fj][pj]).count("1") <= VIS_DIST:
+                    _union(fi, fj)
     if stats_out is not None:
-        # Atspaudas nukenteja tik tada, kai NE VIENAS jo kibiras nebuvo
-        # palygintas - kitaip ji isgelbejo kitas gabalas.
+        # Failas nukenteja tik tada, kai NE VIENAS jo kibiras nebuvo
+        # palygintas - kitaip ji isgelbejo kitas gabalas ar kita padetis.
         stats_out["skipped_buckets"] = praleista_kibiru
-        stats_out["skipped_hashes"] = len(per_dideli - palyginti)
+        stats_out["skipped_pictures"] = len(per_dideli - palyginti)
 
     merged = defaultdict(list)
-    for idx, hv in enumerate(uniq):
-        merged[_find(idx)].extend(by_hash[hv])
+    for idx in range(len(keliai)):
+        merged[_find(idx)].append(idx)
 
     # 3) Kelio -> tikslios (MD5) grupes id; atmetam grupes be nieko naujo
     exact_gid = {}
@@ -537,17 +585,57 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
         for fp in grp:
             exact_gid[fp] = gid
 
+    def _nukrype_nuo_normos(idxs):
+        """Kurie grupes nariai guli KITAIP pasukti nei dauguma?
+
+        Robertas 2026-08-26: verta pasakyti ne "grupeje kazkas pasukta", o
+        KURIE failai - nes tai daznai ne kopija, o BROKAS ("pasuko ir pamirso
+        grazinti"), matomas pries issiunciant krūva klientui.
+
+        Norma = didziausias pogrupis, kurio TIESIOGINIAI atspaudai tarpusavyje
+        panasus. Visi likusieji ir yra pasukti/veidrodiniai variantai.
+        """
+        # mazas union-find grupes viduje, TIK pagal tiesiogini atspauda
+        tevas = list(range(len(idxs)))
+
+        def _f(a):
+            while tevas[a] != a:
+                tevas[a] = tevas[tevas[a]]
+                a = tevas[a]
+            return a
+
+        for i in range(len(idxs)):
+            hi = atspaudai[idxs[i]][0]
+            for j in range(i + 1, len(idxs)):
+                if bin(hi ^ atspaudai[idxs[j]][0]).count("1") <= VIS_DIST:
+                    ra, rb = _f(i), _f(j)
+                    if ra != rb:
+                        tevas[rb] = ra
+        pogrupiai = defaultdict(list)
+        for i in range(len(idxs)):
+            pogrupiai[_f(i)].append(i)
+        if len(pogrupiai) < 2:
+            return []          # visi vienodai pasukti - nera ka sakyti
+        norma = max(pogrupiai.values(), key=len)
+        normos = set(norma)
+        return [keliai[idxs[i]] for i in range(len(idxs)) if i not in normos]
+
     groups = []
-    for paths in merged.values():
-        if len(paths) < 2:
+    pasukti_failai = []
+    for idxs in merged.values():
+        if len(idxs) < 2:
             continue
+        paths = [keliai[i] for i in idxs]
         # Unikalus "saltiniai": MD5 grupe = vienas saltinis, laisvas failas -
         # atskiras. >=2 saltiniai -> grupe prideda ka nors naujo.
         sources = set()
         for fp in paths:
             sources.add(exact_gid.get(fp, f"solo:{fp}"))
         if len(sources) >= 2:
+            pasukti_failai.extend(_nukrype_nuo_normos(idxs))
             groups.append(sorted(paths))
+    if stats_out is not None:
+        stats_out["rotated_files"] = pasukti_failai
     return groups
 
 

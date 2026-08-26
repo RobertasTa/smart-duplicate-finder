@@ -24,6 +24,9 @@ _LT = {
     "Grupe": "Grupė",
     # v1.4 „Kuris čia pirminis?"
     "Greiciausiai pirminis": "Greičiausiai pirminis",
+    "Pastaba": "Pastaba",
+    "pasukta arba veidrodine - patikrinkite, ar taip ir turi buti":
+        "pasukta arba veidrodinė – patikrinkite, ar taip ir turi būti",
     "Kodel": "Kodėl",
     "kiti grupeje vardu pazymeti kaip kopijos":
         "kiti grupėje vardu pažymėti kaip kopijos",

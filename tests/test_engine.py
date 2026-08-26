@@ -146,7 +146,7 @@ def test_crowded_bucket_still_reports_similar_pairs(tmp_path):
     assert "p000.png" in joined and "p001.png" in joined
     # and nothing was dropped silently
     assert stats.get("skipped_buckets", 0) == 0
-    assert stats.get("skipped_hashes", 0) == 0
+    assert stats.get("skipped_pictures", 0) == 0
 
 
 def test_bucket_ceiling_is_reported_when_reached(tmp_path):
@@ -159,9 +159,61 @@ def test_bucket_ceiling_is_reported_when_reached(tmp_path):
         files.append((str(p), 1))
 
     stats = {}
-    de.find_similar_images(files, stats_out=stats, max_bucket=3)
+    de.find_similar_images(files, stats_out=stats, max_bucket=1)
     assert stats["skipped_buckets"] >= 1
-    assert stats["skipped_hashes"] >= 3
+    assert stats["skipped_pictures"] >= 3
+
+
+def _gradient_image(w=320, h=240):
+    from PIL import Image
+    im = Image.new("RGB", (w, h))
+    px = im.load()
+    for x in range(w):
+        for y in range(h):
+            px[x, y] = ((x * 3) % 256, (y * 5) % 256, ((x + y) * 2) % 256)
+    return im
+
+
+def test_finds_physically_rotated_copies(tmp_path):
+    """A copy turned on its side is still the same picture.
+
+    EXIF orientation only covers pictures the camera tagged. Once the pixels
+    themselves are rewritten - by an editor, a chat app or a scanner - the
+    tag is gone and the fingerprint changes completely.
+    """
+    from PIL import Image
+    im = _gradient_image()
+    a = tmp_path / "orig.jpg"
+    im.save(a, quality=92)
+    b = tmp_path / "turned.jpg"                      # no EXIF tag at all
+    im.transpose(Image.ROTATE_90).save(b, quality=92)
+    c = tmp_path / "mirrored.jpg"
+    im.transpose(Image.FLIP_LEFT_RIGHT).save(c, quality=92)
+
+    stats = {}
+    groups = de.find_similar_images(
+        [(str(a), 1), (str(b), 1), (str(c), 1)], stats_out=stats)
+
+    assert len(groups) == 1, "the three variants belong together"
+    assert len(groups[0]) == 3
+    # and the report must name WHICH files are the turned ones
+    turned = {os.path.basename(f) for f in stats.get("rotated_files", [])}
+    assert turned == {"turned.jpg", "mirrored.jpg"}
+
+
+def test_upright_copies_are_not_reported_as_turned(tmp_path):
+    """Plain copies must not be labelled as turned."""
+    im = _gradient_image()
+    a = tmp_path / "one.jpg"
+    im.save(a, quality=92)
+    b = tmp_path / "two.jpg"
+    im.save(b, quality=88)                            # same picture, requeezed
+
+    stats = {}
+    groups = de.find_similar_images(
+        [(str(a), 1), (str(b), 1)], stats_out=stats)
+    assert len(groups) == 1
+    assert stats.get("rotated_files") == []
 
 
 def test_pletiniai_kelias_dev_mode_points_to_source_dir():

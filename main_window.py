@@ -185,6 +185,7 @@ class MainWindow(QMainWindow):
         self._all_files = []
         self._skipped = 0
         self.visual_results = []
+        self.visual_rotated = []
         # Thread guards (pyqt6_threading_guard)
         self._worker = None
         self._thread = None
@@ -963,9 +964,10 @@ class MainWindow(QMainWindow):
         }
         self.suspect_results = data["suspects"]
         self.visual_results = data.get("visual") or []
+        self.visual_rotated = data.get("visual_rotated") or []
         self._sizes = data.get("sizes") or {}
         st0 = data["stats"]
-        vis_skipped = data.get("visual_skipped_hashes", 0)
+        vis_skipped = data.get("visual_skipped_pictures", 0)
         vis_skipped_note = f" (PRALEISTA {vis_skipped} atspaudu)" if vis_skipped else ""
         self._log(f"GILUS done: {st0['duplicate_groups']} grupiu, "
                   f"{st0['duplicated_mb']:.0f} MB dubliu "
@@ -1175,7 +1177,8 @@ class MainWindow(QMainWindow):
         worker = ExportWorker(self.scan_results,
                               self.suspect_results if hasattr(self, 'suspect_results') else [],
                               target, getattr(self, "_sizes", None),
-                              getattr(self, "visual_results", None))
+                              getattr(self, "visual_results", None),
+                              getattr(self, "visual_rotated", None))
         self._start_worker(worker, [
             (worker.exportDone, self._on_export_done),
             (worker.scanError, self._on_export_error),

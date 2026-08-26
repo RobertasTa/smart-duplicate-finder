@@ -97,6 +97,9 @@ _EN = {
     # v1.4 - "Kuris cia pirminis?" ataskaitos skiltys. Tai INFORMACIJA,
     # ne nurodymas: programa netrina nieko ir nesiulo trinti.
     "Greiciausiai pirminis": "Most likely the original",
+    "Pastaba": "Note",
+    "pasukta arba veidrodine - patikrinkite, ar taip ir turi buti":
+        "turned or mirrored - check whether it is meant to be",
     "Kodel": "Why",
     "kiti grupeje vardu pazymeti kaip kopijos": "the others are named as copies",
     "kiti guli kopiju aplankuose": "the others sit in copy folders",
