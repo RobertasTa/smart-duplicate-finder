@@ -175,6 +175,8 @@ class DeepScanWorker(QObject):
                 "visual": visual,
                 "visual_skipped_pictures": visual_stats.get("skipped_pictures", 0),
                 "visual_rotated": visual_stats.get("rotated_files", []),
+                "visual_unreadable": len(
+                    visual_stats.get("unreadable_pictures", [])),
                 "total_files": self.total_files,
                 "speed_mbs": round(speed_mbs, 1),
                 "sizes": sizes,

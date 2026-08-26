@@ -216,3 +216,43 @@ def test_mikroskopijos_grupe_duoda_saziniga_neaisku():
     kelias, priez = at.greiciausiai_pirminis(grupe)
     assert kelias == ""
     assert priez == at.NEAISKU
+
+
+def test_year_in_brackets_is_not_a_copy_number():
+    """A four-digit number in brackets is a year, not a copy number.
+
+    Explorer and browsers number copies as (1), (2), (3) - short. Names like
+    "Report (2024).pdf" or "Budget (2026).xlsx" merely carry the year, and
+    reading them as copies is the same mistake as reading "Photocopy.jpg"
+    as a copy: the marking looked right but was not there.
+    """
+    for vardas in ("Ataskaita (2024).pdf", "Nuotrauka (2019).jpg",
+                   "Biudzetas (2026).xlsx"):
+        assert not at.vardas_rodo_kopija(vardas), vardas
+    # short numbers stay copies
+    for vardas in ("daina (1).mp3", "file (12).txt", "Kaina (100).xlsx"):
+        assert at.vardas_rodo_kopija(vardas), vardas
+
+
+def test_copy_suffix_stripping_covers_all_four_languages():
+    """The suspects search must know copies in every language the app speaks.
+
+    Windows names a copy "- Copy", "- kopija", "- kopiya" (Cyrillic) or
+    "- Kopie" depending on its own language, and macOS uses "Copy of ...".
+    Until 2026-08-26 only the first two were recognised - three pairs out of
+    five slipped through unnoticed.
+    """
+    RU = "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442"
+    KOPIJA_RU = "\u043a\u043e\u043f\u0438\u044f"
+    poros = [("report", "report - Copy"),
+             ("ataskaita", "ataskaita - kopija"),
+             (RU, RU + " - " + KOPIJA_RU),
+             ("Bericht", "Bericht - Kopie"),
+             ("plan", "Copy of plan"),
+             ("file", "file (1)"),
+             ("foto", "foto_copy")]
+    for svarus, kopija in poros:
+        assert at.be_kopijos_pozymio(kopija) == svarus, kopija
+    # and names that only look like copies must be left alone
+    for vardas in ("Photocopy", "Ataskaita (2024)", "daina (remix)", "1984"):
+        assert at.be_kopijos_pozymio(vardas) == vardas, vardas

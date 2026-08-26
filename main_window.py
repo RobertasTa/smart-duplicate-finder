@@ -1010,6 +1010,10 @@ class MainWindow(QMainWindow):
             msg += t("; {n} nuotrauku liko nepalygintos - per daug panasiu "
                      "vienoje vietoje (susiaurink katalogus)"
                      ).format(n=vis_skipped)
+        vis_unreadable = data.get("visual_unreadable", 0)
+        if vis_unreadable:
+            msg += t("; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo "
+                     "formato arba per didzuliu)").format(n=vis_unreadable)
         self._scan_idle(msg)
 
     # ---- Disko greicio prisiminimas laiko prognozei (scan_speed.json) ----

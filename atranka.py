@@ -39,7 +39,12 @@ import re
 # Raktas: pozymis turi buti PABAIGOJE (pries pletini), kad "Copyright.txt"
 # ar "1984.txt" nebutu palaikyti kopijomis.
 _KOPIJOS_UODEGOS = [
-    r"\s*\(\d+\)$",              # nuotrauka (1).jpg   <- Explorer, Chrome
+    # PATAISA 2026-08-26: buvo r"\s*\(\d+\)$" - bet koks skaicius skliaustuose,
+    # tad kopija tapdavo "Ataskaita (2024).pdf", "Nuotrauka (2019).jpg",
+    # "Biudzetas (2026).xlsx". Kopijos numeri deda Explorer ir narsykles, ir
+    # jis trumpas; keturi skaitmenys pabaigoje - beveik visada METAI.
+    # Ta pati klaidos rusis kaip "Photocopy" (v1.4): pozymis atrode, bet nebuvo.
+    r"\s*\(\d{1,3}\)$",          # nuotrauka (1).jpg   <- Explorer, Chrome
     r"\s*-\s*[Cc]opy$",          # file - Copy.txt     <- Explorer EN
     r"\s*-\s*[Kk]opija$",        # file - kopija.txt   <- Explorer LT
     # "file - kopija.txt" rusiskai. Kirilica rasoma \u escape'ais TYCIA:
@@ -75,6 +80,26 @@ def vardas_rodo_kopija(kelias):
         if r.search(saknis):
             return True
     return False
+
+
+def be_kopijos_pozymio(saknis):
+    """Vardas be kopijos uodegos/priesdelio; jei pozymio nera - nepakeistas.
+
+    Tas pats zinynas, kuri naudoja vardas_rodo_kopija - kad ITARTINU paieska
+    (duplicate_engine._normalize) mokėtų tas pacias keturias kalbas.
+    Iki 2026-08-26 ji turejo SAVO, siauresne taisykle ir matydavo tik
+    "- Copy" bei "- kopija"; "kopija" rusiskai, "Kopie" vokiskai ir
+    "Copy of ..." likdavo neatpazinti - t. y. 3 poros is 5.
+    """
+    for r in _UODEGOS_RE:
+        naujas = r.sub("", saknis)
+        if naujas != saknis:
+            return naujas.strip()
+    for r in _PRIESDELIU_RE:
+        naujas = r.sub("", saknis)
+        if naujas != saknis:
+            return naujas.strip()
+    return saknis
 
 
 # --- 2 taisykle: aplanko vardas prisipazista ------------------------------

@@ -95,6 +95,8 @@ _LT = {
         "Peržiūrėta failų: {n}, katalogų: {k} — dublikatų grupių: {g}; dubliai užima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; ĮTARTINŲ sąrašas nukirptas ties {n} porų riba (susiaurinkite katalogus, jei norite visų)",
+    "; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo formato arba per didzuliu)":
+        "; {n} nuotraukų nepavyko atverti (sugadintos, nežinomo formato arba per didžiulės)",
     "; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)":
         "; {n} nuotraukų liko nepalygintos – per daug panašių vienoje vietoje (susiaurinkite katalogus)",
     "; nepasiekiamu failu praleista: {n}":

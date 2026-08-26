@@ -220,3 +220,25 @@ def test_pletiniai_kelias_dev_mode_points_to_source_dir():
     p = de.pletiniai_kelias()
     assert p.name == "pletiniai.json"
     assert p.parent == Path(de.__file__).resolve().parent
+
+
+def test_unopenable_pictures_are_reported_not_swallowed(tmp_path):
+    """A picture the program cannot open must still be accounted for.
+
+    Damaged files, unknown formats and enormous images (Pillow refuses
+    anything past twice its pixel ceiling) all end up in the same place.
+    Until 2026-08-26 they were caught and forgotten, so a scan could quietly
+    look at fewer pictures than the user handed it.
+    """
+    good = tmp_path / "good.jpg"
+    _gradient_image().save(good, quality=90)
+    broken = tmp_path / "broken.jpg"
+    broken.write_bytes(b"this is not a picture at all")
+    empty = tmp_path / "empty.png"
+    empty.write_bytes(b"")
+
+    stats = {}
+    de.find_similar_images(
+        [(str(good), 1), (str(broken), 1), (str(empty), 1)], stats_out=stats)
+    names = {os.path.basename(p) for p in stats.get("unreadable_pictures", [])}
+    assert names == {"broken.jpg", "empty.png"}

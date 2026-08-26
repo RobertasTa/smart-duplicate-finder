@@ -289,12 +289,22 @@ def _md5(filepath):
 
 
 def _normalize(name):
-    """Remove copy suffixes: ' (1)', '_copy', '- Copy' etc. Lowercase."""
+    """Vardas be kopijos pozymio, mazosiomis raidemis.
+
+    2026-08-26: anksciau cia gyveno SAVO, siauresne taisykle, ir ji darė dvi
+    klaidas vienu metu:
+      (a) mokejo tik "- Copy" ir "- kopija" - o programa keturkalbe, tad
+          rusiskas "- kopija", vokiskas "- Kopie" ir "Copy of ..." likdavo
+          neatpazinti (isMATUOTA: 3 poros is 5 nepatekdavo i ITARTINUS);
+      (b) salino BET KOKI skliaustu turini, todel "Ataskaita (2024)" ir
+          "Ataskaita (2025)" tapdavo tuo paciu vardu - lygiai ta pati klaidos
+          rusis, kaip v1.4 "Photocopy" ir "Mikroskopija".
+    Dabar naudojamas tas pats atranka.py zinynas, kuri jau turi programa -
+    ne naujos taisykles, o esamu panaudojimas vienoje vietoje.
+    """
     base, ext = os.path.splitext(name)
-    base = re.sub(r'\s*\([^)]*\)', '', base)          # remove (1), (2)...
-    base = re.sub(r'[-_]\s*(?:copy|kopija)', '', base, flags=re.IGNORECASE)
-    base = base.strip()
-    return base.lower() + ext.lower()
+    import atranka
+    return atranka.be_kopijos_pozymio(base).strip().lower() + ext.lower()
 
 
 def find_duplicates(file_list):
@@ -505,6 +515,7 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
     # 1) Atspaudai kiekvienai nuotraukai (po 8; [0] - tiesioginis)
     keliai = []
     atspaudai = []
+    neatidaryti = []      # nuotraukos, kuriu nepavyko atverti (zr. zemiau)
     total = len(image_files)
     for i, (p, s) in enumerate(image_files, 1):
         try:
@@ -520,7 +531,13 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
             keliai.append(p)
             atspaudai.append(hs)
         except Exception:
-            pass  # sugadinta/neatpazinta nuotrauka - tyliai praleidziama
+            # 2026-08-26: anksciau cia buvo "pass" - nuotrauka dingdavo TYLIAI.
+            # Priezastys tikros: sugadintas failas, nezinomas formatas, be
+            # teisiu, o milziniskoms (virs 2 x Pillow MAX_IMAGE_PIXELS =
+            # 179 mln. taskeliu) Pillow meta DecompressionBombError. Gyvi
+            # matavimai: 240 ir 285 tokiu nuotrauku dviejuose Roberto
+            # archyvuose. Vartotojas apie jas nesuzinodavo NIEKO.
+            neatidaryti.append(p)
         if progress_cb:
             progress_cb(i, total)
 
@@ -636,6 +653,7 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
             groups.append(sorted(paths))
     if stats_out is not None:
         stats_out["rotated_files"] = pasukti_failai
+        stats_out["unreadable_pictures"] = neatidaryti
     return groups
 
 
