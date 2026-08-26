@@ -584,6 +584,18 @@ def find_similar_images(image_files, progress_cb=None, exact_groups=None,
                 fj, pj = items[j]
                 if fi == fj:
                     continue      # ta pati nuotrauka kita padetimi
+                # BENT VIENAS turi buti TIESIOGINEJE padetyje.
+                # Jei B yra pasukta A versija, tai A tiesioginis atspaudas
+                # sutaps su kuria nors B padetimi - lyginti dvieju PASUKTU
+                # tarpusavyje nereikia, ir butent ten gimdavo atsitiktiniai
+                # pataikymai: sukant prarandama dalis informacijos, tad du
+                # skirtingi vaizdai gali netycia suartėti.
+                # Gyvas matavimas 2026-08-26 (Roberto testo katalogas):
+                #   tikras pasukimas / veidrodis / 180 / sumazinta -> 0..2 bitai
+                #   atsitiktinis (dvi skirtingos nuotraukos)       -> 4 bitai
+                # Priedo 8 kartus maziau lyginimu.
+                if pi and pj:
+                    continue
                 if bin(hi ^ atspaudai[fj][pj]).count("1") <= VIS_DIST:
                     _union(fi, fj)
     if stats_out is not None:

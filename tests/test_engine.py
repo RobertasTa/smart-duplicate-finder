@@ -190,12 +190,24 @@ def test_finds_physically_rotated_copies(tmp_path):
     c = tmp_path / "mirrored.jpg"
     im.transpose(Image.FLIP_LEFT_RIGHT).save(c, quality=92)
 
+    # a different picture that must NOT be dragged in: turning a fingerprint
+    # loses detail, so two unrelated pictures can drift together once both are
+    # turned. Only upright-against-turned is compared, never turned-against-turned.
+    other = _gradient_image(300, 300)
+    px = other.load()
+    for x in range(300):
+        for y in range(300):
+            px[x, y] = ((x * 11) % 256, (y * 2) % 256, (x + 2 * y) % 256)
+    d = tmp_path / "unrelated.jpg"
+    other.save(d, quality=92)
+
     stats = {}
     groups = de.find_similar_images(
-        [(str(a), 1), (str(b), 1), (str(c), 1)], stats_out=stats)
+        [(str(a), 1), (str(b), 1), (str(c), 1), (str(d), 1)], stats_out=stats)
 
     assert len(groups) == 1, "the three variants belong together"
-    assert len(groups[0]) == 3
+    assert len(groups[0]) == 3, "and the unrelated picture stays out"
+    assert "unrelated.jpg" not in {os.path.basename(f) for f in groups[0]}
     # and the report must name WHICH files are the turned ones
     turned = {os.path.basename(f) for f in stats.get("rotated_files", [])}
     assert turned == {"turned.jpg", "mirrored.jpg"}
