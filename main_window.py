@@ -35,7 +35,11 @@ from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 # 1.5.1 (2026-08-26): tamsioje sistemos temoje matomas rezultatu lenteles
 #     tekstas (rado fotografas macOS; ta pati spraga buvo ir Windows
 #     tamsioje temoje - langeliams buvo nustatomas tik fonas arba tik tekstas)
-VERSIJA = "1.5.1"
+# 1.5.2 (2026-08-28): "Klausk DI" promptas paduoda TIESIOGINE raw nuoroda
+#     i AI_CONSULTANT_BRIEF.md (gyvas testas: LLM spedavo saka "main" arba
+#     springo github.com HTML ir brief'o nerasdavo; su tiksliu keliu Grok
+#     testas 4/4). README virsuje - ta pati nuoroda AI asistentams.
+VERSIJA = "1.5.2"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
@@ -585,10 +589,11 @@ class MainWindow(QMainWindow):
             'Hi! I am using the app "Smart Duplicate Finder" - a'
             " duplicate file finder. Its source code is public:"
             " https://github.com/RobertasTa/smart-duplicate-finder."
-            " Please FIRST read the file AI_CONSULTANT_BRIEF.md in that"
-            " repository - it is your briefing from the author - then the"
-            " program's code and README, and answer my question in plain,"
-            " human language - no programmer jargon."
+            " Please FIRST read your briefing from the author:"
+            " https://raw.githubusercontent.com/RobertasTa/"
+            "smart-duplicate-finder/master/AI_CONSULTANT_BRIEF.md"
+            " - then the program's code and README, and answer my question"
+            " in plain, human language - no programmer jargon."
             " My question: ")
         webbrowser.open("https://claude.ai/new?q="
                         + urllib.parse.quote(promptas))

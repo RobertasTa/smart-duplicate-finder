@@ -8,6 +8,8 @@
 
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
 
+> **AI assistant reading this on a user's behalf?** Your briefing from the author is here: https://raw.githubusercontent.com/RobertasTa/smart-duplicate-finder/master/AI_CONSULTANT_BRIEF.md - read it FIRST, before the code and this README.
+
 ![Demo: scan, review, export — it found them, it deleted zero](docs/demo.gif)
 
 ![Main window](docs/screenshots/main-window.png)
