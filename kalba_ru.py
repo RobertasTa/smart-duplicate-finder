@@ -154,6 +154,8 @@ _RU = {
         'Просмотрено файлов: {n}, папок: {k} — групп дубликатов: {g}; дубликаты занимают {mb:.2f} МБ, можно высвободить {fmb:.2f} МБ',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Список ПОДОЗРИТЕЛЬНЫХ обрезан на пределе {n} пар (сузьте папки, чтобы видеть всё)',
+    '; {n} failu ITARTINI patikroje praleista - per daug vienodo vardo failu vienoje vietoje (susiaurink katalogus)':
+        '; {n} файлов пропущено в проверке ПОДОЗРИТЕЛЬНЫХ — слишком много одноимённых файлов в одном месте (сузьте папки)',
     '; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo formato arba per didzuliu)':
         '; {n} снимков не удалось открыть (повреждены, неизвестный формат или слишком велики)',
     '; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)':
@@ -234,6 +236,12 @@ _RU = {
         'Подозрительный {n}',
     'RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)':
         'ПОКАЗАНО {a} ИЗ {b} СТРОК — превышен лимит листа Excel (1 048 576)',
+    # "на {n} файлов" luzta ties dazniausiu atveju n=2 (turi buti "файла") -
+    # frazuojama be linksniavimo po skaiciaus, kaip v1.4 gramatikos pamokoje
+    'DALIS {k} IS {n} - eiluciu daugiau nei telpa viename Excel faile, ataskaita padalinta i {n} failus':
+        'ЧАСТЬ {k} ИЗ {n} — строк больше, чем вмещает один файл Excel; отчёт разделён на несколько файлов (всего: {n})',
+    'Ataskaita padalinta i {n} failus (-1, -2, ...) - eiluciu daugiau nei telpa viename Excel faile':
+        'Отчёт разделён на несколько файлов (всего: {n}; -1, -2, ...) — строк больше, чем вмещает один файл Excel',
     'ITARINI':
         'ПОДОЗРИТЕЛЬНЫЙ',
     'ITARTINI (panasus, bet ne identiski)':

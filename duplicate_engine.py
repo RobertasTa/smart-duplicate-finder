@@ -316,8 +316,19 @@ def find_duplicates(file_list):
 # poru (pvz. vienavardes ikoneles) stingdo lentele, kesa ir Excel eksporta
 MAX_SUSPECT_PAIRS = 10_000
 
+# Vieno vardo kibiro lubos (v1.6; 3M egzamino RADINYS 2, 2026-08-28).
+# Dydziu prefiltras kibiro viduje lygina kiekviena su kiekvienu - kaina auga
+# KVADRATU: 3M egzamine kryzminiai backup medziai sukrove vienavardziu failu
+# kibirus, ir find_suspects dirbo 50 min del 0 rezultatu. Tas pats vaistas
+# kaip dHash MAX_BUCKET: per dideli kibira praleidziam su pastaba vartotojui.
+# 2000: prefiltro 2000^2 = 4 mln. palyginimu (~sekunde), o vardas, archyve
+# pasikartojantis >2000 kartu, yra sisteminis slamstas (ikonos, backup
+# kopijos), ne zmogaus dubliai. Ribos dydis rezultatu TEISINGUMO nekeicia -
+# tik tai, kiek darbo sutinkame padaryti.
+MAX_NAME_BUCKET = 2_000
 
-def find_suspects(file_list, progress_cb=None):
+
+def find_suspects(file_list, progress_cb=None, stats_out=None):
     """Suspect files: normalized name match + size within +-10% but DIFF MD5.
 
     PERFORMANCE FIX 2026-08-05: (a) grupuojama pagal normalizuota varda;
@@ -325,6 +336,10 @@ def find_suspects(file_list, progress_cb=None):
     turi dydzio partneri +-10% (dydziai jau RAM'e - disko skaityt nereikia).
     Be prefiltro visam diskui buvo hash'uojami visi vienavardziai failai.
     progress_cb(done, total) - kvieciamas po kiekvieno suhash'uoto failo.
+    stats_out - neprivalomas zodynas (tas pats rastas kaip find_similar_images):
+    uzpildomas raktais "skipped_buckets" ir "skipped_files" (kiek vardo kibiru
+    virsijo MAX_NAME_BUCKET ir kiek failu del to liko nepatikrinta). Kvieteju,
+    kurie jo neduoda, elgsena nesikeicia.
 
     Returns (suspects, truncated):
       suspects  - list of dicts {file_a, file_b, size_a, size_b, reason}
@@ -339,8 +354,15 @@ def find_suspects(file_list, progress_cb=None):
 
     # Dydziu prefiltras (be jokio disko skaitymo)
     hash_jobs = []
+    praleista_kibiru = 0
+    praleista_failu = 0
     for nname, items in by_name.items():
         if len(items) < 2:
+            continue
+        if len(items) > MAX_NAME_BUCKET:
+            # Kibiro lubos PRIES kvadratini prefiltra - butent jis ir sprogsta
+            praleista_kibiru += 1
+            praleista_failu += len(items)
             continue
         cand = []
         for i, (p, s) in enumerate(items):
@@ -353,6 +375,10 @@ def find_suspects(file_list, progress_cb=None):
                     break
         if len(cand) >= 2:
             hash_jobs.append(cand)
+
+    if stats_out is not None:
+        stats_out["skipped_buckets"] = praleista_kibiru
+        stats_out["skipped_files"] = praleista_failu
 
     total = sum(len(c) for c in hash_jobs)
     done = 0

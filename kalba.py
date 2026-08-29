@@ -178,6 +178,8 @@ _EN = {
         "Files scanned: {n}, folders: {k} - duplicate groups: {g}; duplicates take {mb:.2f} MB, {fmb:.2f} MB can be freed",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; SUSPICIOUS list truncated at the {n}-pair limit (narrow the folders to see all)",
+    "; {n} failu ITARTINI patikroje praleista - per daug vienodo vardo failu vienoje vietoje (susiaurink katalogus)":
+        "; {n} files skipped in the SUSPICIOUS check - too many same-name files in one place (narrow the folders)",
     "; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo formato arba per didzuliu)":
         "; {n} pictures could not be opened (damaged, unknown format or enormous)",
     "; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)":
@@ -237,6 +239,10 @@ _EN = {
     "Itartinas {n}": "Suspect {n}",
     "RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)":
         "SHOWING {a} OF {b} ROWS - Excel sheet limit exceeded (1,048,576)",
+    "DALIS {k} IS {n} - eiluciu daugiau nei telpa viename Excel faile, ataskaita padalinta i {n} failus":
+        "PART {k} OF {n} - more rows than one Excel file can hold, the report is split into {n} files",
+    "Ataskaita padalinta i {n} failus (-1, -2, ...) - eiluciu daugiau nei telpa viename Excel faile":
+        "The report was split into {n} files (-1, -2, ...) - more rows than one Excel file can hold",
     "ITARINI": "SUSPECT",
     "ITARTINI (panasus, bet ne identiski)": "SUSPICIOUS (similar, but not identical)",
     "Rodoma eiluciu: {n} (didziausios grupes virsuje) - PILNAS sarasas Excel ataskaitoje":

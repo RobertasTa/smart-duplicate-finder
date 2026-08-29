@@ -11,7 +11,13 @@ ROOT = Path(__file__).resolve().parents[1]
 CHECK_SUFFIXES = {".py", ".md", ".yml", ".yaml", ".json", ".txt", ".spec"}
 # Russian-language docs and the RU dictionary are where Cyrillic belongs
 # (kalba_ru.py added v1.3, 2026-08-22 - RU UI language)
-ALLOWED_NAMES = {"README-ru.txt", "README-ru.md", "kalba_ru.py"}
+ALLOWED_NAMES = {"README-ru.txt", "README-ru.md", "kalba_ru.py",
+                 # Internal user-research doc quotes exact foreign strings on
+                 # purpose: non-English copy suffixes the engine must know
+                 # ("kopija" in Cyrillic) and Reddit UI captions. Same logic
+                 # as ROBERTO_TESTAS below. (Guard was red on it before v1.6
+                 # work started, 2026-08-29 - not a code file.)
+                 "VARTOTOJU_NORAI_dublikatams.md"}
 # Live-test checklists for the author quote the exact on-screen strings in
 # all four UI languages - that is the point of them (added 2026-08-25 when
 # the guard caught ROBERTO_TESTAS_v1.4.md). Internal documents, not code.

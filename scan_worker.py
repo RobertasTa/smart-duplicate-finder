@@ -132,8 +132,9 @@ class DeepScanWorker(QObject):
                         .format(a=f"{done:,}", b=f"{total:,}")
                         .replace(",", " "))
 
+            sus_stats = {}
             suspects, suspects_truncated = find_suspects(
-                self.suspect_files, progress_cb=_sus_cb)
+                self.suspect_files, progress_cb=_sus_cb, stats_out=sus_stats)
             self.updateProgress.emit(95)
 
             # Vizualiai panasios nuotraukos (95..99%), jei pazymeta dialoge
@@ -172,6 +173,7 @@ class DeepScanWorker(QObject):
                 "groups": results["groups"],
                 "suspects": suspects,
                 "suspects_truncated": suspects_truncated,
+                "suspects_skipped_files": sus_stats.get("skipped_files", 0),
                 "visual": visual,
                 "visual_skipped_pictures": visual_stats.get("skipped_pictures", 0),
                 "visual_rotated": visual_stats.get("rotated_files", []),
@@ -191,7 +193,9 @@ class ExportWorker(QObject):
     """Excel ataskaitos formavimas fone - kad GUI nesustingtu su dideliais
     rezultatais (openpyxl rasymas + spalvos + autofit uztrunka)."""
 
-    exportDone = pyqtSignal(str)      # sukurtos ataskaitos kelias
+    # v1.6: antras argumentas - i kiek failu ataskaita padalinta (voztuvas);
+    # 1 = viena, kaip visada
+    exportDone = pyqtSignal(str, int)
     scanError = pyqtSignal(str)
 
     def __init__(self, scan_results, suspect_results, out_path, sizes=None,
@@ -208,12 +212,14 @@ class ExportWorker(QObject):
     def run(self):
         try:
             from exporter import export_excel
+            info = {}
             p = export_excel(self.scan_results, self.suspect_results,
                              out_path=self.out_path, sizes=self.sizes,
                              visual=self.visual,
                              visual_rotated=self.visual_rotated,
-                             visual_smaller=self.visual_smaller)
-            self.exportDone.emit(p or "")
+                             visual_smaller=self.visual_smaller,
+                             info_out=info)
+            self.exportDone.emit(p or "", info.get("parts", 1))
         except Exception as exc:
             self.scanError.emit(str(exc))
 

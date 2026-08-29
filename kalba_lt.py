@@ -96,6 +96,8 @@ _LT = {
         "Peržiūrėta failų: {n}, katalogų: {k} — dublikatų grupių: {g}; dubliai užima {mb:.2f} MB, atlaisvinti galima {fmb:.2f} MB",
     "; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)":
         "; ĮTARTINŲ sąrašas nukirptas ties {n} porų riba (susiaurinkite katalogus, jei norite visų)",
+    "; {n} failu ITARTINI patikroje praleista - per daug vienodo vardo failu vienoje vietoje (susiaurink katalogus)":
+        "; {n} failų ĮTARTINŲ patikroje praleista — per daug vienodo vardo failų vienoje vietoje (susiaurinkite katalogus)",
     "; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo formato arba per didzuliu)":
         "; {n} nuotraukų nepavyko atverti (sugadintos, nežinomo formato arba per didžiulės)",
     "; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)":
@@ -145,6 +147,10 @@ _LT = {
     "Itartinas {n}": "Įtartinas {n}",
     "RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)":
         "RODOMA {a} IŠ {b} EILUČIŲ — viršyta Excel lapo riba (1 048 576)",
+    "DALIS {k} IS {n} - eiluciu daugiau nei telpa viename Excel faile, ataskaita padalinta i {n} failus":
+        "DALIS {k} IŠ {n} — eilučių daugiau nei telpa viename Excel faile, ataskaita padalinta į {n} failus",
+    "Ataskaita padalinta i {n} failus (-1, -2, ...) - eiluciu daugiau nei telpa viename Excel faile":
+        "Ataskaita padalinta į {n} failus (-1, -2, ...) — eilučių daugiau nei telpa viename Excel faile",
     "ITARINI": "ĮTARTINAS",
     "ITARTINI (panasus, bet ne identiski)":
         "ĮTARTINI (panašūs, bet ne identiški)",

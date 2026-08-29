@@ -156,6 +156,8 @@ _DE = {
         'Geprüfte Dateien: {n}, Ordner: {k} – Duplikatgruppen: {g}; Duplikate belegen {mb:.2f} MB, {fmb:.2f} MB können freigegeben werden',
     '; ITARTINI sarasas nukirptas ties {n} poru riba (susiaurink katalogus, jei nori visu)':
         '; Liste der VERDÄCHTIGEN bei {n} Paaren abgeschnitten (Ordner eingrenzen, um alle zu sehen)',
+    '; {n} failu ITARTINI patikroje praleista - per daug vienodo vardo failu vienoje vietoje (susiaurink katalogus)':
+        '; {n} Dateien bei der VERDÄCHTIG-Prüfung übersprungen – zu viele gleichnamige Dateien an einer Stelle (Ordner eingrenzen)',
     '; {n} nuotrauku nepavyko atverti (sugadintos, nezinomo formato arba per didzuliu)':
         '; {n} Bilder konnten nicht geöffnet werden (beschädigt, unbekanntes Format oder zu groß)',
     '; {n} nuotrauku liko nepalygintos - per daug panasiu vienoje vietoje (susiaurink katalogus)':
@@ -236,6 +238,10 @@ _DE = {
         'Verdächtiger {n}',
     'RODOMA {a} IS {b} EILUCIU - virsyta Excel lapo riba (1 048 576)':
         'ANGEZEIGT: {a} VON {b} ZEILEN – Excel-Blatt-Limit (1 048 576) überschritten',
+    'DALIS {k} IS {n} - eiluciu daugiau nei telpa viename Excel faile, ataskaita padalinta i {n} failus':
+        'TEIL {k} VON {n} – mehr Zeilen, als eine Excel-Datei fasst; der Bericht wurde in {n} Dateien aufgeteilt',
+    'Ataskaita padalinta i {n} failus (-1, -2, ...) - eiluciu daugiau nei telpa viename Excel faile':
+        'Der Bericht wurde in {n} Dateien aufgeteilt (-1, -2, ...) – mehr Zeilen, als eine Excel-Datei fasst',
     'ITARINI':
         'VERDÄCHTIG',
     'ITARTINI (panasus, bet ne identiski)':

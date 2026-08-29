@@ -39,7 +39,14 @@ from saugykla import LOG_FAILAS, SKENO_FAILAS, GREICIO_FAILAS
 #     i AI_CONSULTANT_BRIEF.md (gyvas testas: LLM spedavo saka "main" arba
 #     springo github.com HTML ir brief'o nerasdavo; su tiksliu keliu Grok
 #     testas 4/4). README virsuje - ta pati nuoroda AI asistentams.
-VERSIJA = "1.5.2"
+# 1.6 (2026-08-29): 3M mastelio egzamino vaisiai - (a) Excel voztuvas:
+#     virsijus lapo riba ataskaita skeliama i failus -1/-2/-3, duomenys
+#     nebedingsta (iki siol tyliai kirpdavo ties 1M su pastaba, kurios
+#     niekas nemato); pastabos virsuje ir pabaigos dialoge; (b) ITARTINI
+#     vardo kibiro lubos - kryzminiai backup medziai nebeuzkabina
+#     kvadratinio prefiltro (50 min -> ms), praleidimas pranesamas;
+#     (c) SDF_EXCEL_ROW_LIMIT diagnostinis jungiklis testams.
+VERSIJA = "1.6"
 
 # Saugumo taisykle (aptarta 2026-08-22): siu pletiniu failo NEATIDAROME
 # vienu meniu paspaudimu - nezinoma programa nepaleidziama; tik katalogas.
@@ -998,7 +1005,8 @@ class MainWindow(QMainWindow):
                   f"{st0['duplicated_mb']:.0f} MB dubliu "
                   f"(atlaisvinama {st0.get('freeable_mb', 0):.0f} MB), "
                   f"{len(self.suspect_results)} ITARTINI poru"
-                  f"{' (NUKIRPTA)' if data.get('suspects_truncated') else ''}, "
+                  f"{' (NUKIRPTA)' if data.get('suspects_truncated') else ''}"
+                  f"{' (PRALEISTA ' + str(data.get('suspects_skipped_files')) + ' failu)' if data.get('suspects_skipped_files') else ''}, "
                   f"{len(self.visual_results)} vizualiu grupiu"
                   f"{vis_skipped_note}, "
                   f"greitis {data.get('speed_mbs', 0)} MB/s")
@@ -1031,6 +1039,13 @@ class MainWindow(QMainWindow):
             msg += t("; ITARTINI sarasas nukirptas ties {n} poru riba "
                      "(susiaurink katalogus, jei nori visu)").format(
                 n=MAX_SUSPECT_PAIRS)
+        sus_skipped = data.get("suspects_skipped_files", 0)
+        if sus_skipped:
+            # v1.6 kibiro lubos (3M egzamino radinys 2): praleisti kibirai
+            # nebetyli - ta pati logika kaip vizualinio praleidimo pastaba
+            msg += t("; {n} failu ITARTINI patikroje praleista - per daug "
+                     "vienodo vardo failu vienoje vietoje (susiaurink "
+                     "katalogus)").format(n=sus_skipped)
         if vis_skipped:
             msg += t("; {n} nuotrauku liko nepalygintos - per daug panasiu "
                      "vienoje vietoje (susiaurink katalogus)"
@@ -1231,16 +1246,23 @@ class MainWindow(QMainWindow):
             (worker.scanError, self._on_export_error),
         ])
 
-    def _on_export_done(self, p):
+    def _on_export_done(self, p, parts=1):
         self._log(f"EKSPORTAS done per "
-                  f"{time.time() - getattr(self, '_export_t0', time.time()):.1f} s: {p}")
+                  f"{time.time() - getattr(self, '_export_t0', time.time()):.1f} s: {p}"
+                  f"{f' ({parts} dalys)' if parts > 1 else ''}")
         self._hide_scan_overlay()
         self.btn_export.setEnabled(True)
         self.status_label.setText(f"{t('Ataskaita sukurta:')} {Path(p).name}")
         if self._thread is not None:
             self._thread.quit()
-        QMessageBox.information(self, t("Eksportas sekmingas"),
-                                f"{t('Ataskaita sukurta:')}\n{p}")
+        zinute = f"{t('Ataskaita sukurta:')}\n{p}"
+        if parts > 1:
+            # v1.6 voztuvas: pastaba ir PABAIGOS DIALOGE (3M egzamino
+            # pamoka - pastabos vien faile niekas nepamato)
+            zinute += "\n\n" + t("Ataskaita padalinta i {n} failus (-1, -2, ...)"
+                                 " - eiluciu daugiau nei telpa viename Excel "
+                                 "faile").format(n=parts)
+        QMessageBox.information(self, t("Eksportas sekmingas"), zinute)
 
     def _on_export_error(self, exc):
         self._hide_scan_overlay()
