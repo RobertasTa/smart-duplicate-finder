@@ -193,8 +193,33 @@ platform limit of the Qt6/Python toolchain, not a bug.)
 > source is right here in this repository, so if your antivirus is suspicious,
 > you can audit the code and **build the exe yourself** in a few minutes: see
 > [BUILD.md](BUILD.md). That is the honest advantage of an open-source gift.
-> Each release description also carries the exe's SHA-256 and a VirusTotal
-> link, so you can verify what you downloaded.
+### Don't take our word for it — check the file yourself
+
+A stranger on the internet telling you their program is safe is worth
+nothing. So here is how to check it, in about 30 seconds, with no account and
+nothing installed:
+
+1. Open **[virustotal.com](https://www.virustotal.com/)** and drag the file you
+   downloaded onto the page (or press *Choose file*).
+2. Around 70 antivirus engines scan it and you see every single verdict.
+3. VirusTotal also shows the file's **SHA-256**. Compare it with the SHA-256
+   printed in this version's [release description](../../releases/latest). If
+   they match, you have exactly the file we published — byte for byte, nothing
+   swapped on the way.
+
+**Keep this trick.** It works for *any* file you download, from anyone — not
+just ours. It is probably the most useful 30 seconds you can spend before
+opening something new that came off the internet. If this gift teaches you only
+that, it has already paid for itself.
+
+**What our own scan showed, and how to read it.** Version 1.6 was flagged by
+**4 engines out of 69** with generic machine-learning marks (`Wacatac.C!ml`,
+`grayware_confidence_60%`) — the same ones as v1.3 — while Avast, Avira,
+BitDefender, ClamAV, ESET, Kaspersky, TrendMicro and the rest reported it
+clean. Those flags are a guess about the *packing tool* (unsigned PyInstaller),
+not a finding about our code. A couple of red marks among ~70 is normal here;
+**many engines agreeing would not be** — if you ever see that, do not run the
+file, tell us instead.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
