@@ -240,10 +240,19 @@ from the outside* — and it looks unusual for three ordinary reasons:
   authors giving a program away, not a company with a budget. That is a fact
   about our wallet, not about our code.
 
-**What would genuinely be alarming:** many engines agreeing *and* naming a
-specific, concrete threat instead of a machine's vague guess. If you ever see
-that on our file, do not run it — tell us, and we will want to know more than
-you do.
+**And you can check behaviour, not just opinions.** On the same VirusTotal
+report open the **BEHAVIOR** tab: that is not an antivirus opinion but a record
+of the program actually being run inside their sandbox — what it touched, what
+it dropped, and whether it talked to the internet. For our sibling gift Temp
+Cleaner that tab reads *network comms: not found*, which is somebody else's
+machine confirming the "no network, no telemetry" claim, with no reason to do us
+a favour. Check this one the same way.
+
+**What would genuinely be alarming:** many engines agreeing, a concrete threat
+description instead of a machine's vague guess, or a BEHAVIOR tab showing
+network traffic from a program that promises it has none. If you ever see that
+on our file, do not run it — tell us, and we will want to know more than you
+do.
 
 And you never have to settle this by trusting us: the program has no network
 code and no telemetry, every line of source is in this repository, and you can
