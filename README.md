@@ -212,14 +212,42 @@ just ours. It is probably the most useful 30 seconds you can spend before
 opening something new that came off the internet. If this gift teaches you only
 that, it has already paid for itself.
 
-**What our own scan showed, and how to read it.** Version 1.6 was flagged by
-**4 engines out of 69** with generic machine-learning marks (`Wacatac.C!ml`,
-`grayware_confidence_60%`) — the same ones as v1.3 — while Avast, Avira,
-BitDefender, ClamAV, ESET, Kaspersky, TrendMicro and the rest reported it
-clean. Those flags are a guess about the *packing tool* (unsigned PyInstaller),
-not a finding about our code. A couple of red marks among ~70 is normal here;
-**many engines agreeing would not be** — if you ever see that, do not run the
-file, tell us instead.
+**What our own scan showed.** Version 1.6 was flagged by **4 engines out of
+69**, while Avast, Avira, BitDefender, ClamAV, ESET, Kaspersky, TrendMicro and
+the other 65 reported it clean.
+
+**And now the important part — why those four red marks are not a reason to be
+afraid.** You will see red and your stomach will drop. Here is what is actually
+happening.
+
+Look at *what* those four engines say. Not "this program steals your files",
+not "this program encrypts your photos" — but vague labels like
+`Wacatac.C!ml` or `grayware_confidence_60%`. That little **`!ml` means "a
+machine guessed"**, and `60%` is the machine admitting it is not sure. None of
+them found anything inside our program. They reacted to how the file *looks
+from the outside* — and it looks unusual for three ordinary reasons:
+
+- **It is a single file that unpacks itself when you double-click it.** That is
+  how a program can run with no installation, straight from a USB stick. But
+  the same trick is used by real viruses to hide what is inside them — so the
+  shape alone makes a scanner raise an eyebrow. Shape, not content.
+- **Almost nobody has this file yet.** Several engines score by fame: something
+  millions of people run daily is "known good"; something a few dozen people
+  downloaded is "unknown, be careful". Being new and little-known counts
+  against us — and there is nothing we can do about that except grow older.
+- **It is not signed.** A signature is a yearly payment to a certificate
+  company, which is why Windows says `Publisher: Unknown publisher`. We are two
+  authors giving a program away, not a company with a budget. That is a fact
+  about our wallet, not about our code.
+
+**What would genuinely be alarming:** many engines agreeing *and* naming a
+specific, concrete threat instead of a machine's vague guess. If you ever see
+that on our file, do not run it — tell us, and we will want to know more than
+you do.
+
+And you never have to settle this by trusting us: the program has no network
+code and no telemetry, every line of source is in this repository, and you can
+**build the exe yourself** from that source — see [BUILD.md](BUILD.md).
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
