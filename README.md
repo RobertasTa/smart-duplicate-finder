@@ -240,13 +240,23 @@ from the outside* — and it looks unusual for three ordinary reasons:
   authors giving a program away, not a company with a budget. That is a fact
   about our wallet, not about our code.
 
-**And you can check behaviour, not just opinions.** On the same VirusTotal
-report open the **BEHAVIOR** tab: that is not an antivirus opinion but a record
-of the program actually being run inside their sandbox — what it touched, what
-it dropped, and whether it talked to the internet. For our sibling gift Temp
-Cleaner that tab reads *network comms: not found*, which is somebody else's
-machine confirming the "no network, no telemetry" claim, with no reason to do us
-a favour. Check this one the same way.
+**And you can check behaviour, not just opinions** — with one caveat we learned
+by getting it wrong ourselves. The **BEHAVIOR** tab on the same report is a
+record of the file actually being run inside a sandbox: what it touched, what it
+dropped, whether it used the network. Useful — but the sandbox is a whole
+Windows machine, and Windows chats to Microsoft on its own, so a stray DNS
+lookup in that report can be the *test machine* rather than the program. Our
+sibling gift Temp Cleaner shows *network comms: not found*; PHOTO home's report
+shows one DNS request to a Microsoft address that is not ours. We say so rather
+than quoting only the convenient one.
+
+**The check that depends on nobody's sandbox is the source.** This program
+imports no networking library at all — no `socket`, no `requests`, no
+`urllib.request`, no `aiohttp`. Search this repository for those words: you
+will find `urllib.parse` used to percent-encode text, and `webbrowser.open`,
+which hands a link to *your* browser when *you* press the "Ask AI" button.
+That is the whole of it, and unlike any scan result, you can verify it in one
+minute without trusting us.
 
 **What would genuinely be alarming:** many engines agreeing, a concrete threat
 description instead of a machine's vague guess, or a BEHAVIOR tab showing
