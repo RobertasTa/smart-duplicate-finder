@@ -212,17 +212,22 @@ just ours. It is probably the most useful 30 seconds you can spend before
 opening something new that came off the internet. If this gift teaches you only
 that, it has already paid for itself.
 
-**What our own scan showed.** Version 1.6 was flagged by **4 engines out of
-69**, while Avast, Avira, BitDefender, ClamAV, ESET, Kaspersky, TrendMicro and
-the other 65 reported it clean.
+**What our own scan showed.** On release day version 1.6 was flagged by 4
+engines out of 69, Microsoft among them (`Wacatac.C!ml`). We reported that
+one to Microsoft as a false positive. VirusTotal's latest scan of the file
+shows **[3 engines out of 66](https://www.virustotal.com/gui/file/9ae781de3d5a26fed63664a1571436c828ec9198b419a455d4a5531b7ea446a2)**:
+Bkav Pro, CrowdStrike Falcon and SecureAge. Avast, Avira, BitDefender,
+ESET, Kaspersky, Microsoft, TrendMicro and the other 56 report it clean.
 
-**And now the important part — why those four red marks are not a reason to be
+**And now the important part — why those three red marks are not a reason to be
 afraid.** You will see red and your stomach will drop. Here is what is actually
 happening.
 
-Look at *what* those four engines say. Not "this program steals your files",
-not "this program encrypts your photos" — but vague labels like
-`Wacatac.C!ml` or `grayware_confidence_60%`. That little **`!ml` means "a
+Look at *what* those engines say. Not "this program steals your files",
+not "this program encrypts your photos", but vague labels:
+`grayware_confidence_60%`, a bare `Malicious`, a serial number like
+`W32.Malware.24D6F94C`. Microsoft's `Wacatac.C!ml` was one of them until
+it was withdrawn. That little **`!ml` means "a
 machine guessed"**, and `60%` is the machine admitting it is not sure. None of
 them found anything inside our program. They reacted to how the file *looks
 from the outside* — and it looks unusual for three ordinary reasons:
